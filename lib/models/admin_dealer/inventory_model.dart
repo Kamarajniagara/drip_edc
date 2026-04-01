@@ -1,7 +1,8 @@
 class InventoryModel
 {
   int productId, categoryId, modelId, productStatus, warrantyMonths, buyerId;
-  String categoryName, modelName, productDescription, dateOfManufacturing, latestBuyer,deviceId, active;
+  String categoryName, modelName, modelDescription, productDescription,
+      dateOfManufacturing, latestBuyer,deviceId, active;
 
   InventoryModel({
     this.productId = 0,
@@ -10,6 +11,7 @@ class InventoryModel
     this.modelId = 0,
     this.modelName ='',
     this.deviceId = '',
+    this.modelDescription = '',
     this.productDescription = '',
     this.dateOfManufacturing = '',
     this.warrantyMonths = 0,
@@ -24,7 +26,8 @@ class InventoryModel
     categoryId: json['categoryId'],
     categoryName: json['categoryName'],
     modelId: json['modelId'],
-    modelName: json['modelDescription'],
+    modelName: json['modelName'],
+    modelDescription: json['modelDescription'],
     deviceId: json['deviceId'],
     productDescription: json['productDescription'],
     dateOfManufacturing: json['dateOfManufacturing'],
@@ -41,6 +44,7 @@ class InventoryModel
     'categoryName': categoryName,
     'modelId': modelId,
     'modelName': modelName,
+    'modelDescription':modelDescription,
     'deviceId': deviceId,
     'productDescription': productDescription,
     'dateOfManufacturing': dateOfManufacturing,

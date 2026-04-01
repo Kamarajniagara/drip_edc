@@ -79,8 +79,8 @@ class CustomerHomeWide extends StatelessWidget {
       bool isAquaculture,) {
     return Consumer<CustomerScreenControllerViewModel>(
       builder: (context, viewModel, _) {
-        final cM = viewModel.mySiteList.data[viewModel.sIndex].master[viewModel
-            .mIndex];
+
+        final cM = viewModel.mySiteList.data[viewModel.sIndex].master[viewModel.mIndex];
         final scheduledProgram = cM.programList;
         final hasProgramOnOff = cM.getPermissionStatus(
             "Program On/Off Manually");
@@ -171,10 +171,9 @@ class CustomerHomeWide extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                isAquaculture
-                                    ? AquacultureLine(irrLine: line, customerId: customerId,
-                                  controllerId: controllerId, modelId: modelId, deviceId: deviceId)
-                                    : buildIrrigationLine(
+                                isAquaculture ?
+                                AquacultureLine(irrLine: line, customerId: customerId,
+                                  controllerId: controllerId, modelId: modelId, deviceId: deviceId) : buildIrrigationLine(
                                     context, line, customerId, controllerId,
                                     modelId, deviceId),
                               ],

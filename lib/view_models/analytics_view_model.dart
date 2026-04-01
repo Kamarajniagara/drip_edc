@@ -37,12 +37,9 @@ class AnalyticsViewModel extends SafeChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
         if (data["code"] == 200 && data.containsKey("data")) {
           mySalesData = SalesDataModel.fromJson(data);
-          totalSales = mySalesData.total
-              ?.fold(0, (sum, e) => sum! + e.totalProduct) ??
-              0;
+          totalSales = mySalesData.total!;
         }
       }
     } catch (e, st) {

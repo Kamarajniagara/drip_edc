@@ -124,7 +124,7 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
         selectedProductList.add({
           "productId": productStockList[i].productId.toString(),
           "categoryName": productStockList[i].categoryName,
-          "modelName": productStockList[i].model,
+          "deviceName": productStockList[i].modelDescription,
         });
         newDevices.add(DeviceListModel(
           categoryName: productStockList[i].categoryName,
@@ -290,7 +290,6 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
 
                 try {
                   var response = await repository.createUserGroupAndDeviceList(body);
-                  debugPrint(response.body);
                   if (response.statusCode == 200) {
                     final Map<String, dynamic> jsonData = jsonDecode(response.body);
                     if(jsonData["code"] == 200){

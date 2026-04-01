@@ -2,9 +2,10 @@ import 'dart:ui';
 
 class SalesDataModel {
   Map<String, List<Category>>? graph;
-  List<Category>? total;
+  List<Category>? category;
+  int? total;
 
-  SalesDataModel({this.graph, this.total});
+  SalesDataModel({this.graph, this.category, this.total});
 
   factory SalesDataModel.fromJson(Map<String, dynamic> json) {
     Map<String, List<Category>>? graphMap;
@@ -17,13 +18,15 @@ class SalesDataModel {
       });
     }
 
-    List<Category>? totalList;
-    if (json['data'] != null && json['data']['total'] != null) {
-      totalList = (json['data']['total'] as List).asMap().entries
+    List<Category>? categoryList;
+    if (json['data'] != null && json['data']['categories'] != null) {
+      categoryList = (json['data']['categories'] as List).asMap().entries
           .map((entry) => Category.fromJson(entry.value, entry.key))
           .toList();
     }
-    return SalesDataModel(graph: graphMap, total: totalList);
+    int totalList = json['data']['total'] ?? 0;
+
+    return SalesDataModel(graph: graphMap, category: categoryList, total: totalList);
   }
 }
 
@@ -44,7 +47,7 @@ class Category {
     return Category(
       categoryId: json['categoryId'],
       categoryName: json['categoryName'],
-      totalProduct: json['totalProduct'],
+      totalProduct: json['totalProduct'] ?? 0,
       color: _parseColor(json['colorCode']),
     );
   }

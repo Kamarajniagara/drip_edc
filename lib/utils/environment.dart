@@ -17,8 +17,9 @@ class Environment {
       "mqttPassword" : '',
     },
     'smartComm' : {
-      'apiUrl': 'https://smartcomm-wms.com:5000/api/v1',
-      'apiKey': 'prod-api-key',
+      'apiUrl': 'http://20.193.232.190:9000/api/v1',
+      //'apiUrl': 'https://smartcomm-wms.com:5000/api/v1',
+      '1': 'prod-api-key',
       'mqttWebUrl': 'wss://smartcomm-wms.com:9443/mqtt',
       'mqttMobileUrl': '52.172.214.208',
       'publishTopic': 'AppToFirmware',
@@ -65,22 +66,21 @@ class Environment {
     },
   };
 
-  static String get apiUrl => config[F.name]?['apiUrl'] ?? '';
-  static String get apiKey => config[currentEnvironment]?['apiKey'] ?? '';
+  static String get apiUrl => config[F.name] ? ['apiUrl'] ?? '';
+  static String get apiKey => config[currentEnvironment] ? ['apiKey'] ?? '';
 
-  static String get mqttWebUrl => config[F.name]?['mqttWebUrl'] ?? '';
-  static String get mqttMobileUrl => config[F.name]?['mqttMobileUrl'] ?? '';
+  static String get mqttWebUrl => config[F.name] ? ['mqttWebUrl'] ?? '';
+  static String get mqttMobileUrl => config[F.name] ? ['mqttMobileUrl'] ?? '';
 
-  static int get mqttWebPort => config[F.name]?['mqttWebPort'] ?? 0;
-  static int get mqttMobilePort => config[F.name]?['mqttMobilePort'] ?? 0;
-  static String get mqttUserName => config[F.name]?['mqttUserName'] ?? '';
-  static String get mqttPassword => config[F.name]?['mqttPassword'] ?? '';
-  static String get mqttSubscribeTopic => config[F.name]?['subscribeTopic'] ?? '';
-  static String get mqttPublishTopic => config[F.name]?['publishTopic'] ?? '';
+  static int get mqttWebPort => config[F.name] ? ['mqttWebPort'] ?? 0;
+  static int get mqttMobilePort => config[F.name] ? ['mqttMobilePort'] ?? 0;
+  static String get mqttUserName => config[F.name] ? ['mqttUserName'] ?? '';
+  static String get mqttPassword => config[F.name] ? ['mqttPassword'] ?? '';
+  static String get mqttSubscribeTopic => config[F.name] ? ['subscribeTopic'] ?? '';
+  static String get mqttPublishTopic => config[F.name] ? ['publishTopic'] ?? '';
 
   static String get mqttLogTopic => 'OroGemLog';
-
-  static String get sftpIpAddress => config[F.name]?['sftpIpAddress'] ?? '';
-  static int get sftpPort => config[F.name]?['sftpPort'] ?? 0;
-  static String get privateKeyPath => config[F.name]?['privateKeyPath'] ?? '';
+  static String get sftpIpAddress => config[F.name] ? ['sftpIpAddress'] ?? '';
+  static int get sftpPort => config[F.name] ? ['sftpPort'] ?? 0;
+  static String get privateKeyPath => config[F.name] ? ['privateKeyPath'] ?? '';
 }

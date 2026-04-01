@@ -79,28 +79,34 @@ class GeneralSettingViewModel extends ChangeNotifier {
         final data = jsonDecode(response.body);
 
         if (data["code"] == 200) {
-          final firstItem =
-          (data["data"] as List).isNotEmpty ? data["data"][0] : {};
 
-          farmName = firstItem['groupName'];
-          controllerCategory = firstItem['deviceName'];
-          modelName = firstItem['modelName'];
-          deviceId = firstItem['deviceId'];
-          categoryName = firstItem['categoryName'];
-          modelId = firstItem['modelId'];
-          groupId = firstItem['groupId'];
+          final firstItem = (data["data"] as List).isNotEmpty ? data["data"][0] : {};
+
+          farmName = firstItem['groupName'] ?? "";
+          controllerCategory = firstItem['deviceName'] ?? "";
+          modelName = firstItem['modelName'] ?? "";
+          deviceId = firstItem['deviceId'] ?? "";
+          categoryName = firstItem['categoryName'] ?? "";
+
+          modelId = firstItem['modelId'] ?? 0;
+          groupId = firstItem['groupId'] ?? 0;
 
           countryCode = firstItem['countryCode'];
           simNumber = firstItem['simNumber'] ?? "";
 
           controllerVersion = firstItem['hwVersion'] ?? "";
-          newVersion = firstItem['availableHwVersion'];
+          newVersion = firstItem['availableHwVersion'] ?? "";
 
           controllerLocation = firstItem['controllerLocation'] ?? "";
 
-          updateCurrentDateTime(firstItem['timeZone']);
+          String timeZone = firstItem['timeZone'] ?? "Asia/Kolkata";
 
-          if (controllerVersion != newVersion) {
+          updateCurrentDateTime(timeZone);
+
+          bool hasNewVersion = newVersion.isNotEmpty;
+          bool isDifferentVersion = controllerVersion != newVersion;
+
+          if (hasNewVersion && isDifferentVersion) {
             timerFunction();
           } else {
             _timer?.cancel();

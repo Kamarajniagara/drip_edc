@@ -101,13 +101,13 @@ class AnalyticsView extends StatelessWidget {
               ) : MySalesBarChart(graph: viewModel.mySalesData.graph),
             ),
             const SizedBox(height: 6),
-            if ((viewModel.mySalesData.total ?? []).isNotEmpty)
+            if ((viewModel.mySalesData.category ?? []).isNotEmpty)
               Wrap(
                 spacing: 5,
                 runSpacing: 5,
                 children: List.generate(
-                  viewModel.mySalesData.total!.length, (index) => SalesChip(
-                    index: index, item: viewModel.mySalesData.total![index]),
+                  viewModel.mySalesData.category!.length, (index) => SalesChip(
+                    index: index, item: viewModel.mySalesData.category![index]),
                 ),
               ),
             const SizedBox(height: 8),

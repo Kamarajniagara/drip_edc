@@ -78,7 +78,6 @@ class _ProductInventoryContentState extends State<_ProductInventoryContent> {
   Widget build(BuildContext context) {
     final viewedCustomer = context.watch<UserProvider>().viewedCustomer;
     final searchProvider = context.watch<SearchProvider>();
-    debugPrint("searchProvider called");
 
     return Consumer<InventoryViewModel>(
       builder: (context, vm, _) {
@@ -238,7 +237,8 @@ class _ProductInventoryContentState extends State<_ProductInventoryContent> {
     );
   }
 
-  DataCell _buildActionButton(BuildContext context, InventoryViewModel vm, InventoryModel product, int customerId) {
+  DataCell _buildActionButton(BuildContext context, InventoryViewModel vm,
+      InventoryModel product, int customerId) {
     if (vm.userRole == UserRole.admin) {
       return DataCell(Center(
         child: IconButton(
@@ -249,6 +249,7 @@ class _ProductInventoryContentState extends State<_ProductInventoryContent> {
               product.categoryId,
               product.categoryName,
               product.modelName,
+              product.modelDescription,
               product.modelId,
               product.deviceId,
               product.warrantyMonths,

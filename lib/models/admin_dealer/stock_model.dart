@@ -1,12 +1,13 @@
 class StockModel
 {
   int productId, warranty, modelId;
-  String categoryName, model, dtOfMnf, imeiNo;
+  String categoryName, model, modelDescription, dtOfMnf, imeiNo;
 
   StockModel({
     this.productId = 0,
     this.categoryName = '',
     this.model = '',
+    this.modelDescription = '',
     this.modelId = 0,
     this.imeiNo = '',
     this.dtOfMnf = '',
@@ -17,7 +18,8 @@ class StockModel
     return StockModel(
       productId: int.tryParse(json['productId'].toString()) ?? 0,
       categoryName: json['categoryName'],
-      model: json['modelDescription'],
+      model: json['modelName'],
+      modelDescription: json['modelDescription'],
       modelId: int.tryParse(json['modelId'].toString()) ?? 0,
       imeiNo: json['deviceId'],
       dtOfMnf: json['dateOfManufacturing'],
@@ -30,6 +32,7 @@ class StockModel
       'productId': productId,
       'categoryName': categoryName,
       'modelName': model,
+      'modelDescription':modelDescription,
       'modelId': modelId,
       'deviceId': imeiNo,
       'dateOfManufacturing': dtOfMnf,

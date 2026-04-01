@@ -331,16 +331,22 @@ class _GeneralSettingWideState extends State<GeneralSettingWide> {
                                 ),
                                 viewModel.controllerVersion != viewModel.newVersion? const SizedBox(width: 16,):
                                 const SizedBox(),
-                                viewModel.controllerVersion != viewModel.newVersion? TextButton(
+                                viewModel.newVersion.isNotEmpty &&
+                                    viewModel.controllerVersion != viewModel.newVersion
+                                    ? TextButton(
                                   onPressed: () {
+                                    // TODO: handle update click
                                   },
                                   child: AnimatedOpacity(
                                     opacity: viewModel.opacity,
                                     duration: const Duration(seconds: 2),
-                                    child: Text('New Version available - ${viewModel.newVersion}', style: const TextStyle(color: Colors.black54),),
+                                    child: Text(
+                                      'New Version available - ${viewModel.newVersion}',
+                                      style: const TextStyle(color: Colors.black54),
+                                    ),
                                   ),
-                                ):
-                                const SizedBox(),
+                                )
+                                    : const SizedBox(),
                               ],
                             ),
                           ),
