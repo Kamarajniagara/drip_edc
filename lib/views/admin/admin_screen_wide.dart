@@ -17,37 +17,39 @@ class AdminScreenWide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<BaseHeaderViewModel>();
-    return Scaffold(
-      appBar: AppBar(
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 15),
-          child: AppLogo(),
+    return DisableWidgetInspectorScope(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: const Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: AppLogo(),
+          ),
+          title: Row(
+            children: [
+              MainMenu(viewModel: viewModel),
+              if(viewModel.selectedIndex==1)...[
+                const Spacer(),
+                SizedBox(width : 420, child: ProductSearchBar(
+                    viewModel: viewModel, barHeight: 40, barRadius: 20)),
+                const Spacer(),
+              ]
+            ],
+          ),
+          actions: const <Widget>[
+            UserAccountMenu(isNarrow: false),
+          ],
+          centerTitle: false,
+          elevation: 10,
+          leadingWidth: F.appFlavor!.name.contains('oro') ? 75:110,
         ),
-        title: Row(
-          children: [
-            MainMenu(viewModel: viewModel),
-            if(viewModel.selectedIndex==1)...[
-              const Spacer(),
-              SizedBox(width : 420, child: ProductSearchBar(
-                  viewModel: viewModel, barHeight: 40, barRadius: 20)),
-              const Spacer(),
-            ]
+        body: IndexedStack(
+          index: viewModel.selectedIndex,
+          children: const [
+            DashboardLayoutSelector(userRole: UserRole.admin),
+            ProductInventory(),
+            StockEntry(isNarrow: false),
           ],
         ),
-        actions: const <Widget>[
-          UserAccountMenu(isNarrow: false),
-        ],
-        centerTitle: false,
-        elevation: 10,
-        leadingWidth: F.appFlavor!.name.contains('oro') ? 75:110,
-      ),
-      body: IndexedStack(
-        index: viewModel.selectedIndex,
-        children: const [
-          DashboardLayoutSelector(userRole: UserRole.admin),
-          ProductInventory(),
-          StockEntry(isNarrow: false),
-        ],
       ),
     );
   }

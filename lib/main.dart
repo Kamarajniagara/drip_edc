@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:oro_drip_irrigation/modules/PumpController/state_management/pump_controller_provider.dart';
 import 'package:oro_drip_irrigation/modules/bluetooth_low_energy/state_management/ble_service.dart';
 import 'package:oro_drip_irrigation/providers/button_loading_provider.dart';
@@ -70,6 +71,12 @@ Future<void> requestAppPermissions() async {
 
 
 FutureOr<void> main() async {
+
+  // Disable debug painting and other visual debugging tools
+  debugPaintSizeEnabled = false;
+  debugPaintBaselinesEnabled = false;
+  debugPaintPointersEnabled = false;
+
   WidgetsFlutterBinding.ensureInitialized();
 
   tz.initializeTimeZones();
