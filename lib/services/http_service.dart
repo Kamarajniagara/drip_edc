@@ -23,7 +23,7 @@ class HttpService implements ApiService {
   @override
   Future<http.Response> postRequest(String endpoint, Map<String, dynamic> bodyData) async {
 
-    print('bodyData : $bodyData');
+    print('bodyData : ${jsonEncode(bodyData)}');
     print('${AppConstants.apiUrl}$endpoint');
     final token = await PreferenceHelper.getToken();
 

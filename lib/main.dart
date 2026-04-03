@@ -69,7 +69,6 @@ Future<void> requestAppPermissions() async {
   }
 }
 
-
 FutureOr<void> main() async {
 
   // Disable debug painting and other visual debugging tools

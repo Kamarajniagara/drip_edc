@@ -415,7 +415,7 @@ class _AdditionalDataScreenState extends State<AdditionalDataScreen> {
         "cyclicOnTime": "00:00:00",
         "cyclicOffTime": "00:00:00",
         "isPressureEnabled": '0',
-        "pressure": "",
+        "pressure": "0",
         "incompleteRestart": mainProvider.isCompletionEnabled ? "1" : "0",
         "controllerReadStatus": '0',
         "programType": mainProvider.selectedProgramType,

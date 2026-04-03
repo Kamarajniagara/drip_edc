@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:oro_drip_irrigation/modules/config_maker/model/device_object_model.dart';
 
@@ -499,6 +500,7 @@ class ProgramLibrary {
         required this.agitatorCount});
 
   factory ProgramLibrary.fromJson(Map<String, dynamic> json) {
+    debugPrint("json ==>$json");
     List<String> programTypes = [json['data']['programType'][0] ?? 'Irrigation Program'];
     if(json['data']['agitatorCount'] > 0) {
       programTypes.add(json['data']['programType'][1]);
