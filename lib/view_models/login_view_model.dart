@@ -43,6 +43,7 @@ class LoginViewModel extends ChangeNotifier {
         await prefs.setString('deviceToken', token ?? '' );
       });
     }
+
     final token = await PreferenceHelper.getDeviceToken();
 
     isLoading = true;
@@ -93,7 +94,7 @@ class LoginViewModel extends ChangeNotifier {
           countryCode: cleanedCountryCode,
           mobileNumber: mobileNumber,
           email: userData['email'],
-          configPermission: userData['permissionDenied'] ?? false,
+          configPermission: userData['havePermissionToAccess'] ?? false,
          );
         onLoginSuccess(data['message']);
       } else {
