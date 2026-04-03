@@ -220,13 +220,9 @@ class StockEntryViewModel extends SafeChangeNotifier {
     }
 
     try {
-      var response =
-      await repository.checkProduct({"deviceId": imei});
-
+      var response = await repository.checkProduct({"deviceId": imei});
       if (isDisposed) return;
-
       var data = jsonDecode(response.body);
-
       if (data['code'] == 404) {
         addProductToList();
       } else {
@@ -247,9 +243,8 @@ class StockEntryViewModel extends SafeChangeNotifier {
   // ================= ADD STOCK TO SERVER =================
 
   Future<bool> addProductStock(int userId) async {
-
     try {
-      var response = await repository.createProduct({
+      final response = await repository.createProduct({
         'products': addedProductList,
         'createUser': userId,
       });
@@ -258,22 +253,25 @@ class StockEntryViewModel extends SafeChangeNotifier {
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-
         if (jsonData["code"] == 200) {
           _clearForm();
           addedProductList.clear();
-          safeNotify();
-          return true;
+          await getMyStock(userId, 1);
+          return true; // ✅ SUCCESS
         } else {
-          errorMsg = jsonData["message"];
+          errorMsg = jsonData["message"] ?? "Something went wrong";
         }
+      } else {
+        errorMsg = "Server error: ${response.statusCode}";
       }
     } catch (e) {
-      debugPrint(e.toString());
+      errorMsg = "Exception: ${e.toString()}";
+      debugPrint(errorMsg);
+    } finally {
+      if (!isDisposed) safeNotify();
     }
 
-    safeNotify();
-    return false;
+    return false; // ❌ FAILURE
   }
 
   // ================= HELPERS =================
@@ -296,8 +294,7 @@ class StockEntryViewModel extends SafeChangeNotifier {
   }
 
   bool isIMEIAlreadyExists(String newIMEI) {
-    return addedProductList
-        .any((product) => product['deviceId'] == newIMEI);
+    return addedProductList.any((product) => product['deviceId'] == newIMEI);
   }
 
   bool _isAnyFieldEmpty() {
