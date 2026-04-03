@@ -38,6 +38,7 @@ class _StockEntryState extends State<StockEntry> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 600),
                             child: Padding(
@@ -549,8 +550,7 @@ class _StockEntryState extends State<StockEntry> {
                                   const Spacer(),
                                   TextButton(
                                     onPressed: (){
-                                      if(viewModel.addedProductList.isNotEmpty)
-                                      {
+                                      if(viewModel.addedProductList.isNotEmpty) {
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -565,15 +565,35 @@ class _StockEntryState extends State<StockEntry> {
                                                   child: const Text('Cancel'),
                                                 ),
                                                 TextButton(
-                                                  onPressed: () => viewModel.addProductStock(viewedCustomer!.id),
+                                                  onPressed: () async {
+                                                    final navigator = Navigator.of(context);
+
+                                                    bool success = await viewModel.addProductStock(viewedCustomer!.id);
+
+                                                    navigator.pop();
+
+                                                    if (success) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text("Product saved successfully"),
+                                                          backgroundColor: Colors.green,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(
+                                                            content: Text(viewModel.errorMsg),
+                                                          backgroundColor: Colors.red,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
                                                   child: const Text('Save'),
                                                 ),
                                               ],
                                             );
                                           },
                                         );
-                                      }else{
-                                        //_showAlertDialog('Alert Message', 'Product Empty!');
                                       }
                                     },
                                     style: TextButton.styleFrom(
