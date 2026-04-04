@@ -22,7 +22,10 @@ class CurrentProgramViewModel extends ChangeNotifier {
   }
 
   void startTimer() {
-    _timer?.cancel();
+    if(_timer != null){
+      _timer?.cancel();
+    }
+
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       updateDurationQtyLeft();
     });
