@@ -148,6 +148,7 @@ class _GlobalAlarmInConstantState extends State<GlobalAlarmInConstant> {
                                         stateSetter((){
                                           setState((){
                                             if(mqttService.acknowledgementPayload != null){
+                                              print("(mqttService.acknowledgementPayload =>${(mqttService.acknowledgementPayload.runtimeType)}");
                                               if(validatePayloadFromHardware(mqttService.acknowledgementPayload, ['cC'], widget.userData['deviceId']) && validatePayloadFromHardware(mqttService.acknowledgementPayload!, ['cM', '4201', 'PayloadCode'], '300')){
                                                 if(mqttService.acknowledgementPayload!['cM']['4201']['Code'] == '200'){
                                                   payloadState = HardwareAcknowledgementState.success;

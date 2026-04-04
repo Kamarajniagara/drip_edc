@@ -72,6 +72,11 @@ Future<void> requestAppPermissions() async {
 
 FutureOr<void> main() async {
 
+  FlutterError.onError = (FlutterErrorDetails details) {
+    print('Flutter Error: ${details.exception}');
+    // Don't crash, just log
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
 
   tz.initializeTimeZones();
@@ -129,40 +134,47 @@ FutureOr<void> main() async {
     });
   }
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => CustomerProvider()),
-        ChangeNotifierProvider(create: (_) => ConfigMakerProvider()),
-        ChangeNotifierProvider(create: (_) => IrrigationProgramMainProvider()),
-        ChangeNotifierProvider(create: (_) => MqttPayloadProvider()),
-        ChangeNotifierProvider(create: (_) => OverAllUse()),
-        ChangeNotifierProvider(create: (_) => PreferenceProvider()),
-        ChangeNotifierProvider(create: (_) => SystemDefinitionProvider()),
-        ChangeNotifierProvider(create: (_) => ConstantProvider()),
-        ChangeNotifierProvider(create: (_) => PumpControllerProvider()),
-        ChangeNotifierProvider(create: (_) => BleProvider()),
-        ChangeNotifierProvider(create: (_) => SearchProvider()),
-        ChangeNotifierProvider(create: (_) => ButtonLoadingProvider()),
-        ProxyProvider2<MqttPayloadProvider, CustomerProvider, CommunicationService>(
-          update: (BuildContext context, MqttPayloadProvider mqttProvider,
-              CustomerProvider customer, CommunicationService? previous) {
-            return CommunicationService(
-              mqttService: MqttService(),
-              blueService: BluetoothClassicService(),
-              bleService: BluetoothBleService(),
-              customerProvider: customer,
-            );
-          },
-        ),
-        Provider<HttpService>(create: (_) => HttpService()),
-        Provider<ApiRepository>(create: (context) =>
+  runZonedGuarded(() {
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(create: (_) => CustomerProvider()),
+          ChangeNotifierProvider(create: (_) => ConfigMakerProvider()),
+          ChangeNotifierProvider(create: (_) => IrrigationProgramMainProvider()),
+          ChangeNotifierProvider(create: (_) => MqttPayloadProvider()),
+          ChangeNotifierProvider(create: (_) => OverAllUse()),
+          ChangeNotifierProvider(create: (_) => PreferenceProvider()),
+          ChangeNotifierProvider(create: (_) => SystemDefinitionProvider()),
+          ChangeNotifierProvider(create: (_) => ConstantProvider()),
+          ChangeNotifierProvider(create: (_) => PumpControllerProvider()),
+          ChangeNotifierProvider(create: (_) => BleProvider()),
+          ChangeNotifierProvider(create: (_) => SearchProvider()),
+          ChangeNotifierProvider(create: (_) => ButtonLoadingProvider()),
+          ProxyProvider2<MqttPayloadProvider, CustomerProvider, CommunicationService>(
+            update: (BuildContext context, MqttPayloadProvider mqttProvider,
+                CustomerProvider customer, CommunicationService? previous) {
+              return CommunicationService(
+                mqttService: MqttService(),
+                blueService: BluetoothClassicService(),
+                bleService: BluetoothBleService(),
+                customerProvider: customer,
+              );
+            },
+          ),
+          Provider<HttpService>(create: (_) => HttpService()),
+          Provider<ApiRepository>(create: (context) =>
               RepositoryImpl(context.read<HttpService>()),
-        ),
-      ],
-      child: const MyApp(),
-    ),
-  );
+          ),
+        ],
+        child: const MyApp(),
+      ),
+    );
+  }, (error, stack) {
+    print('Zone Error: $error');
+    // Handle errors gracefully
+  });
+
+
 
 }
