@@ -81,17 +81,14 @@ class ConfigMakerProvider extends ChangeNotifier{
   void clearData(){
     listOfSampleObjectModel = (defaultDataFromHttp['objectType'] as List<dynamic>).map(mapToDeviceObject).toList();
     listOfObjectModelConnection = (defaultDataFromHttp['objectType'] as List<dynamic>).map(mapToDeviceObject).toList();
-    print("clear called............");
     for(var i in listOfDeviceModel){
       if(AppConstants.ecoGemModelList.contains(masterData['modelId'])){
         if(i.masterId != masterData['controllerId']){
-          print('clear EC25');
           i.masterId = null;
           i.serialNumber = null;
           i.extendControllerId = null;
         }
       }else if(AppConstants.gemModelList.contains(masterData['modelId'])){
-        print('clear gem');
         i.masterId = null;
         i.serialNumber = null;
         i.extendControllerId = null;
@@ -209,13 +206,9 @@ class ConfigMakerProvider extends ChangeNotifier{
           };
           for(var src in source){
             if(src.outletPump.contains(currentPump.commonDetails.sNo)){
-              // print('take outlet pump');
-              // print("src : ${src.toJson()}");
               topSumpFloatSnoForAllSource.add(src.topFloatForOutletPump);
               bottomSumpFloatSnoForAllSource.add(src.bottomFloatForOutletPump);
             }else if(src.inletPump.contains(currentPump.commonDetails.sNo)){
-              // print('take inlet pump');
-              // print("src : ${src.toJson()}");
               topTankFloatSnoForAllSource.add(src.topFloatForInletPump);
               bottomTankFloatSnoForAllSource.add(src.bottomFloatForInletPump);
             }
@@ -263,15 +256,12 @@ class ConfigMakerProvider extends ChangeNotifier{
   }
 
   Future<List<DeviceModel>> fetchData(masterDataFromSiteConfigure, bool fromDashboard)async {
-
     try{
-      print("masterDataFromSiteConfigure : $masterDataFromSiteConfigure");
       reInitialize();
       if(!fromDashboard){
         productStock = masterDataFromSiteConfigure['productStock'];
       }
       else{
-        print('get product list');
         var productListResponse = await ConfigMakerRepository().getProductStock({'userId' : masterDataFromSiteConfigure['customerId']});
         if (kDebugMode) {
           print("productListResponse : ${productListResponse.body}");
@@ -423,8 +413,8 @@ class ConfigMakerProvider extends ChangeNotifier{
       }
       line = (configMakerData['irrigationLine'] as List<dynamic>).map((lineObject) => IrrigationLineModel.fromJson(lineObject)).toList();
     } catch (e, stackTrace){
-      print('Error on converting to device model :: $e');
-      print('stackTrace on converting to device model :: $stackTrace');
+      debugPrint('Error on converting to device model :: $e');
+      debugPrint('stackTrace on converting to device model :: $stackTrace');
     }
 
     notifyListeners();
@@ -453,7 +443,6 @@ class ConfigMakerProvider extends ChangeNotifier{
           masterData = Map<String, dynamic>.from(masterData);
           masterData['deviceId'] = newDevice['deviceId'];
         }else{
-          print("replacing node.......");
           for(var device in listOfDeviceModel){
             if(device.controllerId == oldDevice["controllerId"]){
               device.deviceId = newDevice["deviceId"];
@@ -466,8 +455,8 @@ class ConfigMakerProvider extends ChangeNotifier{
         return 400;
       }
     } catch (e, stackTrace){
-      print('Error on replace deviceId :: $e');
-      print('stackTrace on replace deviceId :: $stackTrace');
+      debugPrint('Error on replace deviceId :: $e');
+      debugPrint('stackTrace on replace deviceId :: $stackTrace');
       return 400;
     }
   }
@@ -643,7 +632,7 @@ class ConfigMakerProvider extends ChangeNotifier{
     }
 
     if(newCount > oldCount){   // adding
-      // ------------- validate ec, ph and pressure switch for category 6----------------------------
+      // ------------- validate ec, ph and pressure switch for category 6 ----------------------------
       if(selectedDevice.categoryId == 6){
         if(selectedConnectionObject.type == '3'){
           /* validate while analog object connection */
@@ -663,8 +652,6 @@ class ConfigMakerProvider extends ChangeNotifier{
           }
         }
       }
-
-      print('selectedModelDefaultConnectionList :: $selectedModelDefaultConnectionList');
       int howManyObjectSupposedToConnect = newCount - oldCount;
       for(var notConfiguredObject = 0;notConfiguredObject < howManyObjectSupposedToConnect;notConfiguredObject++){
         inner : for(var object in listOfGeneratedObject){
@@ -685,7 +672,6 @@ class ConfigMakerProvider extends ChangeNotifier{
                 }
               }
             }
-            print('configuring object.sNo : ${object.toJson()}');
             break inner;
           }
         }
@@ -708,19 +694,6 @@ class ConfigMakerProvider extends ChangeNotifier{
         connectionObject.count = newCount.toString();
       }
     }
-    // for(var object in listOfGeneratedObject){
-    //   print('generated :: ${object.name} , ${object.sNo}  connection :: ${object.connectionNo}  deviceId :: ${object.deviceId}');
-    // }
-    // for(var obj in listOfSampleObjectModel){
-    //   print('productLimit : ${obj.toJson()}');
-    // }
-    // for(var obj in listOfObjectModelConnection){
-    //   print('connection : ${obj.toJson()}');
-    // }
-    // for(var obj in listOfGeneratedObject){
-    //   print('generated : ${obj.toJson()}');
-    // }
-
     notifyListeners();
   }
 
@@ -1231,7 +1204,7 @@ class ConfigMakerProvider extends ChangeNotifier{
     List<int> weatherControllerId = weatherControllersList.map((e) => e.controllerId).toList();
     for (var i = 0; i < objectListToSend.length; i++) {
       var object = objectListToSend[i];
-      if(object.connectionNo != 0 && object.connectionNo != null && !weatherControllerId.contains(object.controllerId)){
+      if(object.connectionNo != 0 && object.connectionNo != null && !weatherControllerId.contains(object.controllerId) && object.controllerId != null){
         var controller = listOfDeviceModel.firstWhere((e) => e.controllerId == object.controllerId);
         List<String> objectSerialNoForEcoGemSplitList = object.sNo.toString().split('.');
         if(objectSerialNoForEcoGemSplitList[1].length == 2){
@@ -1595,7 +1568,6 @@ class ConfigMakerProvider extends ChangeNotifier{
       });
     }
 
-    print('listOfPumpPayload :: $listOfPumpPayload');
     return listOfPumpPayload;
   }
 

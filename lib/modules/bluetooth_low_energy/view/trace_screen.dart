@@ -37,9 +37,6 @@ class _TraceScreenState extends State<TraceScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, result) async {
-        print("didPop: $didPop");
-        print("result: $result");
-
         // Avoid further processing if the route is already popped
         if (didPop) return;
 

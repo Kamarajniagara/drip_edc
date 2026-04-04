@@ -92,8 +92,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
         // ignore connections canceled by the user
       } else {
         Snackbar.show(ABC.c, prettyException("Connect Error:", e), success: false);
-        print(e);
-        print("backtrace: $backtrace");
+        debugPrint(e.toString());
+        debugPrint("backtrace: $backtrace");
       }
     }
   }
@@ -104,8 +104,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
       Snackbar.show(ABC.c, "Cancel: Success", success: true);
     } catch (e, backtrace) {
       Snackbar.show(ABC.c, prettyException("Cancel Error:", e), success: false);
-      print("$e");
-      print("backtrace: $backtrace");
+      debugPrint("$e");
+      debugPrint("backtrace: $backtrace");
     }
   }
 
@@ -115,7 +115,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
       Snackbar.show(ABC.c, "Disconnect: Success", success: true);
     } catch (e, backtrace) {
       Snackbar.show(ABC.c, prettyException("Disconnect Error:", e), success: false);
-      print("$e backtrace: $backtrace");
+      debugPrint("$e backtrace: $backtrace");
     }
   }
 
@@ -130,8 +130,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
       Snackbar.show(ABC.c, "Discover Services: Success", success: true);
     } catch (e, backtrace) {
       Snackbar.show(ABC.c, prettyException("Discover Services Error:", e), success: false);
-      print(e);
-      print("backtrace: $backtrace");
+      debugPrint(e.toString());
+      debugPrint("backtrace: $backtrace");
     }
     if (mounted) {
       setState(() {
@@ -146,8 +146,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
       Snackbar.show(ABC.c, "Request Mtu: Success", success: true);
     } catch (e, backtrace) {
       Snackbar.show(ABC.c, prettyException("Change Mtu Error:", e), success: false);
-      print(e);
-      print("backtrace: $backtrace");
+      debugPrint(e.toString());
+      debugPrint("backtrace: $backtrace");
     }
   }
 

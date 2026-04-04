@@ -46,11 +46,9 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fertilizerSetResponse = getFertilizerSetData(widget.userData);
   }
-
 
   Future<int> getFertilizerSetData(Map<String, dynamic>userData)async{
     try{
@@ -59,7 +57,20 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
         "controllerId": userData['controllerId'],
       };
       var response = await FertilizerSetRepository().getUserFertilizerSet(body);
+
+      if(response.body == null || response.body.isEmpty) {
+        throw Exception('Empty response received');
+      }
+
       Map<String, dynamic> jsonData = jsonDecode(response.body);
+
+      if(jsonData['data'] == null ||
+          jsonData['data']['default'] == null ||
+          jsonData['data']['default']['fertilizerSite'] == null ||
+          jsonData['data']['fertilizerSet'] == null) {
+        throw Exception('Invalid data structure received');
+      }
+
       setState(() {
         listOfFertilizerSite = (jsonData['data']['default']['fertilizerSite'] as List<dynamic>).map((site){
           return FertilizerSiteSettingModel.fromJson(site);
@@ -68,25 +79,23 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
           return FertilizerSiteSettingModel.fromJson(site);
         }).toList();
       });
-      return jsonData['code'];
+
+      return jsonData['code'] ?? 200;
     }catch(e, stackTrace){
       if (kDebugMode) {
         print('Error :: $e');
         print('Stack Trace :: $stackTrace');
       }
-      rethrow;
+      return 500;
     }
   }
 
-
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     themeData = Theme.of(context);
     themeMode = themeData.brightness == Brightness.light;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +104,32 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
         future: fertilizerSetResponse,
         builder: (context, snapshot){
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator()); // Loading state
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}'); // Error state
-          } else if (snapshot.hasData) {
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                    const SizedBox(height: 16),
+                    Text('Error: ${snapshot.error}'),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          fertilizerSetResponse = getFertilizerSetData(widget.userData);
+                        });
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else if (snapshot.hasData && snapshot.data == 200) {
             return Scaffold(
               backgroundColor: Colors.white,
               floatingActionButton: getFloatingActionButton(),
@@ -128,59 +159,59 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
                                 for(var recipe in listOfFertilizerSet)
                                   if(recipe.sNo == listOfFertilizerSite[selectedFertilizerSite].sNo)
                                     Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: Colors.white,
-                                        boxShadow: AppProperties.customBoxShadowLiteTheme
-                                    ),
-                                    child: Column(
-                                      spacing: 15,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        recipeListTile(recipe),
-                                        getEcPh(recipe),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: 30,
-                                                color: themeData.primaryColorLight.withOpacity(0.1),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    tableColumnCell(width: 50 , title: 'Active'),
-                                                    tableColumnCell(width: 50, title: 'Channel'),
-                                                    tableColumnCell(width: 120, title: 'Method'),
-                                                    tableColumnCell(width: 80, title: 'Value'),
-                                                  ],
-                                                ),
-                                              ),
-                                              ...recipe.channel.map((channel) {
-                                                return  Container(
-                                                  height: 40,
-                                                  color: recipe.channel.indexOf(channel).isOdd ? themeData.primaryColorLight.withOpacity(0.05) : null,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: Colors.white,
+                                          boxShadow: AppProperties.customBoxShadowLiteTheme
+                                      ),
+                                      child: Column(
+                                        spacing: 15,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          recipeListTile(recipe),
+                                          getEcPh(recipe),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: 30,
+                                                  color: themeData.primaryColorLight.withOpacity(0.1),
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      tableRowCell(
-                                                          width: 50,
-                                                          widget:  Checkbox(
-                                                            value: channel.active == 1 ? true : false,
-                                                            onChanged: (value){
-                                                              setState(() {
-                                                                channel.active = value! ? 1 : 0;
-                                                              });
-                                                            },
-                                                          )
-                                                      ),
-                                                      tableRowCell(
-                                                          width: 50,
-                                                          widget: Text('Ch ${recipe.channel.indexOf(channel) + 1}', style: TextStyle(color: Colors.black54),)
-                                                      ),
-                                                      tableRowCell(
-                                                          width: 120,
-                                                          widget : CustomDropDownButton(
+                                                      tableColumnCell(width: 50 , title: 'Active'),
+                                                      tableColumnCell(width: 50, title: 'Channel'),
+                                                      tableColumnCell(width: 120, title: 'Method'),
+                                                      tableColumnCell(width: 80, title: 'Value'),
+                                                    ],
+                                                  ),
+                                                ),
+                                                ...recipe.channel.map((channel) {
+                                                  return  Container(
+                                                    height: 40,
+                                                    color: recipe.channel.indexOf(channel).isOdd ? themeData.primaryColorLight.withOpacity(0.05) : null,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        tableRowCell(
+                                                            width: 50,
+                                                            widget:  Checkbox(
+                                                              value: channel.active == 1 ? true : false,
+                                                              onChanged: (value){
+                                                                setState(() {
+                                                                  channel.active = value! ? 1 : 0;
+                                                                });
+                                                              },
+                                                            )
+                                                        ),
+                                                        tableRowCell(
+                                                            width: 50,
+                                                            widget: Text('Ch ${recipe.channel.indexOf(channel) + 1}', style: TextStyle(color: Colors.black54),)
+                                                        ),
+                                                        tableRowCell(
+                                                            width: 120,
+                                                            widget : CustomDropDownButton(
                                                               value: channel.method,
                                                               list: ['Time', 'Pro.time', 'Quantity', 'Pro.quantity', 'Pro.qty per 1000L'],
                                                               onChanged: (value) {
@@ -188,65 +219,45 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
                                                                   channel.method = value!;
                                                                 });
                                                               },
-                                                            // style: TextStyle(color: channel.method.contains('ime') ? Colors.pink : Colors.orange, fontSize: 11, fontWeight: FontWeight.bold),
-                                                          )
-                                                          // widget: DropdownButton(
-                                                          //   isExpanded: true,
-                                                          //   value: channel.method,
-                                                          //   underline: Container(),
-                                                          //   items: ['Time', 'Pro.time', 'Quantity', 'Pro.quantity', 'Pro.quant per 1000L']
-                                                          //       .map((String items) {
-                                                          //     return DropdownMenuItem(
-                                                          //       value: items,
-                                                          //       child: Text(items, style: TextStyle(fontSize: 12, color: Colors.black)),
-                                                          //     );
-                                                          //   }).toList(),
-                                                          //   onChanged: (value) {
-                                                          //     setState(() {
-                                                          //       channel.method = value!;
-                                                          //     });
-                                                          //   },
-                                                          // )
-                                                      ),
-                                                      tableRowCell(
-                                                          width: 80,
-                                                          widget: channel.method.contains('ime')
-                                                              ? InkWell(
-                                                            onTap: (){
-                                                              _showTimePicker(overAllPvd: overAllPvd, time: channel.timeValue, onPressed: (){
-                                                                setState(() {
-                                                                  channel.timeValue = '${overAllPvd.hrs < 10 ? '0' :''}${overAllPvd.hrs}:${overAllPvd.min < 10 ? '0' :''}${overAllPvd.min}:${overAllPvd.sec < 10 ? '0' :''}${overAllPvd.sec}';
-                                                                });
-                                                                Navigator.pop(context);
-                                                              }) ;
+                                                            )
+                                                        ),
+                                                        tableRowCell(
+                                                            width: 80,
+                                                            widget: channel.method.contains('ime')
+                                                                ? InkWell(
+                                                              onTap: (){
+                                                                _showTimePicker(overAllPvd: overAllPvd, time: channel.timeValue, onPressed: (){
+                                                                  setState(() {
+                                                                    channel.timeValue = '${overAllPvd.hrs < 10 ? '0' :''}${overAllPvd.hrs}:${overAllPvd.min < 10 ? '0' :''}${overAllPvd.min}:${overAllPvd.sec < 10 ? '0' :''}${overAllPvd.sec}';
+                                                                  });
+                                                                  Navigator.pop(context);
+                                                                }) ;
                                                               },
-                                                            child: Center(
-                                                              child: Text(Constants.showHourAndMinuteOnly(channel.timeValue, widget.userData['modelId'])),
-                                                            ),
-                                                          )
-                                                              : getTextField(
-                                                              key: '${recipe.channel.indexOf(channel) + 1} - ${channel.sNo}',
-                                                              initialValue: channel.quantityValue,
-                                                              regex: AppProperties.regexForDecimal,
-                                                              onChanged: (value){
-                                                                setState(() {
-                                                                  channel.quantityValue = value;
-                                                                });
-                                                              }
-                                                          )
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              }),
-
-                                            ],
+                                                              child: Center(
+                                                                child: Text(Constants.showHourAndMinuteOnly(channel.timeValue, widget.userData['modelId'])),
+                                                              ),
+                                                            )
+                                                                : getTextField(
+                                                                key: '${recipe.channel.indexOf(channel) + 1} - ${channel.sNo}',
+                                                                initialValue: channel.quantityValue,
+                                                                regex: AppProperties.regexForDecimal,
+                                                                onChanged: (value){
+                                                                  setState(() {
+                                                                    channel.quantityValue = value;
+                                                                  });
+                                                                }
+                                                            )
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-
-                                      ],
-                                    ),
-                                  )
+                                        ],
+                                      ),
+                                    )
                               ],
                             ),
                           ],
@@ -257,7 +268,29 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
               ),
             );
           } else {
-            return const Text('No data'); // Shouldn't reach here normally
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.warning_amber_outlined, size: 64, color: Colors.orange),
+                    const SizedBox(height: 16),
+                    const Text('Failed to load data'),
+                    const SizedBox(height: 16),
+                    Text('Status Code: ${snapshot.data}'),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          fertilizerSetResponse = getFertilizerSetData(widget.userData);
+                        });
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
         }
     );
@@ -301,7 +334,6 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
                             },
                             title: 'Send',
                           ),
-
                       ],
                     );
                   }
@@ -314,18 +346,25 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
   }
 
   void sendToHttp()async{
-    var body = {
-      "userId" : widget.userData['customerId'],
-      "controllerId" : widget.userData['controllerId'],
-      'fertilizerSet' : listOfFertilizerSet.map((set) => set.toJson()).toList(),
-      "createUser" : widget.userData['userId']
-    };
-    var response = await FertilizerSetRepository().createUserFertilizerSet(body);
-    print('response fertilizerSet : ${response.body}');
+    try {
+      var body = {
+        "userId" : widget.userData['customerId'],
+        "controllerId" : widget.userData['controllerId'],
+        'fertilizerSet' : listOfFertilizerSet.map((set) => set.toJson()).toList(),
+        "createUser" : widget.userData['userId']
+      };
+      var response = await FertilizerSetRepository().createUserFertilizerSet(body);
+      if (kDebugMode) {
+        print('response fertilizerSet : ${response.body}');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error sending payload: $e');
+      }
+    }
   }
 
   Widget getHardwareAcknowledgementWidget(HardwareAcknowledgementState state){
-    print('state : $state');
     if(state == HardwareAcknowledgementState.notSent){
       return const StatusBox(color:  Colors.black87,child: Text('Do you want to send payload..',),);
     }else if(state == HardwareAcknowledgementState.success){
@@ -346,7 +385,7 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
   Widget tableColumnCell({
     required double width,
     required String title
-}){
+  }){
     return SizedBox(
       width: width,
       child: Center(child: Text(title)),
@@ -358,11 +397,10 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
     required Widget widget
   }){
     return SizedBox(
-      width: width,
-      child: Center(child: widget)
+        width: width,
+        child: Center(child: widget)
     );
   }
-
 
   void _showTimePicker({required OverAllUse overAllPvd,required String time, required void Function() onPressed}) async {
     overAllPvd.editTimeAll();
@@ -388,7 +426,6 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
             ),
           );
         });
-
       },
     );
   }
@@ -415,12 +452,12 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
         keyboardType: TextInputType.number,
         cursorHeight: 20,
         decoration: const InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 10),
-            constraints: BoxConstraints(maxHeight: 30),
-            counterText: '',
-            border: OutlineInputBorder(
-                borderSide: BorderSide.none
-            ),
+          contentPadding: EdgeInsets.only(bottom: 10),
+          constraints: BoxConstraints(maxHeight: 30),
+          counterText: '',
+          border: OutlineInputBorder(
+              borderSide: BorderSide.none
+          ),
         ),
       ),
     );
@@ -435,7 +472,7 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
           children: [
             Text('Ec', style: themeData.textTheme.labelLarge,),
             getTextField(
-              regex: AppProperties.regexForDecimal,
+                regex: AppProperties.regexForDecimal,
                 key: '${listOfFertilizerSet.indexOf(recipe)} - ec',
                 initialValue: recipe.ecValue,
                 onChanged: (value){
@@ -450,7 +487,7 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
           children: [
             Text('Ph', style: themeData.textTheme.labelLarge,),
             getTextField(
-              regex: AppProperties.regexForDecimal,
+                regex: AppProperties.regexForDecimal,
                 key: '${listOfFertilizerSet.indexOf(recipe)} - ph',
                 initialValue: recipe.phValue,
                 onChanged: (value){
@@ -464,23 +501,108 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
     );
   }
 
+  // Method to show rename dialog
+  void renameRecipe(FertilizerSiteSettingModel recipe) {
+    TextEditingController renameController = TextEditingController(text: recipe.recipeName);
+    final renameFormKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Rename Recipe'),
+          content: Form(
+            key: renameFormKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: renameController,
+                  autofocus: true,
+                  textAlign: TextAlign.center,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Name cannot be empty';
+                    }
+                    // Check for duplicate names within the same site
+                    final isDuplicate = listOfFertilizerSet.any(
+                            (item) => item.recipeName == value &&
+                            item.sNo == recipe.sNo &&
+                            item != recipe
+                    );
+                    if (isDuplicate) {
+                      return 'Recipe name already exists';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter recipe name',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (renameFormKey.currentState!.validate()) {
+                  setState(() {
+                    recipe.recipeName = renameController.text;
+                  });
+                  Navigator.pop(context);
+
+                  // Optional: Show success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Recipe renamed successfully')),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Rename'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget recipeListTile(FertilizerSiteSettingModel recipe){
     return ListTile(
-      title: Text(recipe.recipeName, style: themeData.textTheme.labelLarge,),
-      trailing: IntrinsicWidth(
+      leading: popUpSelectedValue != SelectMode.unSelect
+          ? Checkbox(
+        value: recipe.select,
+        onChanged: (value) {
+          setState(() {
+            recipe.select = value ?? false;
+          });
+        },
+      )
+          : null,
+      title: Text(recipe.recipeName, style: themeData.textTheme.labelLarge),
+      trailing: popUpSelectedValue == SelectMode.unSelect
+          ? IntrinsicWidth(
         child: Row(
           spacing: 15,
           children: [
             boxButton(
                 color: Colors.orange,
                 icon: Icons.edit_note_outlined,
-                onTap: (){
-
+                onTap: () {
+                  renameRecipe(recipe);  // Call rename function
                 }
             ),
           ],
         ),
-      ),
+      )
+          : null,
     );
   }
 
@@ -503,7 +625,11 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
   }
 
   Widget getFertilizerSiteTab(){
-    Widget child = Column(
+    if (listOfFertilizerSite.isEmpty) {
+      return const SizedBox();
+    }
+
+    return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -512,7 +638,7 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            for(var site = 0; site < listOfFertilizerSite.length;site++)
+            for(var site = 0; site < listOfFertilizerSite.length; site++)
               InkWell(
                 onTap: (){
                   setState(() {
@@ -521,7 +647,7 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 500),
-                  padding: EdgeInsets.symmetric(horizontal: 15,vertical: selectedFertilizerSite == site ? 12 :10),
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: selectedFertilizerSite == site ? 12 : 10),
                   decoration: BoxDecoration(
                       border: const Border(top: BorderSide(width: 0.5), left: BorderSide(width: 0.5), right: BorderSide(width: 0.5)),
                       borderRadius: const BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
@@ -539,7 +665,6 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
         )
       ],
     );
-    return child;
   }
 
   Widget addDeleteSelect(){
@@ -548,15 +673,17 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
       height: 60,
       alignment: Alignment.centerRight,
       child: SizedBox(
-        width: 300,
+        width: 400,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           spacing: 10,
           children: [
-            if(popUpSelectedValue == SelectMode.unSelect)
+            if (popUpSelectedValue == SelectMode.unSelect)
               addButton(),
-            if(popUpSelectedValue != SelectMode.unSelect)
+            if (popUpSelectedValue != SelectMode.unSelect) ...[
               deleteButton(),
+              cancelButton(),
+            ],
             popUpButton()
           ],
         ),
@@ -591,8 +718,60 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
         ],
       ),
       onPressed: (){
+        // Check if any items are selected
+        final selectedCount = listOfFertilizerSet.where((e) => e.select).length;
+        if (selectedCount == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No items selected')),
+          );
+          return;
+        }
+
+        // Show confirmation dialog
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Delete Recipes'),
+            content: Text('Are you sure you want to delete $selectedCount selected recipe(s)?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    listOfFertilizerSet = listOfFertilizerSet.where((e) => !e.select).toList();
+                    popUpSelectedValue = SelectMode.unSelect;
+                  });
+                  Navigator.pop(context);
+                },
+                style: TextButton.styleFrom(foregroundColor: Colors.red),
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget cancelButton(){
+    return CustomMaterialButton(
+      color: Colors.grey,
+      child: const Row(
+        spacing: 10,
+        children: [
+          Icon(Icons.cancel, color: Colors.white),
+          Text('Cancel', style: TextStyle(color: Colors.white)),
+        ],
+      ),
+      onPressed: () {
         setState(() {
-          listOfFertilizerSet = listOfFertilizerSet.where((e) => !e.select).toList();
+          // Clear all selections
+          for (var i in listOfFertilizerSet) {
+            i.select = false;
+          }
           popUpSelectedValue = SelectMode.unSelect;
         });
       },
@@ -618,9 +797,14 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
       onSelected: (value){
         setState(() {
           popUpSelectedValue = value as SelectMode;
-          if(popUpSelectedValue == SelectMode.selectAll){
-            for(var i in listOfFertilizerSet){
+          if (popUpSelectedValue == SelectMode.selectAll) {
+            for (var i in listOfFertilizerSet) {
               i.select = true;
+            }
+          } else if (popUpSelectedValue == SelectMode.unSelect) {
+            // Clear all selections when exiting selection mode
+            for (var i in listOfFertilizerSet) {
+              i.select = false;
             }
           }
         });
@@ -629,6 +813,7 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
   }
 
   void recipeName(){
+    name = ''; // Reset name
     showDialog(
         context: context,
         builder: (context){
@@ -647,14 +832,22 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
                       });
                     },
                     textAlign: TextAlign.center,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
                     cursorHeight: 20,
+                    autofocus: true,
                     validator: (value){
                       if(value!.isEmpty){
                         return 'Name must not be empty';
-                      }else{
-                        return null;
                       }
+                      // Check for duplicate names
+                      final isDuplicate = listOfFertilizerSet.any(
+                              (item) => item.recipeName == value &&
+                              item.sNo == listOfFertilizerSite[selectedFertilizerSite].sNo
+                      );
+                      if (isDuplicate) {
+                        return 'Recipe name already exists';
+                      }
+                      return null;
                     },
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.only(bottom: 10),
@@ -666,16 +859,25 @@ class _FertilizerSetScreenState extends State<FertilizerSetScreen> {
               ),
             ),
             actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
               CustomMaterialButton(
                 onPressed: (){
                   if(formKey.currentState!.validate()){
                     setState(() {
-                      setState(() {
+                      if (selectedFertilizerSite < listOfFertilizerSite.length) {
                         listOfFertilizerSet.add(listOfFertilizerSite[selectedFertilizerSite].createRecipe(name));
                         name = '';
-                      });
+                      }
                     });
                     Navigator.pop(context);
+
+                    // Show success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Recipe added successfully')),
+                    );
                   }
                 },
               )

@@ -65,7 +65,6 @@ class _LineConfigurationState extends State<LineConfiguration> {
                   const SizedBox(height: 10,),
                   Expanded(
                     child: Container(
-                      // padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -204,6 +203,16 @@ class _LineConfigurationState extends State<LineConfiguration> {
                             ),
                             Stack(
                               children: [
+                                if(selectedIrrigationLine.aerator.isNotEmpty)
+                                  Wrap(
+                                    children: List.generate(selectedIrrigationLine.aerator.length, (index){
+                                      return Image.asset(
+                                        width: 100,
+                                          height: 100,
+                                          'assets/png/aerators_grey.png'
+                                      );
+                                    }),
+                                  ),
                                 diagramWidget(selectedIrrigationLine),
                                 Positioned(
                                   right: 10,
@@ -535,15 +544,7 @@ class _LineConfigurationState extends State<LineConfiguration> {
     bool singleSelection = false,
     List<DeviceObjectModel>? listOfObject
   }){
-    if(parameterType == LineParameter.source){
-      print('WWWWWW');
-      for(var obj in listOfObject!){
-        print('empty src : ${obj.name}');
-      }
-    }
-
     if(listOfObject != null){
-      print("${parameterType.name}  ===== ${listOfObject.map((object) => object.toJson()).toList()}");
       if(listOfObject.isEmpty){
         return Container();
       }
@@ -676,7 +677,6 @@ class _LineConfigurationState extends State<LineConfiguration> {
     List<SourceModel> suitableSource = widget.configPvd.source
         .where(
             (source){
-              print("source.sourceType :: ${source.sourceType}");
               bool sourcePumpAvailability = selectedIrrigationLine.sourcePump.any((pump) => (source.outletPump.contains(pump) || source.inletPump.contains(pump)));
               bool irrigationPumpAvailability = selectedIrrigationLine.irrigationPump.any((pump) => (source.outletPump.contains(pump) || source.inletPump.contains(pump)));
               return ((sourcePumpAvailability || irrigationPumpAvailability));
@@ -685,18 +685,14 @@ class _LineConfigurationState extends State<LineConfiguration> {
         .map((source) => source.copy())
         .toList();
 
-    print("Suitable source :: ${widget.configPvd.source.map((e) => e.toJson()).toList()}");
 
     for(var src in suitableSource){
       src.inletPump = src.inletPump.where((pumpSno) => selectedIrrigationLine.sourcePump.contains(pumpSno) || selectedIrrigationLine.irrigationPump.contains(pumpSno)).toList();
       src.outletPump = src.outletPump.where((pumpSno) => selectedIrrigationLine.sourcePump.contains(pumpSno) || selectedIrrigationLine.irrigationPump.contains(pumpSno)).toList();
-      print('source name : ${src.commonDetails.name}  ${src.sourceType}');
     }
 
     List<SourceModel> boreOrOthers = suitableSource.where((source) => source.outletPump.any((pumpSno) => widget.configPvd.pump.cast<PumpModel>().firstWhere((pump) => pump.commonDetails.sNo == pumpSno).pumpType == 1)).toList();
     List<SourceModel> wellSumpTank = suitableSource.where((source) => source.outletPump.any((pumpSno) => widget.configPvd.pump.cast<PumpModel>().firstWhere((pump) => pump.commonDetails.sNo == pumpSno).pumpType == 2)).toList();
-    print('boreOrOthers: ${boreOrOthers.length}');
-    print('wellSumpTank: ${wellSumpTank.length}');
 
     if(boreOrOthers.length == 1 && wellSumpTank.isEmpty){
       return oneSource(suitableSource, selectedIrrigationLine, filterSite: filterSite, fertilizerSite: fertilizerSite);
@@ -725,7 +721,6 @@ class _LineConfigurationState extends State<LineConfiguration> {
 
   // Todo :: oneTank
   Widget oneTank(SourceModel source, IrrigationLineModel selectedIrrigationLine, {bool inlet = true, int? maxOutletPumpForTank, required List<FiltrationModel> filterSite, required List<FertilizationModel> fertilizerSite}){
-    print('oneTank maxOutletPumpForTank : $maxOutletPumpForTank');
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -752,7 +747,6 @@ class _LineConfigurationState extends State<LineConfiguration> {
     required List<SourceModel> multipleTank,
     required IrrigationLineModel selectedIrrigationLine
 }){
-    print("${selectedIrrigationLine.commonDetails.name} == multipleSourceAndMultipleTank");
     List<FiltrationModel> filterSite = [];
     for(var site in widget.configPvd.filtration){
       if(site.commonDetails.sNo == selectedIrrigationLine.centralFiltration){
@@ -769,9 +763,6 @@ class _LineConfigurationState extends State<LineConfiguration> {
         fertilizerSite.add(site);
       }
     }
-    print('filterSite : $filterSite');
-    print('fertilizerSite : $fertilizerSite');
-    print('multipleTank : $multipleTank');
     int maxLength = multipleSource.length > multipleTank.length ? multipleSource.length : multipleTank.length;
     int maxOutletPumpForTank = 0;
     int maxOutletPumpForSource = 0;
@@ -781,8 +772,6 @@ class _LineConfigurationState extends State<LineConfiguration> {
     for(var tank in multipleSource){
       maxOutletPumpForSource = maxOutletPumpForSource < tank.outletPump.length ? tank.outletPump.length : maxOutletPumpForSource;
     }
-    print('multipleSourceAndMultipleTank maxOutletPumpForTank : $maxOutletPumpForTank');
-    print('multipleSourceAndMultipleTank maxOutletPumpForSource : $maxOutletPumpForSource');
     return LayoutBuilder(builder: (context, constraint){
       if(maxOutletPumpForTank == 0 && maxOutletPumpForSource == 0){
         return Container();
@@ -1057,7 +1046,6 @@ class _LineConfigurationState extends State<LineConfiguration> {
 
   // Todo :: oneSourceList
   List<Widget> oneSourceList(SourceModel source,{ int? maxOutletPumpForTank, int? maxOutletPumpForSource} ){
-    print("oneSourceList maxOutletPumpForTank : $maxOutletPumpForTank");
     pumpExtendedWidth += (120 * 2);
     return [
         getSource(source,widget.configPvd , inlet: false, dashboard: true),

@@ -30,7 +30,6 @@ class _DropDownSearchFieldState extends State<DropDownSearchField> {
         .where((device) => device['modelId'] == widget.oldDevice["modelId"])
         .map((device) => device['deviceId'].toString())
         .toList());
-    print('matches : $matches');
     matches.retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return matches;
   }

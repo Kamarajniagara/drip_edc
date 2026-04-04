@@ -46,8 +46,10 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
         'irrigationLog': configDetails,
         'createUser': widget.userData['userId'],
       };
+      debugPrint("body : ${body}");
       var response = await IrrigationRepository().createUserLogConfig(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
+      debugPrint("jsonData => ${jsonData}");
       if(jsonData['code'] == 200){
         getUserLogConfig();
       }
@@ -295,7 +297,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
                                                 logName = serverData['logConfig'][i]['logName'];
                                               });
                                               sideSheet(constraints: constraint, mode: 2,configId: serverData['logConfig'][i]['logConfigId']);
-            
+
                                             },
                                             icon: Icon(Icons.edit_note,color: Colors.orange,)
                                         ),
@@ -434,14 +436,14 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-            
-            
+
+
                                 ],
                               )
                             ],
                           ),
                         )
-            
+
               ],
             ),
           ),

@@ -27,7 +27,6 @@ class _ConfigBasePageState extends State<ConfigBasePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("widget.masterData :: ${jsonEncode(widget.masterData)}");
     configPvd = Provider.of<ConfigMakerProvider>(context, listen: false);
     // Lk farm
     // listOfDevices = configPvd.fetchData({"userId":3,"customerId":4,"controllerId":1,"deviceId":"E8FB1C3501D1","deviceName":"xMm","categoryId":1,"categoryName":"xMm","modelId":1,"modelName":"xMm1000_R","groupId":1,"groupName":"LK Demo","connectingObjectId":["1","2","3","4","1","2","3","4"]});

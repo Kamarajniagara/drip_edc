@@ -78,9 +78,7 @@ class _ProductLimitState extends State<ProductLimit> {
     List<DeviceObjectModel> filteredList = widget.configPvd.listOfSampleObjectModel.where((object) {
       return (object.type == '1,2' && widget.configPvd.getPossibleConnectingObjectId().contains(object.objectId));
     }).toList();
-    for(var obj in filteredList){
-      print("obj name : ${obj.objectName}");
-    }
+
     return ProductLimitGridListTile(
       listOfObjectModel: filteredList,
       title: 'Output Object',
@@ -99,7 +97,6 @@ class _ProductLimitState extends State<ProductLimit> {
   }
 
   Widget digitalObject(){
-    print("widget.configPvd.getPossibleConnectingObjectId() : ${widget.configPvd.getPossibleConnectingObjectId()}");
     List<DeviceObjectModel> filteredList = widget.configPvd.listOfSampleObjectModel.where((object) {
       if(AppConstants.pumpWithValveModelList.contains(widget.configPvd.masterData['modelId'])){
         return (object.type == '4' && widget.configPvd.getPossibleConnectingObjectId().contains(object.objectId));
@@ -141,18 +138,6 @@ class _ProductLimitState extends State<ProductLimit> {
       configPvd: widget.configPvd,
     );
   }
-
-  // Widget analogObject(){
-  //   print('listOfObjectId : ${widget.configPvd.listOfSampleObjectModel.map((e) => e.objectId)}');
-  //   List<DeviceObjectModel> filteredList = widget.configPvd.listOfSampleObjectModel.where((object) => (widget.configPvd.masterData['categoryId'] != 2 ? !['-', '1,2'].contains(object.type) : [22, 24, 26, 40].contains(object.objectId))).toList();
-  //   print('filteredList : ${filteredList.map((e) => e.objectId)}');
-  //   filteredList.sort((a, b) => a.type.compareTo(b.type));
-  //   return ProductLimitGridListTile(
-  //     listOfObjectModel: filteredList,
-  //     title: 'Input Object',
-  //     configPvd: widget.configPvd,
-  //   );
-  // }
 
   List<Widget> colorLegendBox(double screenWidth,double screenHeight){
     return [

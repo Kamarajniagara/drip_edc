@@ -54,8 +54,8 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
         defaultData = jsonData['data']['default'];
       });
     } catch (e, stackTrace) {
-      print('error :: $e');
-      print('stackTrace :: $stackTrace');
+      debugPrint('error :: $e');
+      debugPrint('stackTrace :: $stackTrace');
       rethrow;
     }
     return calibrationData;
@@ -412,7 +412,6 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
       "createUser" : widget.userData['userId']
     };
     var response = await CalibrationRepository().createUserCalibration(body);
-    print('response calibration : ${response.body}');
   }
 
   Map<String, dynamic> getCalibrationPayload(List<SensorCategoryModel> sensorCategory){
@@ -434,7 +433,6 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
   }
 
   Widget getHardwareAcknowledgementWidget(HardwareAcknowledgementState state){
-    print('state : $state');
     if(state == HardwareAcknowledgementState.notSent){
       return const StatusBox(color:  Colors.black87,child: Text('Do you want to send payload..',),);
     }else if(state == HardwareAcknowledgementState.success){

@@ -406,7 +406,6 @@ class _SourceConfigurationState extends State<SourceConfiguration> {
                                 isFloatRemoved = true;
                               }
                               if(isFloatRemoved){
-                                print("");
                                 sensorsRemovedFromPump.add(pump.commonDetails.name!);
                                 sensorRemovedInAnyPump = true;
                               }

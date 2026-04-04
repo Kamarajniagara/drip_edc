@@ -21,6 +21,7 @@ class _NodeInBootModeState extends State<NodeInBootMode> {
     super.initState();
     bleService = Provider.of<BleProvider>(context, listen: false);
   }
+
   @override
   Widget build(BuildContext context) {
     bleService = Provider.of<BleProvider>(context, listen: true);

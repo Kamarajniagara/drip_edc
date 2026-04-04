@@ -54,7 +54,6 @@ class _DeviceListState extends State<DeviceList> {
     setState(() {
       userRole = role!;
     });
-    print("userRole :: $userRole");
   }
 
   @override
@@ -316,10 +315,8 @@ class _DeviceListState extends State<DeviceList> {
         // "modifyUser": configPvd.masterData['customerId'],
       };
       var response = await ConfigMakerRepository().checkProduct(body);
-      print("response +++ ${response.body}");
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       if(response.statusCode == 200 && jsonData["code"] == 200){
-        print("jsonData : $jsonData");
         String message = '${jsonData['message']}';
         Navigator.pop(context);
         await Future.delayed(const Duration(milliseconds: 100));
@@ -402,8 +399,8 @@ class _DeviceListState extends State<DeviceList> {
       }
     }catch (e, stackTrace){
       simpleDialogBox(context: context, title: 'Failed', message: e.toString());
-      print('Error on converting to device model :: $e');
-      print('stackTrace on converting to device model :: $stackTrace');
+      debugPrint('Error on converting to device model :: $e');
+      debugPrint('stackTrace on converting to device model :: $stackTrace');
       return 404;
     }
   }
@@ -441,7 +438,6 @@ class _DeviceListState extends State<DeviceList> {
     }else{
       value = '-';
     }
-    print('getInitialExtendValue : $value');
     return value;
   }
 
@@ -507,12 +503,10 @@ class _DeviceListState extends State<DeviceList> {
                     });
                   }
                 }
-                print('configPvd.masterData ::: ${configPvd.masterData}');
 
                 List<DeviceModel> possibleNodeToConfigUnderMaster = listOfDevices.where((node) {
                   List<int> nodeUnderPumpWithValveModel = [15, 17, 23, 25, 42];
                   List<int> nodeNotUnderGemModel = [48, 49];
-                  print("node => ${node.modelId} == ${node.modelDescription} == ${node.modelName}");
                   if(AppConstants.pumpWithValveModelList.contains(configPvd.masterData['modelId']) && nodeUnderPumpWithValveModel.contains(node.modelId)){
                     /* this condition filter node for pump with valve model */
                     return true;
@@ -526,7 +520,6 @@ class _DeviceListState extends State<DeviceList> {
                     return false;
                   }
                 }).toList();
-                print('possibleNodeToConfigUnderMaster : $possibleNodeToConfigUnderMaster');
                 bool isThereNodeToConfigure = possibleNodeToConfigUnderMaster.any((node) => node.masterId == null);
                 if(isThereNodeToConfigure){
                   showDialog(
@@ -584,7 +577,6 @@ class _DeviceListState extends State<DeviceList> {
                                             List<int> nodeUnderPumpWithValveModel = [15, 17, 23, 25, 42];
                                             List<int> nodeUnderEcoGemModel = [36, 50, 42];
                                             List<int> nodeNotUnderGemModel = [48, 49];
-                                            print('modelId : ${node.modelId}');
                                             if(AppConstants.pumpWithValveModelList.contains(configPvd.masterData['modelId']) && nodeUnderPumpWithValveModel.contains(node.modelId)){
                                               /* this condition filter node for pump with valve model */
                                               return true;
@@ -683,19 +675,6 @@ class _DeviceListState extends State<DeviceList> {
       ),
     );
   }
-
-  // void sendToMqttSetSerial(){
-  //
-  //   final Map<String, dynamic> setSerialPayload = {
-  //     '2300' : {
-  //       '2301' : configPvd.listOfDeviceModel.where((device) => device.masterId != null).map((device) => device.serialNumber).toList().join(','),
-  //
-  //     }
-  //   };
-  //   MqttManager().topicToPublishAndItsMessage('${Environment.mqttWebPublishTopic}/${configPvd.masterData['deviceId']}', jsonEncode(setSerialPayload));
-  //   print("configMakerPayload ==> ${jsonEncode(setSerialPayload)}");
-  //   // print("getOroPumpPayload ==> ${widget.configPvd.getOroPumpPayload()}");
-  // }
 
   String getTabName(ConfigMakerTabs configMakerTabs) {
     switch (configMakerTabs) {

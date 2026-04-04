@@ -154,8 +154,8 @@ class _ControlNodeState extends State<ControlNode> {
   }
 
   bool getRelayStatus(int relayNo){
-    print("relayNo : $relayNo");
-    print("bleService.nodeDataFromHw['RLY'] : ${bleService.nodeDataFromHw['RLY']}");
+    debugPrint("relayNo : $relayNo");
+    debugPrint("bleService.nodeDataFromHw['RLY'] : ${bleService.nodeDataFromHw['RLY']}");
     var relayStatusList = bleService.nodeDataFromHw['RLY'].split(',');
     return relayStatusList[relayNo] == '1' ? true : false;
   }
@@ -241,12 +241,12 @@ class _ControlNodeState extends State<ControlNode> {
                           listOfBytes.add(bytes);
                         }
                         if (kDebugMode) {
-                          print(
+                          debugPrint(
                               'listOfBytes : $listOfBytes');
-                          print('sumOfAscii : $sumOfAscii');
-                          print(
+                          debugPrint('sumOfAscii : $sumOfAscii');
+                          debugPrint(
                               'crc : ${sumOfAscii % 256}');
-                          print('payload : $payload');
+                          debugPrint('payload : $payload');
                         }
                         bleService.sendDataToHw(listOfBytes);
                         loadingDialog();
@@ -350,7 +350,7 @@ class _ControlNodeState extends State<ControlNode> {
   }
 
   Widget analogDetailsWidget(){
-    print("bleService.nodeDataFromServer : ${bleService.nodeDataFromServer}");
+    debugPrint("bleService.nodeDataFromServer : ${bleService.nodeDataFromServer}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

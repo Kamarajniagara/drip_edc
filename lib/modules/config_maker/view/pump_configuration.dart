@@ -312,13 +312,9 @@ class _PumpConfigurationState extends State<PumpConfiguration> {
                 };
                 for(var src in widget.configPvd.source){
                   if(src.outletPump.contains(currentPump.commonDetails.sNo)){
-                    print('take outlet pump');
-                    print("src : ${src.toJson()}");
                     topSumpFloatSnoForAllSource.add(src.topFloatForOutletPump);
                     bottomSumpFloatSnoForAllSource.add(src.bottomFloatForOutletPump);
                   }else if(src.inletPump.contains(currentPump.commonDetails.sNo)){
-                    print('take inlet pump');
-                    print("src : ${src.toJson()}");
                     topTankFloatSnoForAllSource.add(src.topFloatForInletPump);
                     bottomTankFloatSnoForAllSource.add(src.bottomFloatForInletPump);
                   }
@@ -337,7 +333,6 @@ class _PumpConfigurationState extends State<PumpConfiguration> {
                 setState(() {
                   widget.configPvd.selectedSno = currentSno;
                 });
-                print("validateFloatAvailableInSource[mode] $mode: ${validateFloatAvailableInSource[mode]}");
                 selectionDialogBox(
                     context: context,
                     title: 'Select $objectName',

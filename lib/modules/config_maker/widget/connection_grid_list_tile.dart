@@ -35,9 +35,7 @@ class _ConnectionGridListTileState extends State<ConnectionGridListTile> with Si
   void initState() {
     // TODO: implement initState
     super.initState();
-    for(var obj in widget.listOfObjectModel){
-      print("init =>> ${obj.toJson()}");
-    }
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800), // Total duration of 2 blinks
@@ -115,9 +113,7 @@ class _ConnectionGridListTileState extends State<ConnectionGridListTile> with Si
           ? Checkbox(
           value: powerSupplyConnectedToCategory_6(),
           onChanged: (value){
-            print('working for powerSupply');
             widget.configPvd.updateObjectConnectionForPowerSupply(object, value!);
-            print('object : ${object.toJson()}');
           }
       ) : SizedBox(
         width: 80,

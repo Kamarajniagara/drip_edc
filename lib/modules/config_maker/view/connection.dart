@@ -53,10 +53,9 @@ class _ConnectionState extends State<Connection> {
       }
       widget.configPvd.updateSelectedConnectionNoAndItsType(0, '');
       widget.configPvd.updateConnectionListTile();
-      print("widget.configPvd.selectedModelControllerId --- : ${widget.configPvd.selectedModelControllerId}");
       return true;
     } catch (e) {
-      print('Error in updateConnection: ${e.toString()}');
+      debugPrint('Error in updateConnection: ${e.toString()}');
       return false;
     }
   }
@@ -226,7 +225,6 @@ class _ConnectionState extends State<Connection> {
             && object.controllerId == null || (object.controllerId == selectedDevice.controllerId && object.connectionNo == widget.configPvd.selectedConnectionNo))
             .toList().where((object) => object.type == widget.configPvd.selectedType)
             .map((object){
-          print("object name : ${object.name}  type : ${object.type} widget.configPvd.selectedType : ${widget.configPvd.selectedType}");
           bool isSelected = object.controllerId == selectedDevice.controllerId
               && object.type == widget.configPvd.selectedType
               && object.connectionNo == widget.configPvd.selectedConnectionNo;

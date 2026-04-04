@@ -182,7 +182,7 @@ class _InterfaceSettingState extends State<InterfaceSetting> {
                     value: bleService.nodeDataFromHw['REP'] == '0' ? false : true,
                     activeTrackColor: Theme.of(context).primaryColorLight,
                     onChanged: (value) {
-                      print('value ==> $value');
+                      debugPrint('value ==> $value');
                       setState(() {
                         bleService.nodeDataFromHw['REP'] = (value ? '1' : '0');
                       });
@@ -207,10 +207,10 @@ class _InterfaceSettingState extends State<InterfaceSetting> {
                       var bytes = i.codeUnitAt(0);
                       listOfBytes.add(bytes);
                     }
-                    print('listOfBytes : $listOfBytes');
-                    print('sumOfAscii : $sumOfAscii');
-                    print('crc : ${sumOfAscii % 256}');
-                    print('payload : ${payload}');
+                    debugPrint('listOfBytes : $listOfBytes');
+                    debugPrint('sumOfAscii : $sumOfAscii');
+                    debugPrint('crc : ${sumOfAscii % 256}');
+                    debugPrint('payload : ${payload}');
                     bleService.sendDataToHw(listOfBytes);
                     loadingDialog();
                   },
@@ -288,10 +288,10 @@ class _InterfaceSettingState extends State<InterfaceSetting> {
                       var bytes = i.codeUnitAt(0);
                       listOfBytes.add(bytes);
                     }
-                    print('listOfBytes : $listOfBytes');
-                    print('sumOfAscii : $sumOfAscii');
-                    print('crc : ${sumOfAscii % 256}');
-                    print('payload : ${payload}');
+                    debugPrint('listOfBytes : $listOfBytes');
+                    debugPrint('sumOfAscii : $sumOfAscii');
+                    debugPrint('crc : ${sumOfAscii % 256}');
+                    debugPrint('payload : ${payload}');
                     bleService.sendDataToHw(listOfBytes);
                     loadingDialog();
                   },
@@ -380,10 +380,10 @@ class _InterfaceSettingState extends State<InterfaceSetting> {
                         var bytes = i.codeUnitAt(0);
                         listOfBytes.add(bytes);
                       }
-                      print('listOfBytes : $listOfBytes');
-                      print('sumOfAscii : $sumOfAscii');
-                      print('crc : ${sumOfAscii % 256}');
-                      print('payload : ${payload}');
+                      debugPrint('listOfBytes : $listOfBytes');
+                      debugPrint('sumOfAscii : $sumOfAscii');
+                      debugPrint('crc : ${sumOfAscii % 256}');
+                      debugPrint('payload : ${payload}');
                       bleService.sendDataToHw(listOfBytes);
                       loadingDialog();
                     },

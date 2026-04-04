@@ -76,7 +76,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
     print("createvalvegroup call");
     final Repository repository = Repository(HttpService());
     Map<String, dynamic> body = {
-      "userId": widget.userId,
+      "userId": widget.customerId,
       "controllerId": widget.controllerId,
       "valveGroup": _groupdata.data?.valveGroup!.map((x) => x.toJson()).toList() ?? [],
       "createUser": widget.userId,

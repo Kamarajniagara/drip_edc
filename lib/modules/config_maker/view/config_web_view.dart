@@ -133,29 +133,29 @@ class _ConfigWebViewState extends State<ConfigWebView> {
   Map<String, dynamic> getConstantHardwarePayload(){
     var constPvd = Provider.of<ConstantProvider>(context, listen: false);
     var generalPayload = constPvd.getGeneralPayload();
-    print("generalPayload : $generalPayload");
+    // print("generalPayload : $generalPayload");
     var globalAlarmPayload = constPvd.getGlobalAlarmPayload();
-    print("globalAlarmPayload : $globalAlarmPayload");
+    // print("globalAlarmPayload : $globalAlarmPayload");
     var globalAlarmForEcoGem = constPvd.getEcoGemPayloadForGlobalAlarm();
-    print("globalAlarmForEcoGem : $globalAlarmForEcoGem");
+    // print("globalAlarmForEcoGem : $globalAlarmForEcoGem");
     var levelSensorPayload = constPvd.getObjectInConstantPayload(constPvd.level);
-    print("levelSensorPayload : $levelSensorPayload");
+    // print("levelSensorPayload : $levelSensorPayload");
     var pumpPayload = constPvd.getObjectInConstantPayload(constPvd.pump);
-    print("pumpPayload : $pumpPayload");
+    // print("pumpPayload : $pumpPayload");
     var channelPayload = constPvd.getObjectInConstantPayload(constPvd.channel);
-    print("channelPayload : $channelPayload");
+    // print("channelPayload : $channelPayload");
     var fertilizerSitePayload = constPvd.getFertilizerSitePayload();
-    print("fertilizerSitePayload : $fertilizerSitePayload");
+    // print("fertilizerSitePayload : $fertilizerSitePayload");
     var waterMeterPayload = constPvd.getObjectInConstantPayload(constPvd.waterMeter);
-    print("waterMeterPayload : $waterMeterPayload");
+    // print("waterMeterPayload : $waterMeterPayload");
     var mainValvePayload = constPvd.getObjectInConstantPayload(constPvd.mainValve);
-    print("mainValvePayload : $mainValvePayload");
+    // print("mainValvePayload : $mainValvePayload");
     var valvePayload = constPvd.getObjectInConstantPayload(constPvd.valve);
-    print("valvePayload : $valvePayload");
+    // print("valvePayload : $valvePayload");
     var normalCriticalPayload = AppConstants.ecoGemModelList.contains(configPvd.masterData['modelId']) ? constPvd.getNormalCriticalAlarmForEcoGem() : constPvd.getNormalCriticalAlarm();
-    print("normalCriticalPayload : $normalCriticalPayload");
+    // print("normalCriticalPayload : $normalCriticalPayload");
     var filterPayload = constPvd.getFilterSitePayload();
-    print("filterPayload : $filterPayload");
+    // print("filterPayload : $filterPayload");
     bool isGem = AppConstants.gemModelList.contains(constPvd.userData['modelId']);
     var hardwarePayload = {
       "300" : {
@@ -656,8 +656,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
         });
       });
     }
-    // MqttManager().topicToPublishAndItsMessage('${Environment.mqttWebPublishTopic}/${configPvd.masterData['deviceId']}', jsonEncode(configMakerPayload));
-    print("listOfPayload ==> $listOfPayload");
     payloadAlertBox();
   }
 
@@ -716,7 +714,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
                       CustomMaterialButton(
                         onPressed: ()async{
                           payloadLoop : for(var payload in listOfPayload){
-                            print("payload : ${payload}");
                             if(!payload['selected']){
                               continue payloadLoop;
                             }
@@ -731,7 +728,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
                                 payload['acknowledgementState'] = HardwareAcknowledgementState.failed;
                               }
                               await Future.delayed(const Duration(seconds: 1));
-                              print("${payload['hardwareType']}\n sec ${sec + 1}   -- ${payload['deviceId']} \n ${mqttService.acknowledgementPayload }");
                               if(mqttService.isConnected && mqttAttempt == true){
                                 mqttService.topicToPublishAndItsMessage(payload['payload'], '${Environment.mqttPublishTopic}/${configPvd.masterData['deviceId']}');
                                 mqttAttempt = false;
@@ -748,7 +744,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
                                           payload['acknowledgementState'] = HardwareAcknowledgementState.programRunning;
                                         }else if(mqttService.acknowledgementPayload!['cM']['4201']['Code'] == '1'){
                                           payload['acknowledgementState'] = HardwareAcknowledgementState.hardwareUnknownError;
-                                          print('successfully!! update status for ${payload['title']}  and its code : ${mqttService.acknowledgementPayload!['cM']['4201']['Code']} -- ${payload['acknowledgementState']}');
                                         }else{
                                           payload['acknowledgementState'] = HardwareAcknowledgementState.errorOnPayload;
                                         }
@@ -796,7 +791,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
   }
 
   Widget payloadAcknowledgementWidget(HardwareAcknowledgementState state){
-    print('state : ${state.name}');
     late Color color;
     if(state == HardwareAcknowledgementState.notSent){
       color = Colors.grey;
@@ -839,7 +833,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
   }
 
   void sendToHttp()async{
-    print('sendToHttp called.....');
     var listOfSampleObjectModel = configPvd.listOfSampleObjectModel.map((object){
       return object.toJson();
     }).toList();
@@ -873,8 +866,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
     var phSensor = configPvd.ph.cast<PhModel>().map((object){
       return object.toJson();
     }).toList();
-    print('ecSensor : ${ecSensor}');
-    print('phSensor : ${phSensor}');
     var body = {
       "userId" : configPvd.masterData['customerId'],
       "controllerId" : configPvd.masterData['controllerId'],
@@ -919,9 +910,6 @@ class _ConfigWebViewState extends State<ConfigWebView> {
       return object.toJson(data: body);
     }).toList();
     var response = await ConfigMakerRepository().createUserConfigMaker(body);
-    print('body : ${jsonEncode(body)}');
-    print('body configMaker: ${jsonEncode(body)}');
-    print('response : ${response.body}');
   }
 
   Widget sideNavigationWidget(screenWidth, screenHeight){
@@ -1007,10 +995,6 @@ bool validatePayloadFromHardware(Map<String, dynamic>? payload, List<String> key
     }else if(checkingNestedData == checkingValue){
       condition = true;
     }
-  }
-
-  if(kDebugMode){
-    print("checkingNestedData : $checkingNestedData \n checkingValue : $checkingValue \n condition : $condition");
   }
   return condition;
 }

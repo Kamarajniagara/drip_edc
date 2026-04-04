@@ -229,10 +229,10 @@ class _CalibrationState extends State<Calibration> {
                             fullData.add(bytes);
                           }
                           if (kDebugMode) {
-                            print('sumOfAscii : $sumOfAscii');
-                            print('crc : ${sumOfAscii % 256}');
-                            print('fullData : ${fullData}');
-                            print('payload : ${payload}');
+                            debugPrint('sumOfAscii : $sumOfAscii');
+                            debugPrint('crc : ${sumOfAscii % 256}');
+                            debugPrint('fullData : ${fullData}');
+                            debugPrint('payload : ${payload}');
                           }
 
                           bleService.sendDataToHw(fullData);
@@ -340,10 +340,10 @@ class _CalibrationState extends State<Calibration> {
                             fullData.add(bytes);
                           }
                           if (kDebugMode) {
-                            print('sumOfAscii : $sumOfAscii');
-                            print('crc : ${sumOfAscii % 256}');
-                            print('fullData : ${fullData}');
-                            print('payload : ${payload}');
+                            debugPrint('sumOfAscii : $sumOfAscii');
+                            debugPrint('crc : ${sumOfAscii % 256}');
+                            debugPrint('fullData : ${fullData}');
+                            debugPrint('payload : ${payload}');
                           }
 
                           bleService.sendDataToHw(fullData);
@@ -468,11 +468,11 @@ class _CalibrationState extends State<Calibration> {
                           });
                           if(sensorCount == 0){
                             if (kDebugMode) {
-                              print("blePvd.calibrationEc1 : ${bleService.calibrationEc1}");
+                              debugPrint("blePvd.calibrationEc1 : ${bleService.calibrationEc1}");
                             }
                           }else{
                             if (kDebugMode) {
-                              print("blePvd.calibrationEc2 : ${bleService.calibrationEc2}");
+                              debugPrint("blePvd.calibrationEc2 : ${bleService.calibrationEc2}");
                             }
 
                           }
@@ -572,11 +572,11 @@ class _CalibrationState extends State<Calibration> {
                           });
                           if(sensorCount == 0){
                             if (kDebugMode) {
-                              print("blePvd.calibrationEc1 : ${bleService.calibrationEc1}");
+                              debugPrint("blePvd.calibrationEc1 : ${bleService.calibrationEc1}");
                             }
                           }else{
                             if (kDebugMode) {
-                              print("blePvd.calibrationEc2 : ${bleService.calibrationEc2}");
+                              debugPrint("blePvd.calibrationEc2 : ${bleService.calibrationEc2}");
                             }
 
                           }
@@ -677,11 +677,11 @@ class _CalibrationState extends State<Calibration> {
                             });
                             if(sensorCount == 0){
                               if (kDebugMode) {
-                                print("blePvd.calibrationEc1 : ${bleService.calibrationEc1}");
+                                debugPrint("blePvd.calibrationEc1 : ${bleService.calibrationEc1}");
                               }
                             }else{
                               if (kDebugMode) {
-                                print("blePvd.calibrationEc2 : ${bleService.calibrationEc2}");
+                                debugPrint("blePvd.calibrationEc2 : ${bleService.calibrationEc2}");
                               }
 
                             }
@@ -759,10 +759,10 @@ class _CalibrationState extends State<Calibration> {
                           fullData.add(bytes);
                         }
                         if (kDebugMode) {
-                          print('sumOfAscii : $sumOfAscii');
-                          print('crc : ${sumOfAscii % 256}');
-                          print('fullData : ${fullData}');
-                          print('payload : ${payload}');
+                          debugPrint('sumOfAscii : $sumOfAscii');
+                          debugPrint('crc : ${sumOfAscii % 256}');
+                          debugPrint('fullData : ${fullData}');
+                          debugPrint('payload : ${payload}');
                         }
                         bleService.sendDataToHw(fullData);
                         loadingDialog('Ec calibration setting sent successfully...');
@@ -884,18 +884,18 @@ class _CalibrationState extends State<Calibration> {
                               bleService.calibrationPh1 = 'ph${sensorCount+1}';
                               bleService.calibrationPh2 = '';
                             }else{
-                              print("update ph 2");
+                              debugPrint("update ph 2");
                               bleService.calibrationPh2 = 'ph${sensorCount+1}';
                               bleService.calibrationPh1 = '';
                             }
                           });
                           if(sensorCount == 0){
                             if (kDebugMode) {
-                              print("blePvd.calibrationPh1 : ${bleService.calibrationPh1}");
+                              debugPrint("blePvd.calibrationPh1 : ${bleService.calibrationPh1}");
                             }
                           }else{
                             if (kDebugMode) {
-                              print("blePvd.calibrationPh2 : ${bleService.calibrationPh2}");
+                              debugPrint("blePvd.calibrationPh2 : ${bleService.calibrationPh2}");
                             }
                           }
                           loadingDialog('Get ${sensorCount == 0 ? bleService.ph1FactorController.text : bleService.ph2FactorController.text} Command Send Successfully..');
@@ -994,11 +994,11 @@ class _CalibrationState extends State<Calibration> {
                           });
                           if(sensorCount == 0){
                             if (kDebugMode) {
-                              print("blePvd.calibrationPh1 : ${bleService.calibrationPh1}");
+                              debugPrint("blePvd.calibrationPh1 : ${bleService.calibrationPh1}");
                             }
                           }else{
                             if (kDebugMode) {
-                              print("blePvd.calibrationPh2 : ${bleService.calibrationPh2}");
+                              debugPrint("blePvd.calibrationPh2 : ${bleService.calibrationPh2}");
                             }
 
                           }
@@ -1075,10 +1075,10 @@ class _CalibrationState extends State<Calibration> {
                           fullData.add(bytes);
                         }
                         if (kDebugMode) {
-                          print('sumOfAscii : $sumOfAscii');
-                          print('crc : ${sumOfAscii % 256}');
-                          print('fullData : ${fullData}');
-                          print('payload : ${payload}');
+                          debugPrint('sumOfAscii : $sumOfAscii');
+                          debugPrint('crc : ${sumOfAscii % 256}');
+                          debugPrint('fullData : ${fullData}');
+                          debugPrint('payload : ${payload}');
                         }
                         bleService.sendDataToHw(fullData);
                         loadingDialog('Ph Calibration Setting Send Successfully..');
