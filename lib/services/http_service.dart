@@ -6,7 +6,7 @@ import '../utils/helpers/encryption_helper.dart';
 import '../utils/shared_preferences_helper.dart';
 import 'api_service.dart';
 
-class HttpService implements ApiService {
+/*class HttpService implements ApiService {
   @override
   Future<http.Response> getRequest(String endpoint, {String? type, Map<String, String>? queryParams}) async {
     final token = await PreferenceHelper.getToken();
@@ -73,15 +73,58 @@ class HttpService implements ApiService {
       body: jsonEncode(bodyData),
     );
   }
-}
+}*/
 
 
 
-/*class HttpService implements ApiService {
+class HttpService implements ApiService {
 
   // Initialize encryption helper
   HttpService() {
     EncryptionHelper.init();
+  }
+
+  // Helper method to encrypt request body
+  String _encryptRequestBody(Map<String, dynamic> bodyData) {
+    try {
+      final jsonString = jsonEncode(bodyData);
+      print('Original JSON: $jsonString');
+
+      final encryptedData = EncryptionHelper.encrypt(jsonString);
+      print('✅ Request body encrypted successfully');
+
+      return jsonEncode({'payload': encryptedData});
+    } catch (e) {
+      print('❌ Failed to encrypt request body: $e');
+      return jsonEncode(bodyData);
+    }
+  }
+
+  // Helper method to decrypt response body
+  dynamic _decryptResponseBody(String responseBody) {
+    try {
+      // Parse the response JSON
+      final jsonResponse = jsonDecode(responseBody);
+
+      // Check if response has a payload field
+      if (jsonResponse is Map && jsonResponse.containsKey('payload')) {
+        final encryptedPayload = jsonResponse['payload'] as String;
+
+        if (encryptedPayload.isNotEmpty && EncryptionHelper.isEncrypted(encryptedPayload)) {
+          final decryptedBody = EncryptionHelper.decrypt(encryptedPayload);
+          print('✅ Response decrypted successfully');
+
+          // Parse the decrypted JSON string
+          return jsonDecode(decryptedBody);
+        }
+      }
+
+      // If no payload field or not encrypted, return original response
+      return jsonResponse;
+    } catch (e) {
+      print('❌ Failed to decrypt/parse response: $e');
+      return responseBody;
+    }
   }
 
   // Helper method to process response (decrypt if needed)
@@ -89,22 +132,21 @@ class HttpService implements ApiService {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final body = response.body;
 
-      // Check if response body is encrypted
-      if (body.isNotEmpty && EncryptionHelper.isEncrypted(body)) {
-        try {
-          final decryptedBody = EncryptionHelper.decrypt(body);
-          print('✅ Response decrypted successfully');
+      print('Raw response body: $body');
 
-          // Create new response with decrypted body
+      if (body.isNotEmpty) {
+        try {
+          final decryptedData = _decryptResponseBody(body);
+
+          // Create new response with decrypted body as JSON string
           return http.Response(
-            decryptedBody,
+            jsonEncode(decryptedData),
             response.statusCode,
             headers: response.headers,
             request: response.request,
           );
         } catch (e) {
-          print('❌ Failed to decrypt response: $e');
-          // Return original response if decryption fails
+          print('❌ Failed to process response: $e');
           return response;
         }
       }
@@ -127,14 +169,13 @@ class HttpService implements ApiService {
         ? await http.get(Uri.parse(endpoint), headers: headers)
         : await http.get(uri, headers: headers);
 
-    // Process and decrypt response if needed
     return await _processResponse(response);
   }
 
   @override
   Future<http.Response> postRequest(String endpoint, Map<String, dynamic> bodyData) async {
-    print('bodyData : $bodyData');
-    print('${AppConstants.apiUrl}$endpoint');
+    print('Original bodyData: $bodyData');
+    print('URL: ${AppConstants.apiUrl}$endpoint');
 
     final token = await PreferenceHelper.getToken();
 
@@ -143,14 +184,25 @@ class HttpService implements ApiService {
       'auth_token': token?.isNotEmpty == true ? token! : 'default_token',
     };
 
-    http.Response response = await http.post(
-      Uri.parse('${AppConstants.apiUrl}$endpoint'),
-      headers: headers,
-      body: jsonEncode(bodyData),
-    );
+    // Encrypt the request body
+    final encryptedBody = _encryptRequestBody(bodyData);
+    print('Encrypted body: $encryptedBody');
 
-    // Process and decrypt response if needed
-    return await _processResponse(response);
+    try {
+      http.Response response = await http.post(
+        Uri.parse('${AppConstants.apiUrl}$endpoint'),
+        headers: headers,
+        body: encryptedBody,
+      ).timeout(const Duration(seconds: 30));
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      return await _processResponse(response);
+    } catch (e) {
+      print('Request error: $e');
+      rethrow;
+    }
   }
 
   @override
@@ -162,13 +214,14 @@ class HttpService implements ApiService {
       'auth_token': token?.isNotEmpty == true ? token! : 'default_token',
     };
 
+    final encryptedBody = _encryptRequestBody(bodyData);
+
     http.Response response = await http.put(
       Uri.parse('${AppConstants.apiUrl}$endpoint'),
       headers: headers,
-      body: jsonEncode(bodyData),
-    );
+      body: encryptedBody,
+    ).timeout(const Duration(seconds: 30));
 
-    // Process and decrypt response if needed
     return await _processResponse(response);
   }
 
@@ -181,13 +234,14 @@ class HttpService implements ApiService {
       'auth_token': token?.isNotEmpty == true ? token! : 'default_token',
     };
 
+    final encryptedBody = _encryptRequestBody(bodyData);
+
     http.Response response = await http.delete(
       Uri.parse('${AppConstants.apiUrl}$endpoint'),
       headers: headers,
-      body: jsonEncode(bodyData),
-    );
+      body: encryptedBody,
+    ).timeout(const Duration(seconds: 30));
 
-    // Process and decrypt response if needed
     return await _processResponse(response);
   }
-}*/
+}

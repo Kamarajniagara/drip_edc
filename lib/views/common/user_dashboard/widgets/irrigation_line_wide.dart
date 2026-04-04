@@ -170,7 +170,7 @@ class IrrigationLineWide extends StatelessWidget {
 
             if(cFertilizerSite.isNotEmpty) {
               if (((item is ValveWidget) || (item is BuildMainValve)
-                  ||(item is LightWidget)||(item is SensorWidget))
+                  || (item is LightWidget)  || (item is FanWidget) || (item is SensorWidget))
                   && index < itemsPerRow) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 30),

@@ -60,8 +60,8 @@ class DecreaseDurationNotifier extends ChangeNotifier {
   }
 }
 
+
 class IncreaseDurationNotifier extends ChangeNotifier {
-  // Existing variables
   late Duration _duration;
   late Timer _timer;
   late bool _isTimeFormat;
@@ -69,37 +69,52 @@ class IncreaseDurationNotifier extends ChangeNotifier {
   double _setLiters = 0.0;
   double _flowRate = 0.0;
 
-  // New variables for status toggling
-  int _currentStatus = 1;  // 1 = ON, 0 = OFF (default ON)
-  int _onTime = 0;         // Seconds to stay ON
-  int _offTime = 0;        // Seconds to stay OFF
+  // Variables for ON/OFF timing
+  int _onTime = 0;
+  int _offTime = 0;
+  int _currentStatus = 1;
   int _remainingOnTime = 0;
   int _remainingOffTime = 0;
   bool _isPaused = false;
+  String _frtMethod = '0';
+  bool _isCompleted = false;
+  int _externalStatus = 1;
+  bool _hasValidPayload = true;
 
-  // Getters
-  String get onCompletedDrQ =>
-      _isTimeFormat ? _formatTime(_duration) : _liters.toStringAsFixed(2);
+  // Flag to prevent multiple post-frame callbacks
+  bool _hasPendingUpdate = false;
 
+  String get onCompletedDrQ {
+    if (_isCompleted) return _formatTime(_duration);
+    return _isTimeFormat ? _formatTime(_duration) : _liters.toStringAsFixed(2);
+  }
+
+  String get currentDuration => _formatTime(_duration);
   int get currentStatus => _currentStatus;
   bool get isPaused => _isPaused;
+  bool get isCompleted => _isCompleted;
   int get remainingOnTime => _remainingOnTime;
   int get remainingOffTime => _remainingOffTime;
 
-  // Updated constructor
   IncreaseDurationNotifier(
       String setValve,
       String completedValve,
       double flowRate, {
-        int onTime = 0,      // New parameter
-        int offTime = 0,     // New parameter
-        int initialStatus = 1, // New parameter
+        int onTime = 0,
+        int offTime = 0,
+        String frtMethod = '0',
+        int externalStatus = 1,
+        bool hasValidPayload = true,
       }) {
     _isTimeFormat = _checkIsTimeFormat(completedValve);
     _flowRate = flowRate;
     _onTime = onTime;
     _offTime = offTime;
-    _currentStatus = initialStatus;
+    _frtMethod = frtMethod;
+    _externalStatus = externalStatus;
+    _hasValidPayload = hasValidPayload;
+
+    _setLiters = _parseDurationToSeconds(setValve);
 
     if (_isTimeFormat) {
       _duration = _parseTime(completedValve);
@@ -108,41 +123,78 @@ class IncreaseDurationNotifier extends ChangeNotifier {
       _setLiters = double.tryParse(setValve.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
     }
 
-    _startTimer();
+    _checkIfCompleted();
+
+    if (_shouldRunTimer()) {
+      _startTimer();
+    }
+  }
+
+  bool _shouldRunTimer() {
+    return _externalStatus == 1 && _hasValidPayload && !_isCompleted;
+  }
+
+  void _checkIfCompleted() {
+    if (_isTimeFormat) {
+      double currentSeconds = _duration.inSeconds.toDouble();
+      if (currentSeconds >= _setLiters) {
+        _isCompleted = true;
+        _currentStatus = 0;
+      }
+    } else {
+      if (_liters >= _setLiters) {
+        _isCompleted = true;
+        _currentStatus = 0;
+      }
+    }
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_isPaused) return;
-
-      // Handle status toggling if onTime/offTime are set
-      if (_onTime > 0 || _offTime > 0) {
-        _handleStatusToggle();
+      if (!_shouldRunTimer()) {
+        if (_timer != null && _timer.isActive) {
+          _stopTimer();
+        }
+        return;
       }
 
-      // Only update duration/liters when status is ON (1)
-      if (_currentStatus == 1) {
+      if (_isPaused) return;
+
+      if (_frtMethod == '3' && (_onTime > 0 || _offTime > 0)) {
+        _handleOnOffTiming();
+      }
+
+      if (_currentStatus == 1 && !_isCompleted) {
         if (_isTimeFormat) {
           _duration += const Duration(seconds: 1);
+          if (_duration.inSeconds >= _setLiters) {
+            _isCompleted = true;
+            _currentStatus = 0;
+            _stopTimer();
+          }
         } else {
           double flowRatePerSecond = _flowRate / 3600;
           _liters += flowRatePerSecond;
 
           if (_liters >= _setLiters) {
             _liters = _setLiters;
-            _timer.cancel();
+            _isCompleted = true;
+            _currentStatus = 0;
+            _stopTimer();
           }
         }
       }
 
-      notifyListeners();
+      // Schedule notification after build phase
+      _scheduleNotifyListeners();
     });
   }
 
-  // New method to handle status toggling
-  void _handleStatusToggle() {
+  void _handleOnOffTiming() {
+    if (_isCompleted) return;
+    if (!_shouldRunTimer()) return;
+
     if (_currentStatus == 1 && _onTime > 0) {
-      // Currently ON
       if (_remainingOnTime == 0) {
         _remainingOnTime = _onTime;
       }
@@ -150,13 +202,11 @@ class IncreaseDurationNotifier extends ChangeNotifier {
       _remainingOnTime--;
 
       if (_remainingOnTime <= 0) {
-        // Switch to OFF
         _currentStatus = 0;
         _remainingOffTime = _offTime;
       }
     }
-    else if (_currentStatus == 0 && _offTime > 0) {
-      // Currently OFF
+    else if (_currentStatus == 0 && _offTime > 0 && !_isCompleted) {
       if (_remainingOffTime == 0) {
         _remainingOffTime = _offTime;
       }
@@ -164,49 +214,109 @@ class IncreaseDurationNotifier extends ChangeNotifier {
       _remainingOffTime--;
 
       if (_remainingOffTime <= 0) {
-        // Switch to ON
         _currentStatus = 1;
         _remainingOnTime = _onTime;
       }
     }
   }
 
-  // New methods for timer control
+  void updateExternalStatus(int status, bool hasValidPayload) {
+    bool shouldRestart = false;
+
+    if (_externalStatus != status) {
+      _externalStatus = status;
+      shouldRestart = true;
+    }
+
+    if (_hasValidPayload != hasValidPayload) {
+      _hasValidPayload = hasValidPayload;
+      shouldRestart = true;
+    }
+
+    if (shouldRestart) {
+      _restartTimerIfNeeded();
+      // Schedule notification after build phase
+      _scheduleNotifyListeners();
+    }
+  }
+
+  void _restartTimerIfNeeded() {
+    _stopTimer();
+
+    // Reset state when external status becomes invalid
+    if (!_shouldRunTimer()) {
+      _currentStatus = 1;
+      _remainingOnTime = 0;
+      _remainingOffTime = 0;
+      _isPaused = false;
+    }
+
+    if (_shouldRunTimer()) {
+      _startTimer();
+    }
+  }
+
   void pauseTimer() {
-    if (!_isPaused) {
+    if (!_isPaused && _shouldRunTimer()) {
       _isPaused = true;
-      notifyListeners();
+      _scheduleNotifyListeners();
     }
   }
 
   void resumeTimer() {
-    if (_isPaused) {
+    if (_isPaused && _shouldRunTimer()) {
       _isPaused = false;
-      notifyListeners();
+      _scheduleNotifyListeners();
     }
   }
 
   void resetTimer() {
+    _stopTimer();
     _isPaused = false;
+    _isCompleted = false;
     _currentStatus = 1;
     _remainingOnTime = 0;
     _remainingOffTime = 0;
 
-    // Reset duration/liters to initial values
     if (_isTimeFormat) {
       _duration = Duration.zero;
     } else {
       _liters = 0.0;
     }
 
-    notifyListeners();
+    if (_shouldRunTimer()) {
+      _startTimer();
+    }
+
+    _scheduleNotifyListeners();
   }
 
-  void forceStatus(int status) {
-    _currentStatus = status;
-    _remainingOnTime = 0;
-    _remainingOffTime = 0;
-    notifyListeners();
+  void _scheduleNotifyListeners() {
+    if (!_hasPendingUpdate) {
+      _hasPendingUpdate = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _hasPendingUpdate = false;
+        notifyListeners();
+      });
+    }
+  }
+
+  void _stopTimer() {
+    if (_timer != null && _timer.isActive) {
+      _timer.cancel();
+    }
+  }
+
+  double _parseDurationToSeconds(String duration) {
+    if (duration.isEmpty || duration == '00:00:00') return 0;
+    List<String> parts = duration.split(':');
+    if (parts.length == 3) {
+      int hours = int.parse(parts[0]);
+      int minutes = int.parse(parts[1]);
+      int seconds = int.parse(parts[2]);
+      return (hours * 3600 + minutes * 60 + seconds).toDouble();
+    }
+    return 0;
   }
 
   bool _checkIsTimeFormat(String value) {
@@ -230,13 +340,13 @@ class IncreaseDurationNotifier extends ChangeNotifier {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _stopTimer();
     super.dispose();
   }
 }
 
-/*
-class IncreaseDurationNotifier extends ChangeNotifier {
+
+/*class IncreaseDurationNotifier extends ChangeNotifier {
   late Duration _duration;
   late Timer _timer;
 
