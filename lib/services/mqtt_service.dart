@@ -221,38 +221,49 @@ class MqttService {
   void onMqttPayloadReceived(String payload) {
     try {
 
-      if (payload.isNotEmpty && EncryptionHelper.isEncrypted(payload)) {
-        final decryptedBody = EncryptionHelper.decrypt(payload);
-        print('✅ Mqtt Response decrypted successfully');
+      final jsonResponse = jsonDecode(payload);
 
-        final payloadMessage = jsonDecode(decryptedBody);
+      if (jsonResponse is Map && jsonResponse.containsKey('payload')) {
+        final encryptedPayload = jsonResponse['payload'] as String;
 
-        acknowledgementPayload = payloadMessage;
+        if (EncryptionHelper.isEncrypted(encryptedPayload)) {
 
-        switch (payloadMessage['mC']) {
-          case 'SMS':
-            preferenceAck = payloadMessage;
-            break;
+          final decryptedBody = EncryptionHelper.decrypt(encryptedPayload);
+          debugPrint('✅ Mqtt Response decrypted successfully');
 
-          case 'LD01':
-            pumpDashboardPayload =
-                PumpControllerData.fromJson(payloadMessage, "cM", 1);
-            providerState?.updateLastSyncDateFromPumpControllerPayload(payload);
-            break;
+          final payloadMessage = jsonDecode(decryptedBody);
 
-          case '3600':
-            schedulePayload =
-                Constants.dataConversionForScheduleView(payloadMessage['cM']['3601']);
-            break;
+          try {
+            acknowledgementPayload = payloadMessage;
+          }catch(e){
+            debugPrint("acknowledgementPayload:$e");
+          }
 
-          case '4200':
-            _handleAcknowledgement(payloadMessage);
-            break;
+          switch (payloadMessage['mC']) {
+            case 'SMS':
+              preferenceAck = payloadMessage;
+              break;
 
-          default:
-            providerState?.updateReceivedPayload(payload, true);
+            case 'LD01':
+              pumpDashboardPayload =
+                  PumpControllerData.fromJson(payloadMessage, "cM", 1);
+              providerState?.updateLastSyncDateFromPumpControllerPayload(payload);
+              break;
+
+            case '3600':
+              schedulePayload =
+                  Constants.dataConversionForScheduleView(payloadMessage['cM']['3601']);
+              break;
+
+            case '4200':
+              _handleAcknowledgement(payloadMessage);
+              break;
+
+            default:
+              providerState?.updateReceivedPayload(jsonEncode(payloadMessage), true);
+          }
+
         }
-
       }
       else {
         final payloadMessage = jsonDecode(payload);
@@ -280,7 +291,7 @@ class MqttService {
             break;
 
           default:
-            providerState?.updateReceivedPayload(payload, true);
+            providerState?.updateReceivedPayload(payloadMessage, true);
         }
       }
     } catch (e, stackTrace) {
@@ -304,9 +315,9 @@ class MqttService {
       debugPrint("MQTT not connected. Cannot publish. Message dropped.");
       return;
     }
-
     final encryptedData = EncryptionHelper.encrypt(message);
-    final builder = MqttClientPayloadBuilder()..addString(encryptedData);
+    Map<String, dynamic> bodyData = {'payload': encryptedData};
+    final builder = MqttClientPayloadBuilder()..addString(jsonEncode(bodyData));
 
     try {
       _client!.publishMessage(topic, MqttQos.exactlyOnce, builder.payload!);
