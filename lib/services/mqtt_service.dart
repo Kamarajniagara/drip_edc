@@ -205,41 +205,6 @@ class MqttService {
     }
   }
 
-  /*Future<void> topicToSubscribe(String topic) async {
-    try {
-      int retries = 0;
-      while (!isConnected && retries < 10) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        retries++;
-      }
-
-      if (!isConnected) {
-        debugPrint('MQTT not connected. Cannot subscribe to topic: $topic');
-        return;
-      }
-
-      if (currentTopic != null && currentTopic != topic) {
-        _client?.unsubscribe(currentTopic!);
-      }
-
-      await _subscription?.cancel();
-      await Future.delayed(const Duration(milliseconds: 200));
-
-      _client?.subscribe(topic, MqttQos.atLeastOnce);
-      currentTopic = topic;
-
-      _subscription = _client?.updates?.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
-        if (c != null && c.isNotEmpty) {
-          final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
-          final String pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-          onMqttPayloadReceived(pt);
-        }
-      });
-    } catch (e, stacktrace) {
-      debugPrint('MQTT subscribe error: $e\n$stacktrace');
-    }
-  }*/
-
   void topicToUnSubscribe(String topic) {
     if (_client == null) return;
     _subscription?.cancel();
