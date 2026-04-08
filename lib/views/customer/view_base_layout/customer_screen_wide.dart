@@ -27,7 +27,7 @@ class _CustomerScreenWideState
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void callbackFunction(String status) {
-    //if (status == 'Program created' && mounted) onProgramCreated(context);
+    if (status == 'Program created' && mounted) onProgramCreated(context);
   }
 
   @override
