@@ -17,8 +17,8 @@ class Environment {
       "mqttPassword" : '',
     },
     'smartComm' : {
-      'apiUrl': 'http://20.193.232.190:9000/api/v1',
-      //'apiUrl': 'https://smartcomm-wms.com:5000/api/v1',
+      //'apiUrl': 'http://20.193.232.190:9000/api/v1',
+      'apiUrl': 'https://smartcomm-wms.com:9000/api/v1',
       '1': 'prod-api-key',
       'mqttWebUrl': 'wss://smartcomm-wms.com:9443/mqtt',
       'mqttMobileUrl': '52.172.214.208',
