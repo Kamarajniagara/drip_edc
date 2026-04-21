@@ -193,7 +193,7 @@ class HttpService implements ApiService {
         Uri.parse('${AppConstants.apiUrl}$endpoint'),
         headers: headers,
         body: encryptedBody,
-      ).timeout(const Duration(seconds: 30));
+      ).timeout(const Duration(seconds: 60));
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
@@ -216,13 +216,20 @@ class HttpService implements ApiService {
 
     final encryptedBody = _encryptRequestBody(bodyData);
 
-    http.Response response = await http.put(
-      Uri.parse('${AppConstants.apiUrl}$endpoint'),
-      headers: headers,
-      body: encryptedBody,
-    ).timeout(const Duration(seconds: 30));
+    try {
+      http.Response response = await http.put(
+        Uri.parse('${AppConstants.apiUrl}$endpoint'),
+        headers: headers,
+        body: encryptedBody,
+      ).timeout(const Duration(seconds: 60));
 
-    return await _processResponse(response);
+
+      return await _processResponse(response);
+    } catch (e) {
+      print('Request error: $e');
+      rethrow;
+    }
+
   }
 
   @override
@@ -240,7 +247,7 @@ class HttpService implements ApiService {
       Uri.parse('${AppConstants.apiUrl}$endpoint'),
       headers: headers,
       body: encryptedBody,
-    ).timeout(const Duration(seconds: 30));
+    ).timeout(const Duration(seconds: 60));
 
     return await _processResponse(response);
   }

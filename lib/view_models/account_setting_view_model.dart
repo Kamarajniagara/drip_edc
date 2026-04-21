@@ -94,7 +94,7 @@ class UserSettingViewModel extends ChangeNotifier {
                     "userName": controllerUsrName.text,
                     "countryCode": cleanedCode,
                     "mobileNumber": controllerMblNo.text,
-                    "emailAddress": controllerEmail.text,
+                    "email": controllerEmail.text,
                     "modifyUser": userId,
                   };
 
