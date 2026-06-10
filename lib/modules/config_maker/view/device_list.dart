@@ -399,8 +399,8 @@ class _DeviceListState extends State<DeviceList> {
       }
     }catch (e, stackTrace){
       simpleDialogBox(context: context, title: 'Failed', message: e.toString());
-      debugPrint('Error on converting to device model :: $e');
-      debugPrint('stackTrace on converting to device model :: $stackTrace');
+      //debugPrint('Error on converting to device model :: $e');
+      //debugPrint('stackTrace on converting to device model :: $stackTrace');
       return 404;
     }
   }

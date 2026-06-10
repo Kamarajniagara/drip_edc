@@ -114,7 +114,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("Error getControllerInfo: $e");
+      //debugPrint("Error getControllerInfo: $e");
     } finally {
       setLoading(false);
     }
@@ -139,7 +139,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("Error getSubUserList: $e");
+      //debugPrint("Error getSubUserList: $e");
     } finally {
       setLoading(false);
     }
@@ -189,7 +189,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
         GlobalSnackBar.show(context, data["message"], data["code"]);
       }
     } catch (e) {
-      debugPrint("Error updateMasterDetails: $e");
+      //debugPrint("Error updateMasterDetails: $e");
     } finally {
       setLoading(false);
     }
@@ -204,7 +204,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
         Navigator.pop(context);
       }
     } catch (error) {
-      debugPrint('Error fetching device list: $error');
+      //debugPrint('Error fetching device list: $error');
     }
   }
 
@@ -219,14 +219,14 @@ class GeneralSettingViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching device list: $error');
+      //debugPrint('Error fetching device list: $error');
     }
     return null;
   }
 
   Future<void> updateCustomerList(Map<String, dynamic> json) async {
     if (json['status'] != 'success') return;
-    debugPrint(json as String?);
+    //debugPrint(json as String?);
   }
 
 

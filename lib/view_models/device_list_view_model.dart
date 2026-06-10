@@ -71,14 +71,14 @@ class DeviceListViewModel extends ChangeNotifier {
               .toList();
           dealerDeviceList.addAll(newDevices);
         } else {
-          debugPrint("API Error: ${jsonData['message'] ?? 'Unknown error'}");
+          //debugPrint("API Error: ${jsonData['message'] ?? 'Unknown error'}");
         }
       } else {
-        debugPrint("HTTP Error: ${response.statusCode}");
+        //debugPrint("HTTP Error: ${response.statusCode}");
       }
     } catch (error, stackTrace) {
-      debugPrint("Error fetching device list: $error");
-      debugPrint(stackTrace.toString());
+      //debugPrint("Error fetching device list: $error");
+      //debugPrint(stackTrace.toString());
     } finally {
       isLoading = false;
       isLoadingMoreData = false;
@@ -144,8 +144,8 @@ class DeviceListViewModel extends ChangeNotifier {
           }
         }
       } catch (error, stackTrace) {
-        debugPrint('Error fetching Product stock: $error');
-        debugPrint(stackTrace.toString());
+        //debugPrint('Error fetching Product stock: $error');
+        //debugPrint(stackTrace.toString());
       } finally {
         notifyListeners();
       }

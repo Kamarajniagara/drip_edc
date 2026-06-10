@@ -2870,7 +2870,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         "controllerReadStatus": controllerReadStatus,
         "hardware": hardwareData
       };
-      debugPrint("userData => $userData");
+      //debugPrint("userData => $userData");
       var updateUserProgramDetails = await repository.updateProgramDetails(userData);
       // var updateUserProgramDetails = await httpService.putRequest('updateUserProgramDetails', userData);
       print("updateUserProgramDetails : ${updateUserProgramDetails.body}");

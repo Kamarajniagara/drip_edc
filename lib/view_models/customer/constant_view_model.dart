@@ -145,7 +145,7 @@ class ConstantViewModel extends ChangeNotifier {
           }
         }
       } catch (error) {
-        debugPrint('Error fetching language list: $error');
+        //debugPrint('Error fetching language list: $error');
       } finally {
         setLoading(false);
       }
@@ -533,7 +533,7 @@ class ConstantViewModel extends ChangeNotifier {
           }
         }
       } catch (error) {
-        debugPrint('Error fetching language list: $error');
+        //debugPrint('Error fetching language list: $error');
       } finally {
         setLoading(false);
       }

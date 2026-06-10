@@ -87,11 +87,11 @@ class _ViewConfigState extends State<ViewConfig> {
       _remainingTime = 90; // reset every time
     });
 
-    // debugPrint('requestViewConfig START - payload:$selectedPayload index:$index');
+    // //debugPrint('requestViewConfig START - payload:$selectedPayload index:$index');
 
     _timeoutTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) {
-        debugPrint('Widget unmounted - cancelling timer');
+        //debugPrint('Widget unmounted - cancelling timer');
         timer.cancel();
         return;
       }
@@ -100,9 +100,9 @@ class _ViewConfigState extends State<ViewConfig> {
         setState(() {
           _remainingTime--;
         });
-        debugPrint('Timer tick for $selectedPayload: $_remainingTime');
+        //debugPrint('Timer tick for $selectedPayload: $_remainingTime');
       } else {
-        debugPrint('Timer timeout for $selectedPayload');
+        //debugPrint('Timer timeout for $selectedPayload');
         timer.cancel();
         if (mounted) {
           setState(() {
@@ -169,13 +169,13 @@ class _ViewConfigState extends State<ViewConfig> {
     // Check for MQTT response and update state
     if (widget.isLora) {
       if (_hasPayload(selectedPayload, mqttProvider, deviceId)) {
-        debugPrint('Received LORA response for $deviceId - cancelling timer');
+        //debugPrint('Received LORA response for $deviceId - cancelling timer');
         _timeoutTimer?.cancel();
         _hasTimedOut = false;
       }
     } else {
       if (mqttProvider.viewSettingsList.isNotEmpty && mqttProvider.cCList.contains(deviceId)) {
-        // debugPrint('Received response (non-LORA) for $deviceId - cancelling timer');
+        // //debugPrint('Received response (non-LORA) for $deviceId - cancelling timer');
         _timeoutTimer?.cancel();
         _hasTimedOut = false;
       }

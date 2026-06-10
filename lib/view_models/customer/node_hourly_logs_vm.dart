@@ -96,7 +96,7 @@ class NodeHourlyLogsVm extends ChangeNotifier {
 
           safeNotify();
         } catch (e) {
-          debugPrint('Error parsing node logs: $e');
+          //debugPrint('Error parsing node logs: $e');
         }
       }
     }

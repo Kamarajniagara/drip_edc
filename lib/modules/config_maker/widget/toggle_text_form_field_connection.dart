@@ -55,37 +55,37 @@ class _ToggleTextFormFieldForConnectionState extends State<ToggleTextFormFieldFo
             int countLimitFromProductLimit = getNotConfiguredObjectByObjectId(widget.object.objectId, widget.configPvd) + oldCount;
             int balancePossibleCountToConfigure = mappingBalanceType[widget.object.type]!;
 
-            debugPrint('oldCount :: $oldCount  newCount :: $newCount    maxLimit :: $countLimitFromProductLimit  mappingBalanceType :: ${mappingBalanceType[widget.object.type]!}  balancePossibleCountToConfigure :: $balancePossibleCountToConfigure');
+            //debugPrint('oldCount :: $oldCount  newCount :: $newCount    maxLimit :: $countLimitFromProductLimit  mappingBalanceType :: ${mappingBalanceType[widget.object.type]!}  balancePossibleCountToConfigure :: $balancePossibleCountToConfigure');
             if(newCount == oldCount){
               //  don't do anything....
             }else if(newCount > countLimitFromProductLimit && newCount <= balancePossibleCountToConfigure){
               // validate non configured to configure count
-              debugPrint('111111111');
+              //debugPrint('111111111');
               int validateCount = newCount < countLimitFromProductLimit ? newCount : countLimitFromProductLimit;
               bool updateOthers = updateConnectionForFixedInputs(oldCount: oldCount, newCount: validateCount, countLimitFromProductLimit: countLimitFromProductLimit);
               if(updateOthers){
-                debugPrint('no ph,ec');
+                //debugPrint('no ph,ec');
 
                 widget.configPvd.updateObjectConnection(widget.object, validateCount);
               }
             }else if(increasingCount != null && increasingCount <= balancePossibleCountToConfigure){
               // only update if there is place to configure
-              debugPrint('22222222');
+              //debugPrint('22222222');
               bool updateOthers = updateConnectionForFixedInputs(oldCount: oldCount, newCount: newCount, countLimitFromProductLimit: countLimitFromProductLimit);
               if(updateOthers){
-                debugPrint('no ph,ec');
+                //debugPrint('no ph,ec');
                 widget.configPvd.updateObjectConnection(widget.object, oldCount + increasingCount);
               }
             }else if(increasingCount != null && increasingCount >= balancePossibleCountToConfigure){
               // only update max object possible to configure
-              debugPrint('3333333333');
+              //debugPrint('3333333333');
               bool updateOthers = updateConnectionForFixedInputs(oldCount: oldCount, newCount: newCount, countLimitFromProductLimit: countLimitFromProductLimit);
               if(updateOthers){
-                debugPrint('oldCount + balancePossibleCountToConfigure == > ${oldCount + balancePossibleCountToConfigure}');
+                //debugPrint('oldCount + balancePossibleCountToConfigure == > ${oldCount + balancePossibleCountToConfigure}');
                 widget.configPvd.updateObjectConnection(widget.object, oldCount + balancePossibleCountToConfigure);
               }
             }else{
-              debugPrint('44444444');
+              //debugPrint('44444444');
               widget.configPvd.updateObjectConnection(widget.object, newCount);
             }
             setState(() {

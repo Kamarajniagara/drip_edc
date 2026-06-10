@@ -207,7 +207,7 @@ class MqttPayloadProvider with ChangeNotifier {
            device.connectionState= BlueConnectionState.values[status];
            notifyListeners();
          } else {
-           debugPrint('Invalid status int: $status');
+           ////debugPrint('Invalid status int: $status');
          }
          break;
        }
@@ -221,11 +221,10 @@ class MqttPayloadProvider with ChangeNotifier {
            final newState = BlueConnectionState.values[status];
            if (device.connectionState != newState) {
              device.connectionState = newState;
-             debugPrint("🔵 BLE Device $deviceId state changed to: $newState");
-             notifyListeners(); // CRITICAL: This triggers UI update
+             notifyListeners(); 
            }
          } else {
-           debugPrint('Invalid status int: $status');
+           ////debugPrint('Invalid status int: $status');
          }
          break;
        }
@@ -645,8 +644,8 @@ class MqttPayloadProvider with ChangeNotifier {
          notifyListeners();
        }
        catch (e, stackTrace) {
-         debugPrint('Error parsing JSON: $e');
-         debugPrint('Stacktrace while parsing json : $stackTrace');
+         ////debugPrint('Error parsing JSON: $e');
+         ////debugPrint('Stacktrace while parsing json : $stackTrace');
        }
 
      }
@@ -664,7 +663,6 @@ class MqttPayloadProvider with ChangeNotifier {
 
       try {
         Map<String, dynamic> data = _receivedPayload.isNotEmpty? jsonDecode(_receivedPayload) : {};
-         debugPrint('_receivedPayload------>:$_receivedPayload');
 
         if(data['mC']=='2400'){
 
@@ -695,13 +693,13 @@ class MqttPayloadProvider with ChangeNotifier {
                   : "";
             }
           } catch (e) {
-            debugPrint("Error: $e");
+            ////debugPrint("Error: $e");
           }
 
           final cm = data['cM'];
           if (cm == null || cm is! Map || !cm.containsKey('2401') || cm['2401'] == null ||
               cm['2401'] is! String || (cm['2401'] as String).isEmpty) {
-            debugPrint("2401 key NOT FOUND → stopping execution");
+            ////debugPrint("2401 key NOT FOUND → stopping execution");
             return;
           }
 
@@ -876,8 +874,8 @@ class MqttPayloadProvider with ChangeNotifier {
           notifyListeners();
         }
       } catch (e, stackTrace) {
-        debugPrint('Error parsing JSON: $e');
-        debugPrint('Stacktrace while parsing json : $stackTrace');
+        ////debugPrint('Error parsing JSON: $e');
+        ////debugPrint('Stacktrace while parsing json : $stackTrace');
       }
       finally{
         notifyListeners();

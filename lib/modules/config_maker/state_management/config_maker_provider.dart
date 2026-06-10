@@ -413,8 +413,8 @@ class ConfigMakerProvider extends ChangeNotifier{
       }
       line = (configMakerData['irrigationLine'] as List<dynamic>).map((lineObject) => IrrigationLineModel.fromJson(lineObject)).toList();
     } catch (e, stackTrace){
-      debugPrint('Error on converting to device model :: $e');
-      debugPrint('stackTrace on converting to device model :: $stackTrace');
+      //debugPrint('Error on converting to device model :: $e');
+      //debugPrint('stackTrace on converting to device model :: $stackTrace');
     }
 
     notifyListeners();
@@ -455,8 +455,8 @@ class ConfigMakerProvider extends ChangeNotifier{
         return 400;
       }
     } catch (e, stackTrace){
-      debugPrint('Error on replace deviceId :: $e');
-      debugPrint('stackTrace on replace deviceId :: $stackTrace');
+      //debugPrint('Error on replace deviceId :: $e');
+      //debugPrint('stackTrace on replace deviceId :: $stackTrace');
       return 400;
     }
   }

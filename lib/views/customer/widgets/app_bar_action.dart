@@ -564,8 +564,8 @@ void showPasswordDialog(BuildContext context, correctPassword, userId,
                   }
                 }
               } catch (e, stackTrace) {
-                debugPrint(' Error overAll getData => ${e.toString()}');
-                debugPrint(' trace overAll getData  => $stackTrace');
+                //debugPrint(' Error overAll getData => ${e.toString()}');
+                //debugPrint(' trace overAll getData  => $stackTrace');
               }
             },
             child: const Text('Submit'),

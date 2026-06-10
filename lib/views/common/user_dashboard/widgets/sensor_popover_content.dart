@@ -78,7 +78,7 @@ class _SensorPopoverContentState extends State<SensorPopoverContent> {
         }
       }
     } catch (e) {
-      debugPrint('Error fetching sensor hourly data: $e');
+      //debugPrint('Error fetching sensor hourly data: $e');
     }
 
     return sensors;

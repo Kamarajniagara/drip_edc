@@ -500,7 +500,7 @@ class ProgramLibrary {
         required this.agitatorCount});
 
   factory ProgramLibrary.fromJson(Map<String, dynamic> json) {
-    debugPrint("json ==>$json");
+    //debugPrint("json ==>$json");
     List<String> programTypes = [json['data']['programType'][0] ?? 'Irrigation Program'];
     if(json['data']['agitatorCount'] > 0) {
       programTypes.add(json['data']['programType'][1]);

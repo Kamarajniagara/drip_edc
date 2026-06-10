@@ -82,7 +82,7 @@ class SentAndReceivedViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching sent/received data: $error');
+      //debugPrint('Error fetching sent/received data: $error');
     } finally {
       if (!_disposed) setLoading(false);
     }
@@ -135,7 +135,7 @@ class SentAndReceivedViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching payload: $error');
+      //debugPrint('Error fetching payload: $error');
     } finally {
       if (!_disposed) setLoading(false);
     }

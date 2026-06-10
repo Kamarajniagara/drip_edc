@@ -31,11 +31,11 @@ class _ScanScreenState extends State<ScanScreen> {
   void initState() {
     super.initState();
     _scanResultsSubscription = FlutterBluePlus.scanResults.listen((results) {
-      debugPrint("results ::::: ${results}");
+      //debugPrint("results ::::: ${results}");
       for(var result in results){
         var adv = result.advertisementData;
-        debugPrint("adv.advName :: ${adv.advName}");
-        debugPrint("result.device.remoteId :: ${result.device.remoteId}");
+        //debugPrint("adv.advName :: ${adv.advName}");
+        //debugPrint("result.device.remoteId :: ${result.device.remoteId}");
       }
       if (mounted) {
         setState(() => _scanResults = results);
@@ -65,8 +65,8 @@ class _ScanScreenState extends State<ScanScreen> {
       _systemDevices = await FlutterBluePlus.systemDevices(withServices);
     } catch (e, backtrace) {
       Snackbar.show(ABC.b, prettyException("System Devices Error:", e), success: false);
-      debugPrint(e.toString());
-      debugPrint("backtrace: $backtrace");
+      //debugPrint(e.toString());
+      //debugPrint("backtrace: $backtrace");
     }
     try {
       await FlutterBluePlus.startScan(
@@ -86,8 +86,8 @@ class _ScanScreenState extends State<ScanScreen> {
       );
     } catch (e, backtrace) {
       Snackbar.show(ABC.b, prettyException("Start Scan Error:", e), success: false);
-      debugPrint(e.toString());
-      debugPrint("backtrace: $backtrace");
+      //debugPrint(e.toString());
+      //debugPrint("backtrace: $backtrace");
     }
     if (mounted) {
       setState(() {});
@@ -99,8 +99,8 @@ class _ScanScreenState extends State<ScanScreen> {
       FlutterBluePlus.stopScan();
     } catch (e, backtrace) {
       Snackbar.show(ABC.b, prettyException("Stop Scan Error:", e), success: false);
-      debugPrint(e.toString());
-      debugPrint("backtrace: $backtrace");
+      //debugPrint(e.toString());
+      //debugPrint("backtrace: $backtrace");
     }
   }
 

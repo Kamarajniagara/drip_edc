@@ -27,7 +27,7 @@ class CustomerProductViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching country list: $error');
+      //debugPrint('Error fetching country list: $error');
     } finally {
       setLoading(false);
     }

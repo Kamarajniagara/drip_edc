@@ -47,7 +47,7 @@ class BluetoothClassicService {
         await _bluetooth.requestEnable();
       }
     } catch (e) {
-      debugPrint('Error enabling Bluetooth: $e');
+      //debugPrint('Error enabling Bluetooth: $e');
     }
   }
 
@@ -69,7 +69,7 @@ class BluetoothClassicService {
 
       final statuses = await permissions.request();
       if (statuses.values.any((status) => status.isDenied || status.isPermanentlyDenied)) {
-        debugPrint('Permissions not granted');
+        //debugPrint('Permissions not granted');
         return false;
       }
     }
@@ -88,7 +88,7 @@ class BluetoothClassicService {
   Future<void> checkLocationServices() async {
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (!isLocationEnabled) {
-      debugPrint("Location services are OFF. Prompting user...");
+      //debugPrint("Location services are OFF. Prompting user...");
       await Geolocator.openLocationSettings();
     }
   }
@@ -173,7 +173,7 @@ class BluetoothClassicService {
         providerState?.updateClassicConnectedDeviceStatus(null);
       });
     } catch (e) {
-      debugPrint("Connection failed: $e");
+      //debugPrint("Connection failed: $e");
       providerState?.updateClassicDeviceStatus(device.device.address, BlueConnectionState.disconnected.index);
       providerState?.updateClassicConnectedDeviceStatus(null);
     }
@@ -193,7 +193,7 @@ class BluetoothClassicService {
   }
 
   void _parseBuffer() {
-    debugPrint('_buffer----> $_buffer');
+    //debugPrint('_buffer----> $_buffer');
 
     if (_buffer.isEmpty) return;
 
@@ -207,7 +207,7 @@ class BluetoothClassicService {
       providerState?.setTraceLoading(false);
 
       int sizeInBytes = getTraceLogSize();
-      debugPrint('TraceLog size in bytes: $sizeInBytes');
+      //debugPrint('TraceLog size in bytes: $sizeInBytes');
       providerState?.setTraceLoadingsize(sizeInBytes);
 
       traceChunk = ''; // Clear buffer for next round
@@ -261,7 +261,7 @@ class BluetoothClassicService {
 
 
   void _processData(String jsonString) {
-    debugPrint("_processData call $jsonString");
+    //debugPrint("_processData call $jsonString");
     try {
       final data = json.decode(jsonString);
       final jsonStr = json.encode(data);
@@ -298,25 +298,25 @@ class BluetoothClassicService {
           break;
       }
     } catch (e) {
-      debugPrint("Error parsing: $e");
+      //debugPrint("Error parsing: $e");
     }
   }
 
   Future<void> write(String payload) async {
     if (_connection != null && _connection!.isConnected) {
       final finalPayload = '*$payload#';
-      debugPrint("Sending: $finalPayload");
+      //debugPrint("Sending: $finalPayload");
       _connection!.output.add(Uint8List.fromList(utf8.encode("$finalPayload\r\n")));
     }
   }
 
   Future<void> writeFW(List<int> data) async {
     if (_connection != null && _connection!.isConnected) {
-      debugPrint("Sending ${data.length} bytes over Bluetooth...");
+      //debugPrint("Sending ${data.length} bytes over Bluetooth...");
       _connection!.output.add(Uint8List.fromList(data)); // send raw bytes
       await _connection!.output.allSent; // ensure it's flushed
     } else {
-      debugPrint("Not connected");
+      //debugPrint("Not connected");
     }
   }
 
@@ -324,7 +324,7 @@ class BluetoothClassicService {
     try {
       await _connection?.close();
     } catch (e) {
-      debugPrint("Disconnect failed: $e");
+      //debugPrint("Disconnect failed: $e");
     } finally {
       _connection = null;
       _connectedAddress = null;

@@ -45,7 +45,7 @@ class CreateAccountViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching country list: $error');
+      //debugPrint('Error fetching country list: $error');
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ class CreateAccountViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching state list: $error');
+      //debugPrint('Error fetching state list: $error');
     } finally {
       setLoading(false);
     }
@@ -132,7 +132,7 @@ class CreateAccountViewModel extends ChangeNotifier {
           }
         }
       } catch (error) {
-        debugPrint('Error creating account: $error');
+        //debugPrint('Error creating account: $error');
       } finally {
         setLoading(false);
       }

@@ -89,7 +89,7 @@ class StandAloneViewModel extends ChangeNotifier {
             if (!programWithNameExists) {
               programList.insert(0, defaultProgram);
             } else {
-              debugPrint('Program with name \'Default\' already exists in widget.programList.');
+              //debugPrint('Program with name \'Default\' already exists in widget.programList.');
             }
           }
 
@@ -97,7 +97,7 @@ class StandAloneViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching country list: $error');
+      //debugPrint('Error fetching country list: $error');
     } finally {
       setLoading(false);
     }
@@ -129,7 +129,7 @@ class StandAloneViewModel extends ChangeNotifier {
               }
 
             } catch (e) {
-              debugPrint('Error: $e');
+              //debugPrint('Error: $e');
             }
 
             if(isNova){
@@ -149,7 +149,7 @@ class StandAloneViewModel extends ChangeNotifier {
             if (position != -1) {
               ddCurrentPosition = position;
             }else {
-              debugPrint("'$serialNumber' not found in the list.");
+              //debugPrint("'$serialNumber' not found in the list.");
             }
 
             if(standAloneMethod == 3){
@@ -172,14 +172,14 @@ class StandAloneViewModel extends ChangeNotifier {
             fetchStandAloneSelection(serialNumber, ddCurrentPosition);
 
           }catch(e){
-            debugPrint(e.toString());
+            //debugPrint(e.toString());
           }
         } else {
           throw Exception('Invalid response format: "data" is null');
         }
       }
     } catch (error) {
-      debugPrint('Error fetching country list: $error');
+      //debugPrint('Error fetching country list: $error');
     } finally {
       setLoading(false);
     }
@@ -206,12 +206,12 @@ class StandAloneViewModel extends ChangeNotifier {
           standAloneData = StandAloneModel.fromJson(data);
           updatePreviousSelection(standAloneData!);
         } else {
-          debugPrint('Invalid response format: "data" is null');
+          //debugPrint('Invalid response format: "data" is null');
         }
       }
     } catch (error, stackTrace) {
-      debugPrint('Error fetching Product stock: $error');
-      debugPrint(stackTrace.toString());
+      //debugPrint('Error fetching Product stock: $error');
+      //debugPrint(stackTrace.toString());
     } finally {
       notifyListeners();
     }
@@ -868,14 +868,14 @@ class StandAloneViewModel extends ChangeNotifier {
           standaloneSelection.clear();
         }
       } catch (error, stackTrace) {
-        debugPrint('Error fetching Product stock: $error');
-        debugPrint(stackTrace.toString());
+        //debugPrint('Error fetching Product stock: $error');
+        //debugPrint(stackTrace.toString());
       } finally {
         notifyListeners();
       }
 
     } catch (e) {
-      debugPrint('Error: $e');
+      //debugPrint('Error: $e');
     }
   }
 

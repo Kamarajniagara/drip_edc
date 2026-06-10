@@ -62,8 +62,8 @@ class _NodeDashboardState extends State<NodeDashboard> {
       bleService.editNodeDataFromServer(nodeJsonData['data']['default'], widget.nodeData);
       return nodeJsonData['code'];
     }catch(e,stacktrace){
-      debugPrint('Error on getting constant data :: $e');
-      debugPrint('Error on getting constant data :: $e');
+      //debugPrint('Error on getting constant data :: $e');
+      //debugPrint('Error on getting constant data :: $e');
       ('Stacktrace on getting constant data :: $stacktrace');
       rethrow;
     }

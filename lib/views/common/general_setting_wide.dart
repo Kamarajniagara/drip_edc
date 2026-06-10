@@ -595,7 +595,7 @@ class _GeneralSettingWideState extends State<GeneralSettingWide> {
         userGroups = deviceList.map((i) => UserGroup.fromJson(i)).toList();
       });
     } else {
-      debugPrint("No devices found.");
+      //debugPrint("No devices found.");
     }
 
     showDialog(

@@ -33,7 +33,7 @@ class NotificationServiceCall {
     if (token != null) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('deviceToken', token);
-      debugPrint('FCM Token: $token');
+      //debugPrint('FCM Token: $token');
     }
 
     // Handle foreground messages

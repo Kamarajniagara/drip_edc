@@ -77,7 +77,7 @@ class StockEntryViewModel extends SafeChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("Stock fetch error: $e");
+      //debugPrint("Stock fetch error: $e");
     }
 
     safeNotify();
@@ -266,7 +266,7 @@ class StockEntryViewModel extends SafeChangeNotifier {
       }
     } catch (e) {
       errorMsg = "Exception: ${e.toString()}";
-      debugPrint(errorMsg);
+      //debugPrint(errorMsg);
     } finally {
       if (!isDisposed) safeNotify();
     }

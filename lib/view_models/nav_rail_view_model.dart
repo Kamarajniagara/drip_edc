@@ -44,11 +44,11 @@ class NavRailViewModel extends ChangeNotifier {
         if (responseBody["code"] == 200) {
           jsonDataMap = responseBody;
         } else {
-          debugPrint("API Error: ${responseBody['message']}");
+          //debugPrint("API Error: ${responseBody['message']}");
         }
       }
     } catch (error) {
-      debugPrint("Error: $error");
+      //debugPrint("Error: $error");
     } finally {
       notifyListeners();
     }

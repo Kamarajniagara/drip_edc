@@ -64,7 +64,7 @@ class BaseHeaderViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("Error: $e");
+      //debugPrint("Error: $e");
     } finally {
       if (!_isDisposed) safeNotify();
     }

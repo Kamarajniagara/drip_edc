@@ -88,11 +88,7 @@ class HttpService implements ApiService {
   String _encryptRequestBody(Map<String, dynamic> bodyData) {
     try {
       final jsonString = jsonEncode(bodyData);
-      print('Original JSON: $jsonString');
-
       final encryptedData = EncryptionHelper.encrypt(jsonString);
-      print('✅ Request body encrypted successfully');
-
       return jsonEncode({'payload': encryptedData});
     } catch (e) {
       print('❌ Failed to encrypt request body: $e');
@@ -112,8 +108,6 @@ class HttpService implements ApiService {
 
         if (encryptedPayload.isNotEmpty && EncryptionHelper.isEncrypted(encryptedPayload)) {
           final decryptedBody = EncryptionHelper.decrypt(encryptedPayload);
-          print('✅ Response decrypted successfully');
-
           // Parse the decrypted JSON string
           return jsonDecode(decryptedBody);
         }
@@ -131,8 +125,6 @@ class HttpService implements ApiService {
   Future<http.Response> _processResponse(http.Response response) async {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final body = response.body;
-
-      print('Raw response body: $body');
 
       if (body.isNotEmpty) {
         try {
@@ -158,7 +150,6 @@ class HttpService implements ApiService {
   Future<http.Response> getRequest(String endpoint, {String? type, Map<String, String>? queryParams}) async {
     final token = await PreferenceHelper.getToken();
     final uri = Uri.parse('${AppConstants.apiUrl}$endpoint').replace(queryParameters: queryParams);
-    print('uri:$uri');
 
     final headers = {
       'Content-Type': 'application/json',
@@ -174,8 +165,8 @@ class HttpService implements ApiService {
 
   @override
   Future<http.Response> postRequest(String endpoint, Map<String, dynamic> bodyData) async {
-    print('Original bodyData: $bodyData');
-    print('URL: ${AppConstants.apiUrl}$endpoint');
+    //print('Original bodyData: $bodyData');
+    //print('URL: ${AppConstants.apiUrl}$endpoint');
 
     final token = await PreferenceHelper.getToken();
 
@@ -186,7 +177,7 @@ class HttpService implements ApiService {
 
     // Encrypt the request body
     final encryptedBody = _encryptRequestBody(bodyData);
-    print('Encrypted body: $encryptedBody');
+    //print('Encrypted body: $encryptedBody');
 
     try {
       http.Response response = await http.post(
@@ -195,8 +186,6 @@ class HttpService implements ApiService {
         body: encryptedBody,
       ).timeout(const Duration(seconds: 60));
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
 
       return await _processResponse(response);
     } catch (e) {

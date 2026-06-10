@@ -139,8 +139,8 @@ class MqttService {
     try {
       await _client!.connect();
     } catch (e, stackTrace) {
-      debugPrint('MQTT Connect Exception: $e');
-      debugPrint('$stackTrace');
+      //debugPrint('MQTT Connect Exception: $e');
+      //debugPrint('$stackTrace');
       _client?.disconnect();
     }
   }
@@ -151,8 +151,8 @@ class MqttService {
       try {
         _client!.disconnect();
       } catch (e, stackTrace) {
-        debugPrint('MQTT Disconnect Exception: $e');
-        debugPrint('$stackTrace');
+        //debugPrint('MQTT Disconnect Exception: $e');
+        //debugPrint('$stackTrace');
       }
     }
   }
@@ -170,7 +170,7 @@ class MqttService {
 
       if (_client?.connectionStatus?.state !=
           MqttConnectionState.connected) {
-        debugPrint('MQTT not connected. Cannot subscribe to topic: $topic');
+        //debugPrint('MQTT not connected. Cannot subscribe to topic: $topic');
         return;
       }
 
@@ -199,10 +199,10 @@ class MqttService {
         },
       );
 
-      debugPrint("Subscribed to $topic");
+      //debugPrint("Subscribed to $topic");
 
     } catch (e, stacktrace) {
-      debugPrint('MQTT subscribe error: $e\n$stacktrace');
+      //debugPrint('MQTT subscribe error: $e\n$stacktrace');
     }
   }
 
@@ -229,14 +229,14 @@ class MqttService {
         if (EncryptionHelper.isEncrypted(encryptedPayload)) {
 
           final decryptedBody = EncryptionHelper.decrypt(encryptedPayload);
-          debugPrint('✅ Mqtt Response decrypted successfully');
+          //debugPrint('✅ Mqtt Response decrypted successfully');
 
           final payloadMessage = jsonDecode(decryptedBody);
 
           try {
             acknowledgementPayload = payloadMessage;
           }catch(e){
-            debugPrint("acknowledgementPayload:$e");
+            //debugPrint("acknowledgementPayload:$e");
           }
 
           switch (payloadMessage['mC']) {
@@ -295,7 +295,7 @@ class MqttService {
         }
       }
     } catch (e, stackTrace) {
-      debugPrint('MQTT Payload Parsing Error: $e\n$stackTrace');
+      //debugPrint('MQTT Payload Parsing Error: $e\n$stackTrace');
     }
   }
 
@@ -312,7 +312,7 @@ class MqttService {
   Future<void> topicToPublishAndItsMessage(String message, String topic) async {
 
     if (!isConnected) {
-      debugPrint("MQTT not connected. Cannot publish. Message dropped.");
+      //debugPrint("MQTT not connected. Cannot publish. Message dropped.");
       return;
     }
     final encryptedData = EncryptionHelper.encrypt(message);
@@ -322,21 +322,21 @@ class MqttService {
     try {
       _client!.publishMessage(topic, MqttQos.exactlyOnce, builder.payload!);
     } catch (e) {
-      debugPrint("MQTT Publish Error: $e");
+      //debugPrint("MQTT Publish Error: $e");
     }
   }
 
   void onSubscribed(String topic) {
-    debugPrint('Subscribed to topic: $topic');
+    //debugPrint('Subscribed to topic: $topic');
   }
 
   void onDisconnected() {
-    debugPrint('MQTT disconnected');
+    //debugPrint('MQTT disconnected');
     _connectionController.add(MqttConnectionState.disconnected);
   }
 
   void onConnected() {
-    debugPrint('MQTT connected');
+    //debugPrint('MQTT connected');
     _connectionController.add(MqttConnectionState.connected);
   }
 }

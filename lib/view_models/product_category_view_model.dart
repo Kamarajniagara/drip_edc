@@ -29,7 +29,7 @@ class ProductCategoryViewModel extends SafeChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("Category error: $e");
+      //debugPrint("Category error: $e");
     } finally {
       if (!isDisposed) {
         setLoading(false);

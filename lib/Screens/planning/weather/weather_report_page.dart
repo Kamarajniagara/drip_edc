@@ -109,7 +109,7 @@ class _SensorHourlyReportPageState extends State<SensorHourlyReportPage> {
       });
     } catch (e) {
       setState(() => isLoading = false);
-      debugPrint('Hourly Report Error: $e');
+      //debugPrint('Hourly Report Error: $e');
     }
   }
   // ------------------ DATE PICKER ------------------

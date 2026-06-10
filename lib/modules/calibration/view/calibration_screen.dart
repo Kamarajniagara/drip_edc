@@ -54,8 +54,8 @@ class _CalibrationScreenState extends State<CalibrationScreen> {
         defaultData = jsonData['data']['default'];
       });
     } catch (e, stackTrace) {
-      debugPrint('error :: $e');
-      debugPrint('stackTrace :: $stackTrace');
+      //debugPrint('error :: $e');
+      //debugPrint('stackTrace :: $stackTrace');
       rethrow;
     }
     return calibrationData;

@@ -30,7 +30,7 @@ class ProductStockViewModel extends SafeChangeNotifier {
         }
       }
     } catch (e, st) {
-      debugPrint('Stock fetch error: $e\n$st');
+      //debugPrint('Stock fetch error: $e\n$st');
     } finally {
       if (!isDisposed) {
         setStockLoading(false);

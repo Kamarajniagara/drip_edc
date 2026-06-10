@@ -50,7 +50,7 @@ class CustomerListViewModel extends SafeChangeNotifier {
         }
       }
     } catch (e, st) {
-      debugPrint('Customer fetch error: $e\n$st');
+      //debugPrint('Customer fetch error: $e\n$st');
     } finally {
       if (!isDisposed) {
         setCustomerLoading(false);

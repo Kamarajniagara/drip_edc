@@ -77,9 +77,9 @@ class BluetoothBleService {
     providerState = state;
 
     _adapterSubscription = FlutterBluePlus.adapterState.listen((adapterState) {
-      debugPrint("🔵 BLE Bluetooth State: $adapterState");
+      //debugPrint("🔵 BLE Bluetooth State: $adapterState");
       if (adapterState != BluetoothAdapterState.on) {
-        debugPrint("⚠️ BLE Bluetooth is not on! State: $adapterState");
+        //debugPrint("⚠️ BLE Bluetooth is not on! State: $adapterState");
         if (_connectedDevice != null) {
           _resetConnection();
           providerState?.updateBleConnectedDeviceStatus(null);
@@ -88,7 +88,7 @@ class BluetoothBleService {
       }
     });
 
-    debugPrint("✅ BLE Service Initialized with provider");
+    ////debugPrint("✅ BLE Service Initialized with provider");
   }
 
   /// ---------------- PERMISSIONS ----------------
@@ -99,7 +99,7 @@ class BluetoothBleService {
       final androidInfo = await DeviceInfoPlugin().androidInfo;
       final sdkInt = androidInfo.version.sdkInt;
 
-      debugPrint("📱 Android SDK Version: $sdkInt");
+      ////debugPrint("📱 Android SDK Version: $sdkInt");
 
       final List<Permission> permissions = [];
 
@@ -118,38 +118,38 @@ class BluetoothBleService {
         permissions.add(Permission.bluetooth);
       }
 
-      debugPrint("🔐 Requesting BLE permissions: ${permissions.map((p) => p.toString()).toList()}");
+      ////debugPrint("🔐 Requesting BLE permissions: ${permissions.map((p) => p.toString()).toList()}");
 
       final Map<Permission, PermissionStatus> statuses = await permissions.request();
 
       bool allGranted = true;
       for (var permission in permissions) {
         final status = statuses[permission];
-        debugPrint("BLE Permission $permission: $status");
+        ////debugPrint("BLE Permission $permission: $status");
 
         if (status == null || !status.isGranted) {
           allGranted = false;
 
           if (status == PermissionStatus.permanentlyDenied) {
-            debugPrint("⚠️ BLE Permission $permission is permanently denied");
+            ////debugPrint("⚠️ BLE Permission $permission is permanently denied");
             await openAppSettings();
             return false;
           }
         } else {
-          debugPrint("✅ BLE Permission granted: $permission");
+          ////debugPrint("✅ BLE Permission granted: $permission");
         }
       }
 
       if (!allGranted) {
-        debugPrint("❌ Not all BLE permissions granted");
+        ////debugPrint("❌ Not all BLE permissions granted");
         return false;
       }
 
-      debugPrint("✅ All BLE permissions granted successfully");
+      ////debugPrint("✅ All BLE permissions granted successfully");
       return true;
 
     } catch (e) {
-      debugPrint("❌ Error requesting BLE permissions: $e");
+      ////debugPrint("❌ Error requesting BLE permissions: $e");
       return false;
     }
   }
@@ -157,15 +157,15 @@ class BluetoothBleService {
   /// ---------------- CHECK BLUETOOTH ----------------
   Future<bool> checkBluetooth() async {
     if (!await FlutterBluePlus.isSupported) {
-      debugPrint("❌ BLE not supported on this device");
+      //debugPrint("❌ BLE not supported on this device");
       return false;
     }
 
     final state = await FlutterBluePlus.adapterState.first;
-    debugPrint("📱 BLE Adapter State: $state");
+    //debugPrint("📱 BLE Adapter State: $state");
 
     if (state != BluetoothAdapterState.on) {
-      debugPrint("❌ BLE Bluetooth is not ON. Please enable Bluetooth");
+      //debugPrint("❌ BLE Bluetooth is not ON. Please enable Bluetooth");
       return false;
     }
 
@@ -174,59 +174,59 @@ class BluetoothBleService {
 
   /// ---------------- START SCAN ----------------
   Future<void> startScan({String? deviceId}) async {
-    debugPrint("🔍 Starting BLE scan process...");
-    debugPrint("deviceNameFilter:$deviceId");
+    //debugPrint("🔍 Starting BLE scan process...");
+    //debugPrint("deviceNameFilter:$deviceId");
 
     if (_isScanning) {
-      debugPrint("⚠️ BLE Scan already in progress");
+      //debugPrint("⚠️ BLE Scan already in progress");
       return;
     }
 
-    debugPrint("📱 Requesting BLE permissions...");
+    //debugPrint("📱 Requesting BLE permissions...");
     if (!await requestPermissions()) {
-      debugPrint("❌ BLE Permissions not granted");
+      //debugPrint("❌ BLE Permissions not granted");
       return;
     }
 
-    debugPrint("📱 Checking BLE Bluetooth...");
+    //debugPrint("📱 Checking BLE Bluetooth...");
     if (!await checkBluetooth()) {
-      debugPrint("❌ BLE Bluetooth not available");
+      //debugPrint("❌ BLE Bluetooth not available");
       return;
     }
 
-    debugPrint("🧹 Clearing previous BLE devices...");
+    //debugPrint("🧹 Clearing previous BLE devices...");
     _devices.clear();
     try {
       providerState?.updateBlePairedDevices([]);
     } catch (e) {
-      debugPrint("⚠️ Error updating BLE provider: $e");
+      //debugPrint("⚠️ Error updating BLE provider: $e");
     }
 
-    debugPrint("🛑 Stopping any existing BLE scan...");
+    //debugPrint("🛑 Stopping any existing BLE scan...");
     await stopScan();
 
     _isScanning = true;
-    debugPrint("🔍 BLE Scan Started - Looking for devices with service: $serviceUuid");
+    //debugPrint("🔍 BLE Scan Started - Looking for devices with service: $serviceUuid");
 
     try {
       await FlutterBluePlus.startScan(
         withServices: [Guid(serviceUuid)],
         timeout: const Duration(seconds: 15),
       );
-      debugPrint("✅ BLE Scan started successfully");
+      //debugPrint("✅ BLE Scan started successfully");
 
       _scanSubscription = FlutterBluePlus.scanResults.listen((List<ScanResult> results) {
-        debugPrint("📡 Received ${results.length} BLE scan results");
+        //debugPrint("📡 Received ${results.length} BLE scan results");
 
         for (final r in results) {
           final device = r.device;
           final name = device.platformName;
 
-          debugPrint("============ BLE DEVICE FOUND ============");
-          debugPrint("Name: $name");
-          debugPrint("ID: ${device.remoteId}");
-          debugPrint("RSSI: ${r.rssi}");
-          debugPrint("======================================");
+     /*     //debugPrint("============ BLE DEVICE FOUND ============");
+          //debugPrint("Name: $name");
+          //debugPrint("ID: ${device.remoteId}");
+          //debugPrint("RSSI: ${r.rssi}");
+          //debugPrint("======================================");*/
 
           bool shouldAddDevice = false;
 
@@ -235,27 +235,27 @@ class BluetoothBleService {
               final deviceIdFromName = name.substring(4);
               if (deviceIdFromName == deviceId) {
                 shouldAddDevice = true;
-                debugPrint("✅ BLE Device matches filter: $deviceIdFromName == $deviceId");
+                ////debugPrint("✅ BLE Device matches filter: $deviceIdFromName == $deviceId");
               } else {
-                debugPrint("❌ BLE Device filtered out: $deviceIdFromName != $deviceId");
+                ////debugPrint("❌ BLE Device filtered out: $deviceIdFromName != $deviceId");
               }
             } else {
               if (name == deviceId) {
                 shouldAddDevice = true;
-                debugPrint("✅ BLE Device matches direct filter: $name == $deviceId");
+                ////debugPrint("✅ BLE Device matches direct filter: $name == $deviceId");
               } else {
-                debugPrint("❌ BLE Device filtered out: $name != $deviceId");
+                ////debugPrint("❌ BLE Device filtered out: $name != $deviceId");
               }
             }
           } else {
             shouldAddDevice = name.isNotEmpty;
-            debugPrint("ℹ️ No filter applied, adding BLE device if name exists");
+            //debugPrint("ℹ️ No filter applied, adding BLE device if name exists");
           }
 
           final exists = _devices.any((d) => d.deviceId == device.remoteId.str);
 
           if (!exists && shouldAddDevice) {
-            debugPrint("➕ Adding new BLE device: $name");
+            //debugPrint("➕ Adding new BLE device: $name");
 
             final newDevice = BleBluetoothDeviceModel(
               device: device,
@@ -270,11 +270,11 @@ class BluetoothBleService {
             try {
               providerState?.updateBlePairedDevices(updatedDevices);
             } catch (e) {
-              debugPrint("⚠️ Error updating BLE provider: $e");
+              //debugPrint("⚠️ Error updating BLE provider: $e");
             }
             onDeviceFound?.call();
 
-            debugPrint("✅ BLE Device added successfully. Total devices: ${_devices.length}");
+            //debugPrint("✅ BLE Device added successfully. Total devices: ${_devices.length}");
           }
         }
       });
@@ -282,7 +282,7 @@ class BluetoothBleService {
       // Monitor scan completion
       FlutterBluePlus.isScanning.listen((isScanning) {
         if (!isScanning && _isScanning) {
-          debugPrint("🛑 BLE Scan automatically stopped");
+          //debugPrint("🛑 BLE Scan automatically stopped");
           _isScanning = false;
           _scanSubscription?.cancel();
           _scanSubscription = null;
@@ -290,7 +290,7 @@ class BluetoothBleService {
       });
 
     } catch (e) {
-      debugPrint("❌ Error starting BLE scan: $e");
+      //debugPrint("❌ Error starting BLE scan: $e");
       _isScanning = false;
       rethrow;
     }
@@ -299,20 +299,20 @@ class BluetoothBleService {
   /// ---------------- STOP SCAN ----------------
   Future<void> stopScan() async {
     if (!_isScanning) {
-      debugPrint("ℹ️ No active BLE scan to stop");
+      //debugPrint("ℹ️ No active BLE scan to stop");
       return;
     }
 
     _isScanning = false;
-    debugPrint("🛑 Stopping BLE Scan...");
+    //debugPrint("🛑 Stopping BLE Scan...");
 
     try {
       await _scanSubscription?.cancel();
       _scanSubscription = null;
       await FlutterBluePlus.stopScan();
-      debugPrint("✅ BLE Scan stopped successfully");
+      //debugPrint("✅ BLE Scan stopped successfully");
     } catch (e) {
-      debugPrint("❌ Error stopping BLE scan: $e");
+      //debugPrint("❌ Error stopping BLE scan: $e");
     }
   }
 
@@ -326,7 +326,7 @@ class BluetoothBleService {
               _connectedDevice!.connectionState == BlueConnectionState.connected) {
             if (_lastActivity != null &&
                 DateTime.now().difference(_lastActivity!) > const Duration(seconds: 20)) {
-              debugPrint("💓 Sending BLE keep-alive ping...");
+              //debugPrint("💓 Sending BLE keep-alive ping...");
               await write("2,status", silent: true);
             }
           } else {
@@ -345,7 +345,7 @@ class BluetoothBleService {
   Future<bool> connectToDevice(BleBluetoothDeviceModel d) async {
     // CRITICAL: Check if device is already connected
     if (_isAlreadyConnected || _connectedDevice != null) {
-      debugPrint("✅ Device already connected! Using existing connection.");
+      //debugPrint("✅ Device already connected! Using existing connection.");
       d.connectionState = BlueConnectionState.connected;
       _connectedDevice = d;
       _startKeepAlive();
@@ -353,11 +353,11 @@ class BluetoothBleService {
     }
 
     if (_isConnecting || _isReconnecting) {
-      debugPrint("⚠️ BLE Connection already in progress");
+      //debugPrint("⚠️ BLE Connection already in progress");
       return false;
     }
 
-    debugPrint("🔌 Attempting to connect to BLE device: ${d.deviceName} (ID: ${d.deviceId})");
+    //debugPrint("🔌 Attempting to connect to BLE device: ${d.deviceName} (ID: ${d.deviceId})");
     _currentDeviceId = d.deviceId;
 
     _isConnecting = true;
@@ -366,7 +366,7 @@ class BluetoothBleService {
     try {
       // Step 1: Request permissions
       if (!await requestPermissions()) {
-        debugPrint("❌ BLE Permissions not granted");
+        //debugPrint("❌ BLE Permissions not granted");
         _isConnecting = false;
         return false;
       }
@@ -385,14 +385,14 @@ class BluetoothBleService {
             d.deviceId, BlueConnectionState.connecting.index);
         providerState?.updateBleConnectedDeviceStatus(null);
       } catch (e) {
-        debugPrint("⚠️ Error updating BLE status: $e");
+        //debugPrint("⚠️ Error updating BLE status: $e");
       }
 
       // Step 5: Check if we're already receiving data from this device
       // If we're getting JSON data, the device is already connected through some means
       if (_lastActivity != null &&
           DateTime.now().difference(_lastActivity!) < const Duration(seconds: 10)) {
-        debugPrint("✅ Device appears to be already connected (receiving data)");
+        //debugPrint("✅ Device appears to be already connected (receiving data)");
         _isAlreadyConnected = true;
         d.connectionState = BlueConnectionState.connected;
         _connectedDevice = d;
@@ -403,8 +403,8 @@ class BluetoothBleService {
       }
 
       // Step 6: Try to connect without explicit bonding first
-      debugPrint("🔗 Connecting to BLE ${d.deviceId}...");
-      debugPrint("ℹ️ If a pairing dialog appears, please accept it");
+      //debugPrint("🔗 Connecting to BLE ${d.deviceId}...");
+      //debugPrint("ℹ️ If a pairing dialog appears, please accept it");
 
       await d.device.connect(
         timeout: const Duration(seconds: 30),
@@ -412,7 +412,7 @@ class BluetoothBleService {
         license: License.free,
       );
 
-      debugPrint("✅ BLE Connected successfully");
+      //debugPrint("✅ BLE Connected successfully");
       _lastActivity = DateTime.now();
       _isAlreadyConnected = true;
 
@@ -427,17 +427,17 @@ class BluetoothBleService {
           // Check if still connected
           final isConnected = await d.device.isConnected;
           if (!isConnected) {
-            debugPrint("❌ Device disconnected before MTU request");
+            //debugPrint("❌ Device disconnected before MTU request");
             break;
           }
 
           await d.device.requestMtu(mtu);
-          debugPrint("✅ BLE MTU set to $mtu");
+          //debugPrint("✅ BLE MTU set to $mtu");
           break;
         } catch (e) {
-          debugPrint("⚠️ BLE MTU $mtu request failed: $e");
+          //debugPrint("⚠️ BLE MTU $mtu request failed: $e");
           if (e.toString().contains('not connected')) {
-            debugPrint("❌ Device disconnected during MTU negotiation");
+            //debugPrint("❌ Device disconnected during MTU negotiation");
             break;
           }
         }
@@ -448,11 +448,11 @@ class BluetoothBleService {
       _connectedDevice = d;
       _writeReady = false;
 
-      debugPrint("🔍 Discovering BLE services...");
+      //debugPrint("🔍 Discovering BLE services...");
       bool servicesFound = await _discoverServicesWithRetry(d, maxRetries: 3);
 
       if (!servicesFound) {
-        debugPrint("⚠️ BLE Custom service not found after retries");
+        //debugPrint("⚠️ BLE Custom service not found after retries");
         _showConfigurationInstructions();
 
         d.connectionState = BlueConnectionState.disconnected;
@@ -474,26 +474,26 @@ class BluetoothBleService {
             BlueConnectionState.connected.index);
         providerState?.updateBleConnectedDeviceStatus(d);
       } catch (e) {
-        debugPrint("⚠️ Error updating BLE final status: $e");
+        //debugPrint("⚠️ Error updating BLE final status: $e");
       }
 
       _startKeepAlive();
 
-      debugPrint("✅ BLE Connection complete - Write: ${_writeChar != null}, Notify: ${_notifyChar != null}");
+      //debugPrint("✅ BLE Connection complete - Write: ${_writeChar != null}, Notify: ${_notifyChar != null}");
       _isConnecting = false;
       return true;
 
     } catch (e) {
-      debugPrint("❌ BLE Connection Failed: $e");
+      //debugPrint("❌ BLE Connection Failed: $e");
 
       // Check for authentication failure
       if (e.toString().contains('AUTHENTICATION_FAILURE') || e.toString().contains('133')) {
-        debugPrint("⚠️ Authentication required for this device");
-        debugPrint("💡 Please ensure you:");
-        debugPrint("   1. The device is not already connected to another phone");
-        debugPrint("   2. Accept the pairing request when it appears");
-        debugPrint("   3. Enter the correct pairing code (usually 0000 or 1234)");
-        debugPrint("   4. If still failing, unpair the device in Bluetooth settings and try again");
+        //debugPrint("⚠️ Authentication required for this device");
+        //debugPrint("💡 Please ensure you:");
+        //debugPrint("   1. The device is not already connected to another phone");
+        //debugPrint("   2. Accept the pairing request when it appears");
+        //debugPrint("   3. Enter the correct pairing code (usually 0000 or 1234)");
+        //debugPrint("   4. If still failing, unpair the device in Bluetooth settings and try again");
       }
 
       d.connectionState = BlueConnectionState.disconnected;
@@ -503,7 +503,7 @@ class BluetoothBleService {
             BlueConnectionState.disconnected.index);
         providerState?.updateBleConnectedDeviceStatus(null);
       } catch (e) {
-        debugPrint("⚠️ Error updating BLE status: $e");
+        //debugPrint("⚠️ Error updating BLE status: $e");
       }
 
       _resetConnection();
@@ -516,10 +516,10 @@ class BluetoothBleService {
   /// ---------------- SETUP CONNECTION MONITORING ----------------
   Future<void> _setupConnectionMonitoring(BleBluetoothDeviceModel d) async {
     _connectionSubscription = d.device.connectionState.listen((state) {
-      debugPrint("📱 BLE Connection State: $state at ${DateTime.now()}");
+      //debugPrint("📱 BLE Connection State: $state at ${DateTime.now()}");
 
       if (state == BluetoothConnectionState.disconnected) {
-        debugPrint("🔌 BLE Device disconnected");
+        //debugPrint("🔌 BLE Device disconnected");
         _lastActivity = null;
         _stopKeepAlive();
         _isAlreadyConnected = false;
@@ -534,14 +534,14 @@ class BluetoothBleService {
               BlueConnectionState.disconnected.index);
           providerState?.updateBleConnectedDeviceStatus(null);
         } catch (e) {
-          debugPrint("⚠️ Error updating BLE status: $e");
+          //debugPrint("⚠️ Error updating BLE status: $e");
         }
 
         if (_currentDeviceId != null && !_isConnecting && !_isReconnecting) {
           _attemptReconnect(d);
         }
       } else if (state == BluetoothConnectionState.connected) {
-        debugPrint("✅ BLE Device connected and stable");
+        //debugPrint("✅ BLE Device connected and stable");
         d.connectionState = BlueConnectionState.connected;
         _isAlreadyConnected = true;
         _startKeepAlive();
@@ -561,7 +561,7 @@ class BluetoothBleService {
         providerState?.updateBleConnectedDeviceStatus(null);
       }
     } catch (e) {
-      debugPrint("⚠️ Error updating BLE status: $e");
+      //debugPrint("⚠️ Error updating BLE status: $e");
     }
   }
 
@@ -621,7 +621,7 @@ class BluetoothBleService {
     if (_reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
       _reconnectAttempts++;
       _isReconnecting = true;
-      debugPrint("🔄 BLE Auto-reconnect attempt $_reconnectAttempts/$MAX_RECONNECT_ATTEMPTS in 5 seconds...");
+      //debugPrint("🔄 BLE Auto-reconnect attempt $_reconnectAttempts/$MAX_RECONNECT_ATTEMPTS in 5 seconds...");
 
       _reconnectTimer = Timer(const Duration(seconds: 5), () async {
         _reconnectTimer = null;
@@ -633,9 +633,9 @@ class BluetoothBleService {
           _isReconnecting = false;
 
           if (!success && _reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-            debugPrint("⚠️ BLE Reconnect failed, will retry on next disconnect");
+            //debugPrint("⚠️ BLE Reconnect failed, will retry on next disconnect");
           } else if (!success) {
-            debugPrint("❌ BLE All reconnect attempts failed");
+            //debugPrint("❌ BLE All reconnect attempts failed");
             _reconnectAttempts = 0;
             _currentDeviceId = null;
             _isAlreadyConnected = false;
@@ -645,7 +645,7 @@ class BluetoothBleService {
         }
       });
     } else {
-      debugPrint("❌ BLE Max reconnect attempts reached. Manual reconnect required.");
+      //debugPrint("❌ BLE Max reconnect attempts reached. Manual reconnect required.");
       _reconnectAttempts = 0;
       _currentDeviceId = null;
       _isReconnecting = false;
@@ -674,7 +674,7 @@ class BluetoothBleService {
         await _connectedDevice!.device.disconnect();
         await Future.delayed(const Duration(milliseconds: 1000));
       } catch (e) {
-        debugPrint("⚠️ Error disconnecting BLE: $e");
+        //debugPrint("⚠️ Error disconnecting BLE: $e");
       }
       _connectedDevice = null;
     }
@@ -685,21 +685,21 @@ class BluetoothBleService {
   /// ---------------- DISCOVER SERVICES WITH RETRY ----------------
   Future<bool> _discoverServicesWithRetry(BleBluetoothDeviceModel d, {int maxRetries = 3}) async {
     for (int attempt = 1; attempt <= maxRetries; attempt++) {
-      debugPrint("🔍 BLE Service discovery attempt $attempt/$maxRetries");
+      //debugPrint("🔍 BLE Service discovery attempt $attempt/$maxRetries");
 
       try {
         // Check if still connected
         final isConnected = await d.device.isConnected;
         if (!isConnected) {
-          debugPrint("❌ Device not connected during service discovery");
+          //debugPrint("❌ Device not connected during service discovery");
           return false;
         }
 
         final services = await d.device.discoverServices();
-        debugPrint("📋 Found ${services.length} BLE services");
+        //debugPrint("📋 Found ${services.length} BLE services");
 
         for (var service in services) {
-          debugPrint("BLE Service: ${service.uuid}");
+          //debugPrint("BLE Service: ${service.uuid}");
         }
 
         bool foundCustomService = services.any(
@@ -707,25 +707,25 @@ class BluetoothBleService {
         );
 
         if (foundCustomService) {
-          debugPrint("✅ Found BLE custom service on attempt $attempt");
+          //debugPrint("✅ Found BLE custom service on attempt $attempt");
           await _processServices(services);
           return true;
         }
 
         if (attempt < maxRetries) {
-          debugPrint("⚠️ BLE Custom service not found, retrying in 1 second...");
+          //debugPrint("⚠️ BLE Custom service not found, retrying in 1 second...");
           await Future.delayed(const Duration(seconds: 1));
         }
 
       } catch (e) {
-        debugPrint("❌ BLE Service discovery attempt $attempt failed: $e");
+        //debugPrint("❌ BLE Service discovery attempt $attempt failed: $e");
         if (attempt < maxRetries) {
           await Future.delayed(const Duration(seconds: 1));
         }
       }
     }
 
-    debugPrint("❌ BLE Custom service not found after $maxRetries attempts");
+    //debugPrint("❌ BLE Custom service not found after $maxRetries attempts");
     return false;
   }
 
@@ -733,38 +733,38 @@ class BluetoothBleService {
   Future<void> _processServices(List<BluetoothService> services) async {
     for (var service in services) {
       if (service.uuid.toString().toLowerCase() == serviceUuid.toLowerCase()) {
-        debugPrint("✅ BLE Target Service Found: ${service.uuid}");
-        debugPrint("📊 Found ${service.characteristics.length} BLE characteristics");
+        //debugPrint("✅ BLE Target Service Found: ${service.uuid}");
+        //debugPrint("📊 Found ${service.characteristics.length} BLE characteristics");
 
         for (var char in service.characteristics) {
           final uuid = char.uuid.toString().toLowerCase();
-          debugPrint("  BLE Characteristic: $uuid");
-          debugPrint("    Properties: ${char.properties}");
+          //debugPrint("  BLE Characteristic: $uuid");
+          //debugPrint("    Properties: ${char.properties}");
 
           if (writeUuids.contains(uuid) && (char.properties.write || char.properties.writeWithoutResponse)) {
             if (_writeChar == null) {
               _writeChar = char;
               _writeReady = true;
-              debugPrint("✅ BLE Write characteristic ready: $uuid");
+              //debugPrint("✅ BLE Write characteristic ready: $uuid");
             }
           }
 
           if (notifyUuids.contains(uuid) && char.properties.notify) {
             if (_notifyChar == null) {
               _notifyChar = char;
-              debugPrint("✅ BLE Notify characteristic found: $uuid");
+              //debugPrint("✅ BLE Notify characteristic found: $uuid");
 
               try {
                 await _notifyChar!.setNotifyValue(true);
-                debugPrint("✅ BLE Notify enabled successfully");
+                //debugPrint("✅ BLE Notify enabled successfully");
 
                 _notifySubscription = _notifyChar!.onValueReceived.listen((value) {
                   final response = String.fromCharCodes(value);
-                  debugPrint("📩 BLE Device Response: $response");
+                  //debugPrint("📩 BLE Device Response: $response");
                   _handleDeviceResponse(response);
                 });
               } catch (e) {
-                debugPrint("⚠️ Could not enable BLE notifications: $e");
+                //debugPrint("⚠️ Could not enable BLE notifications: $e");
               }
             }
           }
@@ -780,19 +780,19 @@ class BluetoothBleService {
         final services = await _connectedDevice!.device.discoverServices();
         await _processServices(services);
       } catch (e) {
-        debugPrint("⚠️ Error refreshing BLE characteristics: $e");
+        //debugPrint("⚠️ Error refreshing BLE characteristics: $e");
       }
     }
   }
 
   /// ---------------- HANDLE DEVICE RESPONSE ----------------
   void _handleDeviceResponse(String response) {
-    debugPrint("📱 Processing BLE device response: $response");
+    //debugPrint("📱 Processing BLE device response: $response");
     _lastActivity = DateTime.now();
 
     // If we're receiving data, we must be connected
     if (!_isAlreadyConnected && _connectedDevice != null) {
-      debugPrint("✅ Received data - marking as connected");
+      //debugPrint("✅ Received data - marking as connected");
       _isAlreadyConnected = true;
       _connectedDevice!.connectionState = BlueConnectionState.connected;
     }
@@ -803,7 +803,7 @@ class BluetoothBleService {
 
   /// ---------------- PARSE BUFFER ----------------
   void _parseBuffer() {
-    debugPrint('BLE _buffer----> $_buffer');
+    //debugPrint('BLE _buffer----> $_buffer');
 
     if (_buffer.isEmpty) return;
 
@@ -823,7 +823,7 @@ class BluetoothBleService {
 
   /// ---------------- PROCESS DATA ----------------
   void _processData(String jsonString) {
-    debugPrint("BLE _processData call $jsonString");
+    //debugPrint("BLE _processData call $jsonString");
     try {
       final data = json.decode(jsonString);
       final jsonStr = json.encode(data);
@@ -860,7 +860,7 @@ class BluetoothBleService {
           break;
       }
     } catch (e) {
-      debugPrint("Error parsing BLE JSON: $e");
+      //debugPrint("Error parsing BLE JSON: $e");
     }
   }
 
@@ -876,7 +876,7 @@ class BluetoothBleService {
 
   /// ---------------- DISCONNECT ----------------
   Future<void> disconnect(BleBluetoothDeviceModel d) async {
-    debugPrint("🔌 Manually disconnecting from BLE device");
+    //debugPrint("🔌 Manually disconnecting from BLE device");
     _stopKeepAlive();
     _reconnectTimer?.cancel();
     _reconnectTimer = null;
@@ -891,7 +891,7 @@ class BluetoothBleService {
     try {
       await d.device.disconnect();
     } catch (e) {
-      debugPrint("⚠️ Error during BLE disconnect: $e");
+      //debugPrint("⚠️ Error during BLE disconnect: $e");
     }
 
     d.connectionState = BlueConnectionState.disconnected;
@@ -899,7 +899,7 @@ class BluetoothBleService {
     try {
       providerState?.updateBleConnectedDeviceStatus(null);
     } catch (e) {
-      debugPrint("⚠️ Error updating BLE status: $e");
+      //debugPrint("⚠️ Error updating BLE status: $e");
     }
   }
 
@@ -921,11 +921,11 @@ class BluetoothBleService {
   /// ---------------- RECONNECT ----------------
   Future<bool> reconnect() async {
     if (_connectedDevice == null) {
-      debugPrint("❌ No BLE device to reconnect");
+      //debugPrint("❌ No BLE device to reconnect");
       return false;
     }
 
-    debugPrint("🔄 Attempting to reconnect BLE...");
+    //debugPrint("🔄 Attempting to reconnect BLE...");
     return await connectToDevice(_connectedDevice!);
   }
 
@@ -993,9 +993,9 @@ class BluetoothBleService {
 
     _adapterSubscription =
         FlutterBluePlus.adapterState.listen((adapterState) {
-          debugPrint("🔵 Bluetooth State: $adapterState");
+          //debugPrint("🔵 Bluetooth State: $adapterState");
           if (adapterState != BluetoothAdapterState.on) {
-            debugPrint("⚠️ Bluetooth is not on! State: $adapterState");
+            //debugPrint("⚠️ Bluetooth is not on! State: $adapterState");
           }
         });
   }
@@ -1023,15 +1023,15 @@ class BluetoothBleService {
     for (var permission in permissions) {
       final status = await permission.status;
       if (status.isDenied || status.isPermanentlyDenied) {
-        debugPrint("❌ Permission denied: $permission");
+        //debugPrint("❌ Permission denied: $permission");
         allGranted = false;
       } else {
-        debugPrint("✅ Permission granted: $permission");
+        //debugPrint("✅ Permission granted: $permission");
       }
     }
 
     if (!allGranted) {
-      debugPrint("❌ Not all permissions granted");
+      //debugPrint("❌ Not all permissions granted");
       return false;
     }
 
@@ -1041,15 +1041,15 @@ class BluetoothBleService {
   /// ---------------- CHECK BLUETOOTH ----------------
   Future<bool> checkBluetooth() async {
     if (!await FlutterBluePlus.isSupported) {
-      debugPrint("❌ BLE not supported on this device");
+      //debugPrint("❌ BLE not supported on this device");
       return false;
     }
 
     final state = await FlutterBluePlus.adapterState.first;
-    debugPrint("📱 Bluetooth Adapter State: $state");
+    //debugPrint("📱 Bluetooth Adapter State: $state");
 
     if (state != BluetoothAdapterState.on) {
-      debugPrint("❌ Bluetooth is not ON. Please enable Bluetooth");
+      //debugPrint("❌ Bluetooth is not ON. Please enable Bluetooth");
       return false;
     }
 
@@ -1062,46 +1062,46 @@ class BluetoothBleService {
     String? macAddressFilter,
     Duration? timeout,
   }) async {
-    debugPrint("🔍 Starting scan process...");
-    debugPrint("🔍 Using device name filter: $deviceNameFilter");
-    debugPrint("🔍 Using MAC address filter: $macAddressFilter");
+    //debugPrint("🔍 Starting scan process...");
+    //debugPrint("🔍 Using device name filter: $deviceNameFilter");
+    //debugPrint("🔍 Using MAC address filter: $macAddressFilter");
 
     if (_isScanning) {
-      debugPrint("⚠️ Scan already in progress");
+      //debugPrint("⚠️ Scan already in progress");
       return;
     }
 
-    debugPrint("📱 Requesting permissions...");
+    //debugPrint("📱 Requesting permissions...");
     if (!await requestPermissions()) {
-      debugPrint("❌ Permissions not granted");
+      //debugPrint("❌ Permissions not granted");
       return;
     }
 
-    debugPrint("📱 Checking Bluetooth...");
+    //debugPrint("📱 Checking Bluetooth...");
     if (!await checkBluetooth()) {
-      debugPrint("❌ Bluetooth not available");
+      //debugPrint("❌ Bluetooth not available");
       return;
     }
 
-    debugPrint("🧹 Clearing previous devices...");
+    //debugPrint("🧹 Clearing previous devices...");
     _devices.clear();
     providerState?.updateBlePairedDevices([]);
 
-    debugPrint("🛑 Stopping any existing scan...");
+    //debugPrint("🛑 Stopping any existing scan...");
     await stopScan();
 
     _isScanning = true;
-    debugPrint("🔍 BLE Scan Started - Looking for devices with service: $serviceUuid");
+    //debugPrint("🔍 BLE Scan Started - Looking for devices with service: $serviceUuid");
 
     try {
       await FlutterBluePlus.startScan(
         withServices: [Guid(serviceUuid)],
         timeout: timeout ?? const Duration(seconds: 15),
       );
-      debugPrint("✅ Scan started successfully");
+      //debugPrint("✅ Scan started successfully");
 
       _scanSubscription = FlutterBluePlus.scanResults.listen((List<ScanResult> results) {
-        debugPrint("📡 Received ${results.length} scan results");
+        //debugPrint("📡 Received ${results.length} scan results");
 
         for (final r in results) {
           final device = r.device;
@@ -1109,28 +1109,28 @@ class BluetoothBleService {
           final macAddress = device.remoteId.str;
           final macAddressNoColons = macAddress.replaceAll(":", "").toUpperCase();
 
-          debugPrint("============ DEVICE FOUND ============");
-          debugPrint("Name: $name");
-          debugPrint("MAC Address: $macAddress");
-          debugPrint("MAC (no colons): $macAddressNoColons");
-          debugPrint("RSSI: ${r.rssi}");
-          debugPrint("======================================");
+          //debugPrint("============ DEVICE FOUND ============");
+          //debugPrint("Name: $name");
+          //debugPrint("MAC Address: $macAddress");
+          //debugPrint("MAC (no colons): $macAddressNoColons");
+          //debugPrint("RSSI: ${r.rssi}");
+          //debugPrint("======================================");
 
           *//*bool shouldInclude = true;
 
           if (deviceNameFilter != null && deviceNameFilter.isNotEmpty) {
             if (name.isEmpty) {
-              debugPrint("⏭️ Skipping device - no name provided");
+              //debugPrint("⏭️ Skipping device - no name provided");
               shouldInclude = false;
             } else {
               final nameLower = name.toLowerCase();
               final filterLower = deviceNameFilter.toLowerCase();
 
               if (!nameLower.contains(filterLower)) {
-                debugPrint("⏭️ Skipping device - name '$name' doesn't contain filter '$deviceNameFilter'");
+                //debugPrint("⏭️ Skipping device - name '$name' doesn't contain filter '$deviceNameFilter'");
                 shouldInclude = false;
               } else {
-                debugPrint("✅ Device name matches filter: $name");
+                //debugPrint("✅ Device name matches filter: $name");
               }
             }
           }
@@ -1140,9 +1140,9 @@ class BluetoothBleService {
             final deviceMac = macAddressNoColons;
 
             if (deviceMac.contains(filterMac) || filterMac.contains(deviceMac)) {
-              debugPrint("✅ Device MAC address matches filter: $macAddress");
+              //debugPrint("✅ Device MAC address matches filter: $macAddress");
             } else {
-              debugPrint("⏭️ Skipping device - MAC address '$macAddress' doesn't match filter '$macAddressFilter'");
+              //debugPrint("⏭️ Skipping device - MAC address '$macAddress' doesn't match filter '$macAddressFilter'");
               shouldInclude = false;
             }
           }
@@ -1154,7 +1154,7 @@ class BluetoothBleService {
           final exists = _devices.any((d) => d.device.remoteId.str == device.remoteId.str);
 
           if (!exists) {
-            debugPrint("➕ Adding new device: $name ($macAddress)");
+            //debugPrint("➕ Adding new device: $name ($macAddress)");
 
             final newDevice = BleBluetoothDeviceModel(
               device: device,
@@ -1167,16 +1167,16 @@ class BluetoothBleService {
             providerState?.updateBlePairedDevices(updatedDevices);
             onDeviceFound?.call();
 
-            debugPrint("✅ Device added successfully. Total devices: ${_devices.length}");
+            //debugPrint("✅ Device added successfully. Total devices: ${_devices.length}");
           } else {
-            debugPrint("⏭️ Device already in list: $name");
+            //debugPrint("⏭️ Device already in list: $name");
           }
         }
       });
 
       FlutterBluePlus.isScanning.listen((isScanning) {
         if (!isScanning && _isScanning) {
-          debugPrint("🛑 BLE Scan automatically stopped");
+          //debugPrint("🛑 BLE Scan automatically stopped");
           _isScanning = false;
           _scanSubscription?.cancel();
           _scanSubscription = null;
@@ -1184,7 +1184,7 @@ class BluetoothBleService {
       });
 
     } catch (e) {
-      debugPrint("❌ Error starting scan: $e");
+      //debugPrint("❌ Error starting scan: $e");
       _isScanning = false;
       rethrow;
     }
@@ -1193,26 +1193,26 @@ class BluetoothBleService {
   /// ---------------- STOP SCAN ----------------
   Future<void> stopScan() async {
     if (!_isScanning) {
-      debugPrint("ℹ️ No active scan to stop");
+      //debugPrint("ℹ️ No active scan to stop");
       return;
     }
 
     _isScanning = false;
-    debugPrint("🛑 Stopping BLE Scan...");
+    //debugPrint("🛑 Stopping BLE Scan...");
 
     try {
       await _scanSubscription?.cancel();
       _scanSubscription = null;
       await FlutterBluePlus.stopScan();
-      debugPrint("✅ BLE Scan stopped successfully");
+      //debugPrint("✅ BLE Scan stopped successfully");
     } catch (e) {
-      debugPrint("❌ Error stopping scan: $e");
+      //debugPrint("❌ Error stopping scan: $e");
     }
   }
 
   /// ---------------- CONNECT ----------------
   Future<void> connectToDevice(BleBluetoothDeviceModel d) async {
-    debugPrint("🔌 Attempting to connect to device: ${d.device.platformName}");
+    //debugPrint("🔌 Attempting to connect to device: ${d.device.platformName}");
 
     try {
       await requestPermissions();
@@ -1221,41 +1221,41 @@ class BluetoothBleService {
       providerState?.updateBleDeviceStatus(
           d.device.remoteId.str, BlueConnectionState.connecting.index);
 
-      debugPrint("🔗 Connecting to ${d.device.remoteId.str}...");
+      //debugPrint("🔗 Connecting to ${d.device.remoteId.str}...");
       await d.device.connect(
         timeout: const Duration(seconds: 25),
         autoConnect: false,
         license: License.free,
       );
-      debugPrint("✅ Connected successfully");
+      //debugPrint("✅ Connected successfully");
 
       _connectedDevice = d;
       _writeReady = false;
 
       await Future.delayed(const Duration(milliseconds: 500));
 
-      debugPrint("📡 Requesting MTU 247...");
+      //debugPrint("📡 Requesting MTU 247...");
       await d.device.requestMtu(247);
-      debugPrint("✅ MTU request sent");
+      //debugPrint("✅ MTU request sent");
 
       await Future.delayed(const Duration(milliseconds: 500));
 
-      debugPrint("🔍 Discovering services...");
+      //debugPrint("🔍 Discovering services...");
       await _discoverServices(d);
 
       if (_writeChar == null) {
-        debugPrint("⚠️ Write characteristic not found!");
+        //debugPrint("⚠️ Write characteristic not found!");
       }
 
       if (_notifyChar == null) {
-        debugPrint("⚠️ Notify characteristic not found or couldn't be enabled");
-        debugPrint("⚠️ Device will still be connected but notifications won't work");
+        //debugPrint("⚠️ Notify characteristic not found or couldn't be enabled");
+        //debugPrint("⚠️ Device will still be connected but notifications won't work");
       }
 
       _connectionSubscription = d.device.connectionState.listen((state) {
-        debugPrint("📱 Connection State: $state");
+        //debugPrint("📱 Connection State: $state");
         if (state == BluetoothConnectionState.disconnected) {
-          debugPrint("🔌 Device disconnected");
+          //debugPrint("🔌 Device disconnected");
           _resetConnection();
           providerState?.updateBleDeviceStatus(
               d.device.remoteId.str,
@@ -1267,37 +1267,37 @@ class BluetoothBleService {
           BlueConnectionState.connected.index);
       providerState?.updateBleConnectedDeviceStatus(d);
 
-      debugPrint("✅ Connection complete");
-      debugPrint("📊 Connection status - Write: ${_writeChar != null}, Notify: ${_notifyChar != null}");
+      //debugPrint("✅ Connection complete");
+      //debugPrint("📊 Connection status - Write: ${_writeChar != null}, Notify: ${_notifyChar != null}");
 
     } catch (e) {
-      debugPrint("❌ BLE Connection Failed: $e");
+      //debugPrint("❌ BLE Connection Failed: $e");
       _resetConnection();
     }
   }
 
   /// ---------------- DISCOVER SERVICES ----------------
   Future<void> _discoverServices(BleBluetoothDeviceModel d) async {
-    debugPrint("🔍 Discovering services for ${d.device.platformName}...");
+    //debugPrint("🔍 Discovering services for ${d.device.platformName}...");
 
     final services = await d.device.discoverServices();
-    debugPrint("📋 Found ${services.length} services");
+    //debugPrint("📋 Found ${services.length} services");
 
     for (var service in services) {
-      debugPrint("Service: ${service.uuid}");
+      //debugPrint("Service: ${service.uuid}");
 
       if (service.uuid.toString().toLowerCase() == serviceUuid.toLowerCase()) {
-        debugPrint("✅ Target Service Found: ${service.uuid}");
+        //debugPrint("✅ Target Service Found: ${service.uuid}");
 
         // Debug all characteristics
         for (var char in service.characteristics) {
           final uuid = char.uuid.toString().toLowerCase();
-          debugPrint("  Characteristic: $uuid");
-          debugPrint("    Properties: ${char.properties}");
-          debugPrint("    Descriptors: ${char.descriptors.length}");
+          //debugPrint("  Characteristic: $uuid");
+          //debugPrint("    Properties: ${char.properties}");
+          //debugPrint("    Descriptors: ${char.descriptors.length}");
 
           for (var desc in char.descriptors) {
-            debugPrint("      Descriptor: ${desc.uuid}");
+            //debugPrint("      Descriptor: ${desc.uuid}");
           }
         }
 
@@ -1307,7 +1307,7 @@ class BluetoothBleService {
           if (uuid == writeUuid.toLowerCase()) {
             _writeChar = char;
             _writeReady = true;
-            debugPrint("✅ Write characteristic ready: $uuid");
+            //debugPrint("✅ Write characteristic ready: $uuid");
             break;
           }
         }
@@ -1320,7 +1320,7 @@ class BluetoothBleService {
 
   /// ---------------- SETUP NOTIFY CHARACTERISTIC ----------------
   Future<void> _setupNotifyCharacteristic(BluetoothService service) async {
-    debugPrint("🔔 Setting up notify characteristic...");
+    //debugPrint("🔔 Setting up notify characteristic...");
 
     List<BluetoothCharacteristic> notifyCharacteristics = [];
 
@@ -1328,24 +1328,24 @@ class BluetoothBleService {
       final uuid = char.uuid.toString().toLowerCase();
       if (char.properties.notify) {
         notifyCharacteristics.add(char);
-        debugPrint("📋 Found notify characteristic: $uuid");
-        debugPrint("   Descriptors count: ${char.descriptors.length}");
+        //debugPrint("📋 Found notify characteristic: $uuid");
+        //debugPrint("   Descriptors count: ${char.descriptors.length}");
 
         for (var desc in char.descriptors) {
-          debugPrint("     Descriptor UUID: ${desc.uuid}");
+          //debugPrint("     Descriptor UUID: ${desc.uuid}");
         }
       }
     }
 
     if (notifyCharacteristics.isEmpty) {
-      debugPrint("⚠️ No notify characteristics found");
+      //debugPrint("⚠️ No notify characteristics found");
       return;
     }
 
     // Try each notify characteristic
     for (var char in notifyCharacteristics) {
       final uuid = char.uuid.toString().toLowerCase();
-      debugPrint("🔍 Trying to enable notifications for: $uuid");
+      //debugPrint("🔍 Trying to enable notifications for: $uuid");
 
       // Add a small delay between attempts
       await Future.delayed(const Duration(milliseconds: 300));
@@ -1356,18 +1356,18 @@ class BluetoothBleService {
         if (success && _notifyChar != null) {
           _notifySubscription = _notifyChar!.onValueReceived.listen((value) {
             final response = String.fromCharCodes(value);
-            debugPrint("📩 Device Response: $response");
+            //debugPrint("📩 Device Response: $response");
             _handleDeviceResponse(response);
           });
-          debugPrint("✅ Notify enabled successfully for $uuid");
+          //debugPrint("✅ Notify enabled successfully for $uuid");
           return;
         }
       } catch (e) {
-        debugPrint("❌ Failed to enable notifications for $uuid: $e");
+        //debugPrint("❌ Failed to enable notifications for $uuid: $e");
       }
     }
 
-    debugPrint("❌ Could not enable notifications on any characteristic");
+    //debugPrint("❌ Could not enable notifications on any characteristic");
   }
 
   /// ---------------- ENABLE NOTIFICATIONS WITH FALLBACK ----------------
@@ -1375,44 +1375,44 @@ class BluetoothBleService {
     // Find the CCCD descriptor
     BluetoothDescriptor? cccdDescriptor;
 
-    debugPrint("🔍 Looking for CCCD descriptor in ${characteristic.descriptors.length} descriptors");
+    //debugPrint("🔍 Looking for CCCD descriptor in ${characteristic.descriptors.length} descriptors");
 
     for (var desc in characteristic.descriptors) {
       final descUuid = desc.uuid.toString().toLowerCase();
-      debugPrint("  Checking descriptor: $descUuid");
+      //debugPrint("  Checking descriptor: $descUuid");
 
       if (descUuid == "2902" ||
           descUuid == "00002902-0000-1000-8000-00805f9b34fb") {
         cccdDescriptor = desc;
-        debugPrint("✅ Found CCCD descriptor! UUID: $descUuid");
+        //debugPrint("✅ Found CCCD descriptor! UUID: $descUuid");
         break;
       }
     }
 
     // APPROACH 1: Try listening without enabling (if device sends automatically)
     try {
-      debugPrint("📝 Trying to listen without explicit enable...");
+      //debugPrint("📝 Trying to listen without explicit enable...");
       _notifyChar = characteristic;
       _notifySubscription = _notifyChar!.onValueReceived.listen((value) {
         final response = String.fromCharCodes(value);
-        debugPrint("📩 Device Response: $response");
+        //debugPrint("📩 Device Response: $response");
         _handleDeviceResponse(response);
       });
-      debugPrint("✅ Listening without explicit enable (device may auto-notify)");
+      //debugPrint("✅ Listening without explicit enable (device may auto-notify)");
       return true;
     } catch (e) {
-      debugPrint("❌ Auto-listen failed: $e");
+      //debugPrint("❌ Auto-listen failed: $e");
     }
 
     if (cccdDescriptor == null) {
-      debugPrint("⚠️ No CCCD descriptor found - trying setNotifyValue anyway");
+      //debugPrint("⚠️ No CCCD descriptor found - trying setNotifyValue anyway");
       try {
         await characteristic.setNotifyValue(true);
         _notifyChar = characteristic;
-        debugPrint("✅ setNotifyValue successful (no CCCD)");
+        //debugPrint("✅ setNotifyValue successful (no CCCD)");
         return true;
       } catch (e) {
-        debugPrint("❌ setNotifyValue failed: $e");
+        //debugPrint("❌ setNotifyValue failed: $e");
         return false;
       }
     }
@@ -1420,96 +1420,96 @@ class BluetoothBleService {
     // APPROACH 2: Try reading the characteristic first (some devices need this)
     if (characteristic.properties.read) {
       try {
-        debugPrint("📝 Attempting to read characteristic first...");
+        //debugPrint("📝 Attempting to read characteristic first...");
         await characteristic.read();
         await Future.delayed(const Duration(milliseconds: 100));
 
-        debugPrint("📝 Writing to CCCD after read...");
+        //debugPrint("📝 Writing to CCCD after read...");
         await cccdDescriptor.write([0x01, 0x00]);
         await Future.delayed(const Duration(milliseconds: 200));
 
         _notifyChar = characteristic;
-        debugPrint("✅ Notify enabled after read");
+        //debugPrint("✅ Notify enabled after read");
         return true;
       } catch (e) {
-        debugPrint("❌ Read-then-write approach failed: $e");
+        //debugPrint("❌ Read-then-write approach failed: $e");
       }
     }
 
     // APPROACH 3: Try with a longer delay
     try {
-      debugPrint("📝 Waiting longer before CCCD write...");
+      //debugPrint("📝 Waiting longer before CCCD write...");
       await Future.delayed(const Duration(milliseconds: 500));
 
       await cccdDescriptor.write([0x01, 0x00]);
       await Future.delayed(const Duration(milliseconds: 200));
 
       _notifyChar = characteristic;
-      debugPrint("✅ Notify enabled after delay");
+      //debugPrint("✅ Notify enabled after delay");
       return true;
     } catch (e) {
-      debugPrint("❌ Delayed write failed: $e");
+      //debugPrint("❌ Delayed write failed: $e");
     }
 
     // APPROACH 4: Try writing with different values
     try {
-      debugPrint("📝 Trying different CCCD values...");
+      //debugPrint("📝 Trying different CCCD values...");
 
       // Try with reversed byte order
       await cccdDescriptor.write([0x00, 0x01]);
       await Future.delayed(const Duration(milliseconds: 200));
 
       _notifyChar = characteristic;
-      debugPrint("✅ Notify enabled with reversed bytes");
+      //debugPrint("✅ Notify enabled with reversed bytes");
       return true;
     } catch (e) {
-      debugPrint("❌ Reversed bytes failed: $e");
+      //debugPrint("❌ Reversed bytes failed: $e");
     }
 
     // APPROACH 5: Try indications instead of notifications
     try {
-      debugPrint("📝 Trying to enable indications...");
+      //debugPrint("📝 Trying to enable indications...");
       await cccdDescriptor.write([0x02, 0x00]); // Indications
       await Future.delayed(const Duration(milliseconds: 200));
 
       _notifyChar = characteristic;
-      debugPrint("✅ Indications enabled successfully");
+      //debugPrint("✅ Indications enabled successfully");
       return true;
     } catch (e) {
-      debugPrint("❌ Indications failed: $e");
+      //debugPrint("❌ Indications failed: $e");
     }
 
     // APPROACH 6: Try both notifications and indications
     try {
-      debugPrint("📝 Trying both notifications and indications...");
+      //debugPrint("📝 Trying both notifications and indications...");
       await cccdDescriptor.write([0x03, 0x00]); // Both
       await Future.delayed(const Duration(milliseconds: 200));
 
       _notifyChar = characteristic;
-      debugPrint("✅ Both notifications and indications enabled");
+      //debugPrint("✅ Both notifications and indications enabled");
       return true;
     } catch (e) {
-      debugPrint("❌ Both failed: $e");
+      //debugPrint("❌ Both failed: $e");
     }
 
     // APPROACH 7: Try setNotifyValue
     try {
-      debugPrint("📝 Attempting setNotifyValue...");
+      //debugPrint("📝 Attempting setNotifyValue...");
       await characteristic.setNotifyValue(true);
       _notifyChar = characteristic;
-      debugPrint("✅ setNotifyValue successful");
+      //debugPrint("✅ setNotifyValue successful");
       return true;
     } catch (e) {
-      debugPrint("❌ setNotifyValue failed: $e");
+      //debugPrint("❌ setNotifyValue failed: $e");
     }
 
     // APPROACH 8: Try writing to a control characteristic first if exists
     try {
-      debugPrint("📝 Looking for control characteristic...");
+      //debugPrint("📝 Looking for control characteristic...");
       for (var c in service.characteristics) {
         if (c.properties.write || c.properties.writeWithoutResponse) {
           if (c.uuid != characteristic.uuid) {
-            debugPrint("📝 Writing to control characteristic: ${c.uuid}");
+            //debugPrint("📝 Writing to control characteristic: ${c.uuid}");
             await c.write([0x01], withoutResponse: true);
             await Future.delayed(const Duration(milliseconds: 100));
 
@@ -1517,34 +1517,34 @@ class BluetoothBleService {
             await Future.delayed(const Duration(milliseconds: 200));
 
             _notifyChar = characteristic;
-            debugPrint("✅ Notify enabled after control write");
+            //debugPrint("✅ Notify enabled after control write");
             return true;
           }
         }
       }
     } catch (e) {
-      debugPrint("❌ Control characteristic approach failed: $e");
+      //debugPrint("❌ Control characteristic approach failed: $e");
     }
 
-    debugPrint("❌ All notification enabling methods failed for ${characteristic.uuid}");
+    //debugPrint("❌ All notification enabling methods failed for ${characteristic.uuid}");
     return false;
   }
 
   /// ---------------- HANDLE DEVICE RESPONSE ----------------
   void _handleDeviceResponse(String response) {
-    debugPrint("📱 Processing device response: $response");
+    //debugPrint("📱 Processing device response: $response");
     // Add your response handling logic here
   }
 
 
   /// ---------------- WRITE NORMAL (Enhanced) ----------------
   Future<void> write(String payload, {bool withResponse = true}) async {
-    debugPrint("📤 Attempting to write: $payload");
+    //debugPrint("📤 Attempting to write: $payload");
 
     // First, prepare for write
     bool isReady = await prepareWrite();
     if (!isReady) {
-      debugPrint("❌ Cannot write: device not ready");
+      //debugPrint("❌ Cannot write: device not ready");
       return;
     }
 
@@ -1552,36 +1552,36 @@ class BluetoothBleService {
       // Convert string to bytes
       final finalPayload = '*$payload#';
       List<int> bytes = finalPayload.codeUnits;
-      debugPrint("📤 Sending: $finalPayload");
-      debugPrint("📤 Bytes: $bytes");
-      debugPrint("📤 Length: ${bytes.length} bytes");
+      //debugPrint("📤 Sending: $finalPayload");
+      //debugPrint("📤 Bytes: $bytes");
+      //debugPrint("📤 Length: ${bytes.length} bytes");
 
       // Try to write with the appropriate method
       if (withResponse && _writeChar!.properties.write) {
         // Use write with response
         await _writeChar!.write(bytes, withoutResponse: false);
-        debugPrint("✅ Message sent successfully (with response)");
+        //debugPrint("✅ Message sent successfully (with response)");
       } else if (_writeChar!.properties.writeWithoutResponse) {
         // Use write without response
         await _writeChar!.write(bytes, withoutResponse: true);
-        debugPrint("✅ Message sent successfully (without response)");
+        //debugPrint("✅ Message sent successfully (without response)");
       } else {
-        debugPrint("❌ No suitable write method available");
-        debugPrint("   Available properties: ${_writeChar!.properties}");
+        //debugPrint("❌ No suitable write method available");
+        //debugPrint("   Available properties: ${_writeChar!.properties}");
       }
 
     } catch (e) {
-      debugPrint("❌ Write Error: $e");
+      //debugPrint("❌ Write Error: $e");
       // Try fallback: write without response
       if (withResponse) {
-        debugPrint("⚠️ Retrying without response...");
+        //debugPrint("⚠️ Retrying without response...");
         try {
           final finalPayload = '*$payload#';
           List<int> fallbackBytes = finalPayload.codeUnits;
           await _writeChar!.write(fallbackBytes, withoutResponse: true);
-          debugPrint("✅ Message sent successfully (fallback)");
+          //debugPrint("✅ Message sent successfully (fallback)");
         } catch (e2) {
-          debugPrint("❌ Fallback also failed: $e2");
+          //debugPrint("❌ Fallback also failed: $e2");
         }
       }
     }
@@ -1595,12 +1595,12 @@ class BluetoothBleService {
   /// ---------------- PREPARE WRITE ----------------
   Future<bool> prepareWrite() async {
     if (_writeChar == null) {
-      debugPrint("❌ Write characteristic not available");
+      //debugPrint("❌ Write characteristic not available");
       return false;
     }
 
     if (_connectedDevice == null) {
-      debugPrint("❌ No device connected");
+      //debugPrint("❌ No device connected");
       return false;
     }
 
@@ -1608,24 +1608,24 @@ class BluetoothBleService {
       // Check connection state
       final connectionState = await _connectedDevice!.device.connectionState.first;
       if (connectionState != BluetoothConnectionState.connected) {
-        debugPrint("❌ Device not connected. State: $connectionState");
+        //debugPrint("❌ Device not connected. State: $connectionState");
         return false;
       }
 
       // Verify characteristic properties
       if (!_writeChar!.properties.write && !_writeChar!.properties.writeWithoutResponse) {
-        debugPrint("❌ Write characteristic does not support writing!");
-        debugPrint("   Properties: ${_writeChar!.properties}");
+        //debugPrint("❌ Write characteristic does not support writing!");
+        //debugPrint("   Properties: ${_writeChar!.properties}");
         return false;
       }
 
-      debugPrint("✅ Write characteristic ready for writing");
-      debugPrint("   UUID: ${_writeChar!.uuid}");
-      debugPrint("   Properties: ${_writeChar!.properties}");
+      //debugPrint("✅ Write characteristic ready for writing");
+      //debugPrint("   UUID: ${_writeChar!.uuid}");
+      //debugPrint("   Properties: ${_writeChar!.properties}");
       return true;
 
     } catch (e) {
-      debugPrint("❌ Error preparing write: $e");
+      //debugPrint("❌ Error preparing write: $e");
       return false;
     }
   }
@@ -1633,7 +1633,7 @@ class BluetoothBleService {
   /// ---------------- WRITE WIFI ----------------
   Future<void> writeWifiCredentials(String ssid, String password) async {
     if (_writeChar == null) {
-      debugPrint("❌ Write characteristic not available");
+      //debugPrint("❌ Write characteristic not available");
       return;
     }
 
@@ -1641,18 +1641,18 @@ class BluetoothBleService {
     final bytes = payload.codeUnits;
     const int maxChunk = 20;
 
-    debugPrint("📤 Sending WiFi credentials (${bytes.length} bytes)");
+    //debugPrint("📤 Sending WiFi credentials (${bytes.length} bytes)");
 
     for (int i = 0; i < bytes.length; i += maxChunk) {
       int end = (i + maxChunk > bytes.length) ? bytes.length : i + maxChunk;
       List<int> chunk = bytes.sublist(i, end);
 
       await _writeChar!.write(chunk, withoutResponse: false);
-      debugPrint("  Sent chunk ${(i ~/ maxChunk) + 1}: ${String.fromCharCodes(chunk)}");
+      //debugPrint("  Sent chunk ${(i ~/ maxChunk) + 1}: ${String.fromCharCodes(chunk)}");
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
-    debugPrint("✅ WiFi credentials sent successfully");
+    //debugPrint("✅ WiFi credentials sent successfully");
   }
 
   /// ---------------- DISCONNECT ----------------

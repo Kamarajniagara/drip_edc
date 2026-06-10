@@ -54,7 +54,7 @@ class ConditionLibraryViewModel extends ChangeNotifier {
           }
         }
       } catch (error) {
-        debugPrint('Error fetching condition library: $error');
+        //debugPrint('Error fetching condition library: $error');
       } finally {
         setLoading(false);
       }
@@ -351,7 +351,7 @@ class ConditionLibraryViewModel extends ChangeNotifier {
       }
 
     } catch (error) {
-      debugPrint('Error fetching language list: $error');
+      //debugPrint('Error fetching language list: $error');
     } finally {
       setLoading(false);
     }

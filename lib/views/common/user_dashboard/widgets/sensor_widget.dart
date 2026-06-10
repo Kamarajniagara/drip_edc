@@ -187,7 +187,7 @@ class SensorWidget extends StatelessWidget {
         }
       }
     } catch (e) {
-      debugPrint('Error fetching sensor hourly data: $e');
+      //debugPrint('Error fetching sensor hourly data: $e');
     }
 
     return sensors;

@@ -46,11 +46,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 // Permissions request
 Future<void> requestAppPermissions() async {
-  debugPrint("Requesting permissions...");
+  //debugPrint("Requesting permissions...");
 
   // Notifications (iOS + Android 13+)
   final notifStatus = await Permission.notification.request();
-  debugPrint("Notification permission: $notifStatus");
+  //debugPrint("Notification permission: $notifStatus");
 
   if (Platform.isAndroid) {
     final statuses = await [
@@ -59,7 +59,7 @@ Future<void> requestAppPermissions() async {
       Permission.locationWhenInUse, // better than generic .location
     ].request();
 
-    debugPrint("BLE + Location permissions: $statuses");
+    //debugPrint("BLE + Location permissions: $statuses");
 
     // Handle permanently denied
     if (notifStatus.isPermanentlyDenied ||
@@ -110,7 +110,7 @@ FutureOr<void> main() async {
     await flutterLocalNotificationsPlugin.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (details) {
-        debugPrint("Notification tapped: ${details.payload}");
+        //debugPrint("Notification tapped: ${details.payload}");
       },
     );
 
@@ -129,7 +129,7 @@ FutureOr<void> main() async {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      debugPrint("Message clicked: ${message.messageId}");
+      //debugPrint("Message clicked: ${message.messageId}");
     });
   }
 

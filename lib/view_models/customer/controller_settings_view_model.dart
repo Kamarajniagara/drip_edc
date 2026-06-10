@@ -111,7 +111,7 @@ class ControllerSettingsViewModel extends ChangeNotifier {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching settings menu: $error');
+      //debugPrint('Error fetching settings menu: $error');
     } finally {
       setLoading(false);
     }

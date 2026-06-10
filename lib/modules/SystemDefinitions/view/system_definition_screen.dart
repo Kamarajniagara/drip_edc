@@ -571,7 +571,7 @@ class _SystemDefinitionState extends State<SystemDefinition> {
               // showNavigationDialog(context: context, menuId: widget.menuId, ack: systemDefinitionProvider.controllerReadStatus == "1");
             } catch (error) {
               ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(message: 'Failed to update because of $error'));
-              debugPrint("Error: $error");
+              //debugPrint("Error: $error");
             }
           },
           child: const Text("Send"),

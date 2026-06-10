@@ -53,7 +53,7 @@ class _NodeConnectionPageState extends State<NodeConnectionPage> {
   //       "deviceId": widget.nodeData['deviceId'],
   //       "hardwareModelId" : bleService.nodeDataFromHw['MID']
   //     };
-  //     debugPrint("body : $body");
+  //     //debugPrint("body : $body");
   //     var nodeBluetoothResponse = await BleRepository().getNodeBluetoothSetting(body);
   //     Map<String, dynamic> nodeJsonData = jsonDecode(nodeBluetoothResponse.body);
   //     bleService.editNodeDataFromServer(nodeJsonData['data']['default'], widget.nodeData);
@@ -64,8 +64,8 @@ class _NodeConnectionPageState extends State<NodeConnectionPage> {
   //     }
   //     return nodeJsonData['code'];
   //   }catch(e,stacktrace){
-  //     debugPrint('Error on getting constant data :: $e');
-  //     debugPrint('Stacktrace on getting constant data :: $stacktrace');
+  //     //debugPrint('Error on getting constant data :: $e');
+  //     //debugPrint('Stacktrace on getting constant data :: $stacktrace');
   //     rethrow;
   //   }
   // }
@@ -98,8 +98,8 @@ class _NodeConnectionPageState extends State<NodeConnectionPage> {
       //   success: false,
       // );
       if (kDebugMode) {
-        debugPrint("Bluetooth check error: $e");
-        debugPrint("Backtrace: $backtrace");
+        //debugPrint("Bluetooth check error: $e");
+        //debugPrint("Backtrace: $backtrace");
       }
       return false;
     }
@@ -115,8 +115,8 @@ class _NodeConnectionPageState extends State<NodeConnectionPage> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, result) async{
-        debugPrint("didPop : $didPop");
-        debugPrint("result : $result");
+        //debugPrint("didPop : $didPop");
+        //debugPrint("result : $result");
         if (didPop) return;
         if (bleService.bleConnectionState == BluetoothConnectionState.connected) {
           bool shouldLeave = await showDialog(
@@ -504,8 +504,8 @@ class _NodeConnectionPageState extends State<NodeConnectionPage> {
                 } catch (e, backtrace) {
                   // Optional: You can display a SnackBar or Dialog
                   if (kDebugMode) {
-                    debugPrint("Turn on Bluetooth error: $e");
-                    debugPrint("Backtrace: $backtrace");
+                    //debugPrint("Turn on Bluetooth error: $e");
+                    //debugPrint("Backtrace: $backtrace");
                   }
                 }
               },

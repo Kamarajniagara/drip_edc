@@ -487,7 +487,7 @@ class PumpWidget extends StatelessWidget {
     Map<String, Object> body = {"userId": customerId, "controllerId": controllerId, "messageStatus": msg, "hardware": jsonDecode(data), "createUser": customerId};
     final response = await Repository(HttpService()).sendManualOperationToServer(body);
     if (response.statusCode == 200) {
-      debugPrint(response.body);
+      //debugPrint(response.body);
     } else {
       throw Exception('Failed to load data');
     }
@@ -966,7 +966,7 @@ class AeratorWidget extends StatelessWidget {
     Map<String, Object> body = {"userId": customerId, "controllerId": controllerId, "messageStatus": msg, "hardware": jsonDecode(data), "createUser": customerId};
     final response = await Repository(HttpService()).sendManualOperationToServer(body);
     if (response.statusCode == 200) {
-      debugPrint(response.body);
+      //debugPrint(response.body);
     } else {
       throw Exception('Failed to load data');
     }

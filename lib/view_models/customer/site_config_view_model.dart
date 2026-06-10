@@ -34,8 +34,8 @@ class SiteConfigViewModel extends ChangeNotifier {
         }
       }
     } catch (error, stackTrace) {
-      debugPrint('Error fetching Product stock: $error');
-      debugPrint(stackTrace.toString());
+      //debugPrint('Error fetching Product stock: $error');
+      //debugPrint(stackTrace.toString());
     } finally {
       notifyListeners();
     }

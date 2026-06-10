@@ -143,13 +143,13 @@ class AlarmListItems extends StatelessWidget {
                     payload: payLoadFinal);
 
                 if (result['http'] == true) {
-                  debugPrint("Payload sent to Server");
+                  //debugPrint("Payload sent to Server");
                 }
                 if (result['mqtt'] == true) {
-                  debugPrint("Payload sent to MQTT Box");
+                  //debugPrint("Payload sent to MQTT Box");
                 }
                 if (result['bluetooth'] == true) {
-                  debugPrint("Payload sent via Bluetooth");
+                  //debugPrint("Payload sent via Bluetooth");
                 }
 
                 Navigator.pop(context);

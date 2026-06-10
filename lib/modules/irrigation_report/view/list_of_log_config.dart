@@ -46,10 +46,10 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
         'irrigationLog': configDetails,
         'createUser': widget.userData['userId'],
       };
-      debugPrint("body : ${body}");
+      //debugPrint("body : ${body}");
       var response = await IrrigationRepository().createUserLogConfig(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
-      debugPrint("jsonData => ${jsonData}");
+      //debugPrint("jsonData => ${jsonData}");
       if(jsonData['code'] == 200){
         getUserLogConfig();
       }

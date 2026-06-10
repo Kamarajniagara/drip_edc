@@ -105,7 +105,7 @@ class LoginViewModel extends ChangeNotifier {
     } catch (error) {
       print("error:${error.toString()}");
       isLoading = false;
-      debugPrint('$error');
+      //debugPrint('$error');
       errorMessage = "Unexpected error occurred.";
       notifyListeners();
     }

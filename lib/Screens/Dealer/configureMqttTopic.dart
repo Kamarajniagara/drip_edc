@@ -204,19 +204,19 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         });
         final result = await context.read<CommunicationService>().sendCommand(payload: payLoadFinal,
             serverMsg: '');
-        debugPrint("Payload sent to Server$payLoadFinal");
+        //debugPrint("Payload sent to Server$payLoadFinal");
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Settings sent Ble")),
         );
         if (result['http'] == true) {
-          debugPrint("Payload sent to Server");
+          //debugPrint("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          debugPrint("Payload sent to MQTT Box");
+          //debugPrint("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          debugPrint("Payload sent via Bluetooth");
+          //debugPrint("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -319,13 +319,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("view settings sent Ble")),
         );
         if (result['http'] == true) {
-          debugPrint("Payload sent to Server");
+          //debugPrint("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          debugPrint("Payload sent to MQTT Box");
+          //debugPrint("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          debugPrint("Payload sent via Bluetooth");
+          //debugPrint("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -413,13 +413,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("update settings sent Ble")),
         );
         if (result['http'] == true) {
-          debugPrint("Payload sent to Server");
+          //debugPrint("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          debugPrint("Payload sent to MQTT Box");
+          //debugPrint("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          debugPrint("Payload sent via Bluetooth");
+          //debugPrint("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -491,13 +491,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("update settings sent Ble")),
         );
         if (result['http'] == true) {
-          debugPrint("Payload sent to Server");
+          //debugPrint("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          debugPrint("Payload sent to MQTT Box");
+          //debugPrint("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          debugPrint("Payload sent via Bluetooth");
+          //debugPrint("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -568,13 +568,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("Restart settings sent Ble")),
         );
         if (result['http'] == true) {
-          debugPrint("Payload sent to Server");
+          //debugPrint("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          debugPrint("Payload sent to MQTT Box");
+          //debugPrint("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          debugPrint("Payload sent via Bluetooth");
+          //debugPrint("Payload sent via Bluetooth");
         }
 
       } finally {

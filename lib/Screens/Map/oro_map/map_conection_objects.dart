@@ -51,7 +51,7 @@ class _MapConnectionObjectState extends State<MapConnectionObject> {
       }
     } catch (e) {
       provider.httpError = true;
-      debugPrint('Error Fetching Data: $e');
+      //debugPrint('Error Fetching Data: $e');
     }
   }
 

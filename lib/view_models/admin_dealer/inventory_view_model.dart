@@ -113,7 +113,7 @@ class InventoryViewModel extends SafeChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("Inventory error: $e");
+      //debugPrint("Inventory error: $e");
     } finally {
       if (!isDisposed) {
         isLoading = false;
@@ -156,14 +156,14 @@ class InventoryViewModel extends SafeChangeNotifier {
            displayEditProductDialog(context, catId, catName, mdlName, mdlDis,
                mdlId, imeiNo, warranty, productId, userId);
         } else {
-          debugPrint("API Error: ${jsonData['message']}");
+          //debugPrint("API Error: ${jsonData['message']}");
         }
       } else {
-        debugPrint("HTTP Error: ${response.statusCode}");
+        //debugPrint("HTTP Error: ${response.statusCode}");
       }
     } catch (error, stackTrace) {
-      debugPrint('Error fetching models: $error');
-      debugPrint(stackTrace.toString());
+      //debugPrint('Error fetching models: $error');
+      //debugPrint(stackTrace.toString());
     } finally {
       isLoading = false;
       safeNotify();
@@ -309,16 +309,16 @@ class InventoryViewModel extends SafeChangeNotifier {
                           GlobalSnackBar.show(context, jsonData["message"], 200);
                           Navigator.pop(context);
                         } else {
-                          debugPrint("API Error: ${jsonData['message']}");
+                          //debugPrint("API Error: ${jsonData['message']}");
                           GlobalSnackBar.show(context, jsonData["message"], jsonData["code"]);
                           Navigator.pop(context);
                         }
                       } else {
-                        debugPrint("HTTP Error: ${response.statusCode}");
+                        //debugPrint("HTTP Error: ${response.statusCode}");
                       }
                     } catch (error, stackTrace) {
-                      debugPrint('Error fetching models: $error');
-                      debugPrint(stackTrace.toString());
+                      //debugPrint('Error fetching models: $error');
+                      //debugPrint(stackTrace.toString());
                     } finally {
                       safeNotify();
                     }
@@ -499,7 +499,7 @@ class InventoryViewModel extends SafeChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("Filter error: $e");
+      //debugPrint("Filter error: $e");
     }
 
     safeNotify();

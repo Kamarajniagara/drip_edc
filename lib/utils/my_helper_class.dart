@@ -85,7 +85,7 @@ class MqttAckTracker {
       _onTimeout(buttonId);
     });
 
-    debugPrint("Waiting ACK for button: $buttonId payloadKey: $payloadKey");
+    //debugPrint("Waiting ACK for button: $buttonId payloadKey: $payloadKey");
   }
 
   static void ackReceived(String payloadKey) {
@@ -96,11 +96,11 @@ class MqttAckTracker {
         .key;
 
     if (buttonId.isEmpty) {
-      debugPrint("⚠ ACK arrived but no button matched payloadKey=$payloadKey");
+      //debugPrint("⚠ ACK arrived but no button matched payloadKey=$payloadKey");
       return;
     }
 
-    debugPrint("ACK matched for button: $buttonId payloadKey: $payloadKey");
+    //debugPrint("ACK matched for button: $buttonId payloadKey: $payloadKey");
 
     final context = navigatorKey.currentContext!;
     final buttonProvider = Provider.of<ButtonLoadingProvider>(context, listen: false);
@@ -116,7 +116,7 @@ class MqttAckTracker {
     final context = navigatorKey.currentContext!;
     final buttonProvider = Provider.of<ButtonLoadingProvider>(context, listen: false);
 
-    debugPrint("Timeout! No ACK for button: $buttonId");
+    //debugPrint("Timeout! No ACK for button: $buttonId");
 
     buttonProvider.setLoading(buttonId, false);
 

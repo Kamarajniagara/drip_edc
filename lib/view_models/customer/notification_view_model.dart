@@ -29,7 +29,7 @@ class NotificationViewModel extends ChangeNotifier {
         }
       }
     } catch (e, st) {
-      debugPrint('Error: $e\n$st');
+      //debugPrint('Error: $e\n$st');
     } finally {
       setLoading(false);
     }
@@ -38,7 +38,7 @@ class NotificationViewModel extends ChangeNotifier {
   Future<void> updateNotificationList(BuildContext context, int userId, int controllerId, int modifyUser) async {
 
     final selectedIds = getSelectedIds();
-    debugPrint("Update payload: $selectedIds");
+    //debugPrint("Update payload: $selectedIds");
 
     final body = {
       "userId": userId,
@@ -55,7 +55,7 @@ class NotificationViewModel extends ChangeNotifier {
         GlobalSnackBar.show(context, data["message"], 200);
       }
     } catch (e, st) {
-      debugPrint('Error: $e\n$st');
+      //debugPrint('Error: $e\n$st');
     } finally {
       setLoading(false);
     }

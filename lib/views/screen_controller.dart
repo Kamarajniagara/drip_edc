@@ -39,7 +39,7 @@ class ScreenController extends StatelessWidget {
           return false;
         }
       } catch (e) {
-        debugPrint('Validation skipped: $e');
+        //debugPrint('Validation skipped: $e');
         await PreferenceHelper.clearAll();
         return false;
       }

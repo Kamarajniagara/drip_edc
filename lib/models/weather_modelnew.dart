@@ -8,9 +8,9 @@ class WeatherStation {
   });
 
   factory WeatherStation.fromString(String data) {
-    print('data: $data');
+    //print('data: $data');
     final parts = data.split(',');
-    print('parts: $parts');
+    //print('parts: $parts');
     final deviceId = int.parse(parts[0]); // First index is device ID
     final sensors = <Sensor>[];
 

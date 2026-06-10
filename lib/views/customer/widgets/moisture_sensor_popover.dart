@@ -255,7 +255,7 @@ class _MoistureSensorPopoverState extends State<MoistureSensorPopover> {
         }
       }
     } catch (error) {
-      debugPrint('Error fetching sensor hourly data: $error');
+      //debugPrint('Error fetching sensor hourly data: $error');
     }
 
     setState(() {});

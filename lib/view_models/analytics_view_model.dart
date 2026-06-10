@@ -43,7 +43,7 @@ class AnalyticsViewModel extends SafeChangeNotifier {
         }
       }
     } catch (e, st) {
-      debugPrint('Error in getMySalesData: $e\n$st');
+      //debugPrint('Error in getMySalesData: $e\n$st');
     } finally {
       if (!isDisposed) {
         setLoadingSales(false);

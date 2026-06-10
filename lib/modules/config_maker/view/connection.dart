@@ -55,7 +55,7 @@ class _ConnectionState extends State<Connection> {
       widget.configPvd.updateConnectionListTile();
       return true;
     } catch (e) {
-      debugPrint('Error in updateConnection: ${e.toString()}');
+      //debugPrint('Error in updateConnection: ${e.toString()}');
       return false;
     }
   }

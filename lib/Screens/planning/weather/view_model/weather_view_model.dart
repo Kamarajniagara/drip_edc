@@ -63,7 +63,7 @@ class WeatherViewModel extends ChangeNotifier {
         }
       }
     } catch (e, st) {
-      debugPrint("Weather error: $e\n$st");
+      //debugPrint("Weather error: $e\n$st");
     }
 
     isLoadingWeather = false;
