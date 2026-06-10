@@ -101,7 +101,7 @@ class UserProfile extends StatelessWidget {
                                       initialCountryCode: 'IN',
                                       controller: viewModel.controllerMblNo,
                                       onChanged: (phone) {
-                                        print(phone.completeNumber);
+                                        //print(phone.completeNumber);
                                       },
                                       onCountryChanged: (country) =>
                                       viewModel.countryCode = country.dialCode,

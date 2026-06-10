@@ -13,13 +13,13 @@ class EncryptionHelper {
 
   static void init() {
     if (_isInitialized) {
-      print('EncryptionHelper already initialized, skipping...');
+      //print('EncryptionHelper already initialized, skipping...');
       return;
     }
 
     _keyBytes = _hexDecode(_encryptionKey);
     _isInitialized = true;
-    print('EncryptionHelper initialized successfully');
+    //print('EncryptionHelper initialized successfully');
   }
 
   static Uint8List _hexDecode(String hexString) {

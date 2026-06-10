@@ -24,7 +24,7 @@ class SiteConfigViewModel extends ChangeNotifier {
       var response = await repository.fetchUserGroupWithMasterList(body);
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-        print(response.body);
+        //print(response.body);
         if(jsonData["code"] == 200){
           customerSiteList.clear();
           final cntList = jsonData["data"] as List;

@@ -60,7 +60,7 @@ class AiRecommendationButton extends StatelessWidget {
                             const SizedBox(width: 16),
                             ElevatedButton(
                               onPressed: () {
-                                print("✔️ Applied ${response['percentage']}%");
+                                //print("✔️ Applied ${response['percentage']}%");
                                 Navigator.of(context).pop();
                               },
                               style: ElevatedButton.styleFrom(

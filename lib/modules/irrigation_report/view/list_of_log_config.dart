@@ -32,12 +32,12 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
   void initState() {
     // TODO: implement initState
     getUserLogConfig();
-    print("userData => ${widget.userData}");
+    //print("userData => ${widget.userData}");
     super.initState();
   }
 
   void createUserLogConfig({required String name,required dynamic configDetails})async{
-    print('createUserLogConfig called...............');
+    //print('createUserLogConfig called...............');
     try{
       var body = {
         'userId' : widget.userData['customerId'],
@@ -60,7 +60,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
   }
 
   void updateUserLogConfig({required int id,required dynamic configDetails})async{
-    print('updateUserLogConfig called...............');
+    //print('updateUserLogConfig called...............');
     try{
       var body = {
         'userId' : widget.userData['customerId'],
@@ -82,7 +82,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
 
   void getUserLogConfig()async{
     if (kDebugMode) {
-      print('getUserLogConfig called...............');
+      //print('getUserLogConfig called...............');
     }
     try{
       var body = {
@@ -105,7 +105,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
           serverData = jsonData['data'];
         });
         if (kDebugMode) {
-          print('serverData => $serverData');
+          //print('serverData => $serverData');
         }
         setState(() {
           irrigationLogParameterFromServer = serverData['default'];
@@ -123,7 +123,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
 
   void deleteUserLogConfig({required id})async{
     if (kDebugMode) {
-      print('deleteUserLogConfig called...............');
+      //print('deleteUserLogConfig called...............');
     }
     try{
       var body = {
@@ -133,7 +133,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
       };
       var response = await IrrigationRepository().deleteUserLogConfig(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
-      print('delete response =>${jsonData}');
+      //print('delete response =>${jsonData}');
       if(jsonData['code'] == 200){
         getUserLogConfig();
       }
@@ -629,7 +629,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
                                   style: TextStyle(fontSize: 12),
                                   maxLength: 20,
                                   onChanged: (value){
-                                    print('value => $value');
+                                    //print('value => $value');
                                     stateSetter((){
                                       setState(() {
                                         logName = value;

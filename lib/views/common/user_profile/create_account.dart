@@ -148,7 +148,7 @@ class CreateAccount extends StatelessWidget {
                               },
 
                               onChanged: (phone) {
-                                print(phone.completeNumber);
+                                //print(phone.completeNumber);
                               },
                               onCountryChanged: (country) {
                                 viewModel.dialCode = country.dialCode;

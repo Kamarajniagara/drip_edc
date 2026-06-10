@@ -56,7 +56,7 @@ class SftpService {
       final items = await _sftpClient!.listdir(path);
       if (kDebugMode) {
         for (final item in items) {
-          print(item.longname);
+          //print(item.longname);
         }
       }
       return items;

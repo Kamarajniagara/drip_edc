@@ -654,8 +654,8 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
                     //     ? F.appFlavor = Flavor.oroProduction
                     //     : F.appFlavor = Flavor.smartComm;
 
-                    print('flaVOR ${F.appFlavor}');
-                    print('${AppConstants.mqttUrl}');
+                    //print('flaVOR ${F.appFlavor}');
+                    //print('${AppConstants.mqttUrl}');
                     selectedPlatform = value;
                   });
                 },

@@ -73,7 +73,7 @@ class _PasswordProtectedSiteConfigState
 
                   if (getUserDetails.statusCode == 200) {
                     var jsonData = jsonDecode(getUserDetails.body);
-                    print("jsonData $jsonData");
+                    //print("jsonData $jsonData");
 
                     if (jsonData['code'] == 200) {
                       // print("getUserDetails.body: ${getUserDetails.body}");
@@ -83,8 +83,8 @@ class _PasswordProtectedSiteConfigState
                     }
                   }
                 } catch (e, stackTrace) {
-                  print('Error getData => ${e.toString()}');
-                  print('Trace getData => $stackTrace');
+                  //print('Error getData => ${e.toString()}');
+                  //print('Trace getData => $stackTrace');
                   if (ctx.mounted) Navigator.pop(ctx, false);
                 }
               },

@@ -1811,7 +1811,7 @@ class LiveMessage {
       );
     } catch (e) {
       print("❌ Error in LiveMessage.fromJson: $e");
-      print("JSON: $json");
+      //print("JSON: $json");
 
       // Return a safe empty message
       return LiveMessage(

@@ -65,7 +65,7 @@ class ConstantViewModel extends ChangeNotifier {
     Future.delayed(const Duration(milliseconds: 500), () async {
       try {
         var response = await repository.fetchConstantData({"userId": customerId, "controllerId": controllerId});
-        print(response.body);
+        //print(response.body);
         if (response.statusCode == 200) {
           final jsonData = jsonDecode(response.body);
           if (jsonData["code"] == 200) {
@@ -518,14 +518,12 @@ class ConstantViewModel extends ChangeNotifier {
           "createUser": createUserId,
         };
 
-        print(body);
 
         Map<String, String> jsonObjectGeneral = {
           "301": "${body['general'][9]['value']}, ${body['general'][10]['value']}, ${body['general'][11]['value']}"
         };
 
         var response = await repository.saveConstantData(body);
-        print(response.body);
         if (response.statusCode == 200) {
           final jsonData = jsonDecode(response.body);
           if (jsonData["code"] == 200) {

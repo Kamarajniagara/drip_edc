@@ -39,8 +39,8 @@ class BluetoothOffScreen extends StatelessWidget {
           } catch (e, backtrace) {
             Snackbar.show(ABC.a, prettyException("Error Turning On:", e), success: false);
             if (kDebugMode) {
-              print("$e");
-              print("backtrace: $backtrace");
+              //print("$e");
+              //print("backtrace: $backtrace");
             }
 
           }

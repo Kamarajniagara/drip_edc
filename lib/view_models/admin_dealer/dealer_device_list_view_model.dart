@@ -102,7 +102,6 @@ class DealerDeviceListViewModel extends ChangeNotifier {
 
     for (int i = 0; i < stockLength; i++) {
       if (selectedProducts[i]) {
-        print("Index: $i, Product ID: ${productStockList[i].productId}, Category Name: ${productStockList[i].categoryName}");
 
         selectedProductList.add({
           "productId": productStockList[i].productId,
@@ -130,7 +129,7 @@ class DealerDeviceListViewModel extends ChangeNotifier {
         "products": selectedProductList,
       };
 
-      print(fromAdminPage);
+      //print(fromAdminPage);
 
       try {
 
@@ -142,7 +141,7 @@ class DealerDeviceListViewModel extends ChangeNotifier {
           response = await repository.addProductToSubDealer(body);
         }
         if (response.statusCode == 200) {
-          print(response.body);
+          //print(response.body);
           final Map<String, dynamic> jsonData = jsonDecode(response.body);
           if(jsonData["code"] == 200) {
             dealerDeviceList.insertAll(0, newDevices);

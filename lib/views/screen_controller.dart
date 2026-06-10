@@ -76,7 +76,7 @@ class ScreenController extends StatelessWidget {
     );
 
     final status = await newVersion.getVersionStatus();
-        print("status:${status?.storeVersion},${status?.localVersion},${status?.originalStoreVersion}");
+        //print("status:${status?.storeVersion},${status?.localVersion},${status?.originalStoreVersion}");
     if (status != null && status.canUpdate) {
       newVersion.showUpdateDialog(
         context: context,

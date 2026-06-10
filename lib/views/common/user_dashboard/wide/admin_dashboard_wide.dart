@@ -36,8 +36,8 @@ class AdminDashboardWide extends StatelessWidget {
               role: UserRole.admin,
               isNarrow: false,
               onCustomerProductChanged: (String action, List<StockModel> updatedProducts) {
-                print('Action: $action');
-                print('Updated products count: ${updatedProducts.length}');
+                //print('Action: $action');
+                //print('Updated products count: ${updatedProducts.length}');
               },
             ),
           ),
