@@ -221,7 +221,7 @@ class Repository{
   }
 
   Future<http.Response> updateControllerCommunicationMode(body) async {
-    return await apiService.putRequest('/user/deviceList/updateCommunicationMode', body);
+    return await apiService.putRequest('/user/deviceList/updateMasterCommunicationMode', body);
   }
 
   Future<http.Response> getUserFilterBackwasing(body) async {
