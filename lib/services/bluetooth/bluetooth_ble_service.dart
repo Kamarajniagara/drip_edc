@@ -88,7 +88,7 @@ class BluetoothBleService {
       }
     });
 
-    ////debugPrint("✅ BLE Service Initialized with provider");
+    //debugPrint("✅ BLE Service Initialized with provider");
   }
 
   /// ---------------- PERMISSIONS ----------------
@@ -99,7 +99,7 @@ class BluetoothBleService {
       final androidInfo = await DeviceInfoPlugin().androidInfo;
       final sdkInt = androidInfo.version.sdkInt;
 
-      ////debugPrint("📱 Android SDK Version: $sdkInt");
+      //debugPrint("📱 Android SDK Version: $sdkInt");
 
       final List<Permission> permissions = [];
 
@@ -118,38 +118,38 @@ class BluetoothBleService {
         permissions.add(Permission.bluetooth);
       }
 
-      ////debugPrint("🔐 Requesting BLE permissions: ${permissions.map((p) => p.toString()).toList()}");
+      //debugPrint("🔐 Requesting BLE permissions: ${permissions.map((p) => p.toString()).toList()}");
 
       final Map<Permission, PermissionStatus> statuses = await permissions.request();
 
       bool allGranted = true;
       for (var permission in permissions) {
         final status = statuses[permission];
-        ////debugPrint("BLE Permission $permission: $status");
+        //debugPrint("BLE Permission $permission: $status");
 
         if (status == null || !status.isGranted) {
           allGranted = false;
 
           if (status == PermissionStatus.permanentlyDenied) {
-            ////debugPrint("⚠️ BLE Permission $permission is permanently denied");
+            //debugPrint("⚠️ BLE Permission $permission is permanently denied");
             await openAppSettings();
             return false;
           }
         } else {
-          ////debugPrint("✅ BLE Permission granted: $permission");
+          //debugPrint("✅ BLE Permission granted: $permission");
         }
       }
 
       if (!allGranted) {
-        ////debugPrint("❌ Not all BLE permissions granted");
+        //debugPrint("❌ Not all BLE permissions granted");
         return false;
       }
 
-      ////debugPrint("✅ All BLE permissions granted successfully");
+      //debugPrint("✅ All BLE permissions granted successfully");
       return true;
 
     } catch (e) {
-      ////debugPrint("❌ Error requesting BLE permissions: $e");
+      //debugPrint("❌ Error requesting BLE permissions: $e");
       return false;
     }
   }
@@ -222,11 +222,11 @@ class BluetoothBleService {
           final device = r.device;
           final name = device.platformName;
 
-     /*     //debugPrint("============ BLE DEVICE FOUND ============");
+          //debugPrint("============ BLE DEVICE FOUND ============");
           //debugPrint("Name: $name");
           //debugPrint("ID: ${device.remoteId}");
           //debugPrint("RSSI: ${r.rssi}");
-          //debugPrint("======================================");*/
+          //debugPrint("======================================");
 
           bool shouldAddDevice = false;
 
@@ -235,16 +235,16 @@ class BluetoothBleService {
               final deviceIdFromName = name.substring(4);
               if (deviceIdFromName == deviceId) {
                 shouldAddDevice = true;
-                ////debugPrint("✅ BLE Device matches filter: $deviceIdFromName == $deviceId");
+                //debugPrint("✅ BLE Device matches filter: $deviceIdFromName == $deviceId");
               } else {
-                ////debugPrint("❌ BLE Device filtered out: $deviceIdFromName != $deviceId");
+                //debugPrint("❌ BLE Device filtered out: $deviceIdFromName != $deviceId");
               }
             } else {
               if (name == deviceId) {
                 shouldAddDevice = true;
-                ////debugPrint("✅ BLE Device matches direct filter: $name == $deviceId");
+                //debugPrint("✅ BLE Device matches direct filter: $name == $deviceId");
               } else {
-                ////debugPrint("❌ BLE Device filtered out: $name != $deviceId");
+                //debugPrint("❌ BLE Device filtered out: $name != $deviceId");
               }
             }
           } else {

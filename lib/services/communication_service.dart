@@ -47,7 +47,7 @@ class CommunicationService {
             await mqttService.topicToPublishAndItsMessage(payload, topic);
             result['mqtt'] = true;
           } catch (e) {
-            ////debugPrint('Failed to send via MQTT: $e');
+            //debugPrint('Failed to send via MQTT: $e');
           }
         }
 
@@ -56,11 +56,11 @@ class CommunicationService {
             await sendCommandToServer(serverMsg, payload);
             result['http'] = true;
           } catch (e) {
-            ////debugPrint('Failed to send via HTTP: $e');
+            //debugPrint('Failed to send via HTTP: $e');
           }
         }
       } else {
-        ////debugPrint('🔵 Bluetooth is connected - Skipping web/MQTT communication');
+        //debugPrint('🔵 Bluetooth is connected - Skipping web/MQTT communication');
       }
 
       if (blueService.isConnected) {
@@ -77,18 +77,18 @@ class CommunicationService {
           await bleService.write(payload);
           result['bluetooth'] = true;
         } catch (e) {
-          ////debugPrint('Failed to send via BLE: $e');
+          //debugPrint('Failed to send via BLE: $e');
         }
       }
 
       /*if (mqttService.isConnected) {
         try {
           final topic = '${AppConstants.publishTopic}/${customerProvider.deviceId}';
-          ////debugPrint('Publishing to topic: $topic with payload: $payload');
+          //debugPrint('Publishing to topic: $topic with payload: $payload');
           await mqttService.topicToPublishAndItsMessage(payload, topic);
           result['mqtt'] = true;
         } catch (e) {
-          ////debugPrint('Failed to send via MQTT: $e');
+          //debugPrint('Failed to send via MQTT: $e');
         }
       }
 
@@ -97,7 +97,7 @@ class CommunicationService {
           await sendCommandToServer(serverMsg, payload);
           result['http'] = true;
         } catch (e) {
-          ////debugPrint('Failed to send via HTTP: $e');
+          //debugPrint('Failed to send via HTTP: $e');
         }
       }
 
@@ -107,7 +107,7 @@ class CommunicationService {
           blueService.write(payload);
           result['bluetooth'] = true;
         } catch (e) {
-          ////debugPrint('Failed to send via Bluetooth: $e');
+          //debugPrint('Failed to send via Bluetooth: $e');
         }
       }
 
@@ -116,13 +116,13 @@ class CommunicationService {
           await bleService.write(payload);
           result['bluetooth'] = true;
         } catch (e) {
-          ////debugPrint('Failed to send via BLE: $e');
+          //debugPrint('Failed to send via BLE: $e');
         }
       }*/
 
 
     } catch (e) {
-      ////debugPrint('Unexpected error during sending command: $e');
+      //debugPrint('Unexpected error during sending command: $e');
     }
 
     return result;

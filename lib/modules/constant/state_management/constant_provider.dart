@@ -180,7 +180,7 @@ class ConstantProvider extends ChangeNotifier{
         }
       }
 
-      print("listOfFertilizerSiteObject => ${listOfFertilizerSiteObject}");
+      ////print("listOfFertilizerSiteObject => ${listOfFertilizerSiteObject}");
       // update general
       general = (defaultData['general'] as List<dynamic>)
           .map((menu){
@@ -208,11 +208,11 @@ class ConstantProvider extends ChangeNotifier{
       alarmResetAfterIrrigation = generatePopUpItemModel(defaultData: defaultData, keyName: 'alarmResetAfterIrrigation');
       defaultNormalCriticalAlarmSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'normalCriticalAlarm');
       if (kDebugMode) {
-        print("listOfIrrigationLineObject : $listOfIrrigationLineObject");
+       // //print("listOfIrrigationLineObject : $listOfIrrigationLineObject");
       }
       normalCriticalAlarm = listOfIrrigationLineObject.map((line){
         if (kDebugMode) {
-          print("constantOldData['normalCriticalAlarm'] : ${constantOldData}");
+          ////print("constantOldData['normalCriticalAlarm'] : ${constantOldData}");
         }
         List<dynamic> lineData = (constantOldData['normalCriticalAlarm'] as List<dynamic>).where((oldLine) => oldLine['sNo'] == line['sNo']).toList();
         return NormalCriticalAlarmModel.fromJson(
@@ -224,7 +224,7 @@ class ConstantProvider extends ChangeNotifier{
         );
       }).toList();
       if (kDebugMode) {
-        print('normalCriticalAlarm updated..');
+        //print('normalCriticalAlarm updated..');
     }
 
 
@@ -233,12 +233,12 @@ class ConstantProvider extends ChangeNotifier{
       defaultLevelSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'levelSensor');
       level = generateObjectInConstantModel(listOfObject: listOfLevelObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'levelSensor');
       if (kDebugMode) {
-        print('level updated..');
+        ////print('level updated..');
       }
       defaultPumpSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'pump');
       pump = generateObjectInConstantModel(listOfObject: listOfPumpObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'pump');
       if (kDebugMode) {
-        print('pump updated..');
+        ////print('pump updated..');
       }
 
 
@@ -247,14 +247,14 @@ class ConstantProvider extends ChangeNotifier{
       defaultFilterSiteSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'filterSite');
       filterSite = generateObjectInConstantModel(listOfObject: listOfFilterSiteObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'filterSite');
       if (kDebugMode) {
-        print('filterSite updated..');
+        //print('filterSite updated..');
       }
 
       // update filter
       defaultFilterSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'filter');
       filter = generateObjectInConstantModel(listOfObject: listOfFilterObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'filter');
       if (kDebugMode) {
-        print('filter updated..');
+        //print('filter updated..');
       }
 
       //update mainValve
@@ -262,21 +262,21 @@ class ConstantProvider extends ChangeNotifier{
       defaultMainValveSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'mainValve');
       mainValve = generateObjectInConstantModel(listOfObject: listOfMainValveObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'mainValve');
       if (kDebugMode) {
-        print('mainValve updated..');
+        //print('mainValve updated..');
       }
 
       // update valve
       defaultValveSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'valve');
       valve = generateObjectInConstantModel(listOfObject: listOfValveObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'valve');
       if (kDebugMode) {
-        print('valve updated..');
+        //print('valve updated..');
       }
 
       // update waterMeter
       defaultWaterMeterSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'waterMeter');
       waterMeter = generateObjectInConstantModel(listOfObject: listOfWaterMeterObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'waterMeter');
       if (kDebugMode) {
-        print('waterMeter updated..');
+        //print('waterMeter updated..');
       }
 
       // update fertilizerSite
@@ -291,7 +291,7 @@ class ConstantProvider extends ChangeNotifier{
         }
       }
       if (kDebugMode) {
-        print('fertilizerSite updated..');
+        //print('fertilizerSite updated..');
       }
 
       // update channel
@@ -299,27 +299,27 @@ class ConstantProvider extends ChangeNotifier{
       defaultChannelSetting = generateDefaultSetting(defaultData: defaultData, keyName: "fertilizerChannel");
       channel = generateObjectInConstantModel(listOfObject: listOfChannelObject, defaultData: defaultData, constantOldData: constantOldData, keyName: "fertilizerChannel");
       if (kDebugMode) {
-        print('channel updated..');
+        //print('channel updated..');
       }
-      print("listOfFertilizerSiteObject => ${listOfFertilizerSiteObject}");
+      ////print("listOfFertilizerSiteObject => ${listOfFertilizerSiteObject}");
       // update ec ph
       if(listOfFertilizerSiteObject.isNotEmpty){
         // find out and filter the fertilizer site has ec or ph
         defaultEcPhSetting = generateDefaultSetting(defaultData: defaultData, keyName: 'ecPhSensor');
         List<dynamic> fertilizerSiteWithEcPh = listOfFertilizerSiteObject.where((site){
-          print("listOfEcObject : ${listOfEcObject}");
-          print("site : ${site}");
+          ////print("listOfEcObject : ${listOfEcObject}");
+          ////print("site : ${site}");
           bool ecAvailable = listOfEcObject.any((ecSensor) => site['ec'].contains(ecSensor['sNo']));
           bool phAvailable = listOfPhObject.any((phSensor) => site['ph'].contains(phSensor['sNo']));
-          print('ecAvailable : ${ecAvailable}');
-          print('phAvailable : ${phAvailable}');
+          ////print('ecAvailable : ${ecAvailable}');
+          ////print('phAvailable : ${phAvailable}');
           if(ecAvailable || phAvailable){
             return true;
           }else{
             return false;
           }
         }).toList();
-        print("fertilizerSiteWithEcPh : $fertilizerSiteWithEcPh");
+        ////print("fertilizerSiteWithEcPh : $fertilizerSiteWithEcPh");
         ecPhSensor = fertilizerSiteWithEcPh.map((site){
           return EcPhInConstantModel.fromJson(
               objectData: site,
@@ -330,11 +330,11 @@ class ConstantProvider extends ChangeNotifier{
           );
         }).toList();
         for(var ecPh in ecPhSensor){
-          print("ecph :::: ${ecPh.toJson()}");
+          ////print("ecph :::: ${ecPh.toJson()}");
         }
       }
       if (kDebugMode) {
-        print('ecPh updated..');
+        //print('ecPh updated..');
       }
 
       // update moisture
@@ -343,13 +343,13 @@ class ConstantProvider extends ChangeNotifier{
       moisture = generateObjectInConstantModel(listOfObject: listOfMoistureObject, defaultData: defaultData, constantOldData: constantOldData, keyName: 'moistureSensor');
       notifyListeners();
       if (kDebugMode) {
-        print('moisture updated..');
+        //print('moisture updated..');
       }
 
 
     }catch(e, stackTrace){
-      print('Error on update constant :: $e');
-      print('stackTrace on update constant :: $stackTrace');
+      //print('Error on update constant :: $e');
+      //print('stackTrace on update constant :: $stackTrace');
     }
 
     notifyListeners();
@@ -429,9 +429,9 @@ class ConstantProvider extends ChangeNotifier{
   }
 
   String getFertilizerSitePayload(){
-    print(AppConstants.gemModelList.contains(userData['modelId']) ?  'Gem' : 'Ecogem');
+    ////print(AppConstants.gemModelList.contains(userData['modelId']) ?  'Gem' : 'Ecogem');
     return List.generate(fertilizerSite.length, (siteIndex){
-      print('ecPhSensor ::: $ecPhSensor');
+      ////print('ecPhSensor ::: $ecPhSensor');
       return [
         fertilizerSite[siteIndex].sNo,
         ...fertilizerSite[siteIndex].setting.where((setting){
@@ -499,7 +499,7 @@ class ConstantProvider extends ChangeNotifier{
   }
 
   String getNormalCriticalAlarmForEcoGem(){
-    print('eco gem payload start');
+    ////print('eco gem payload start');
     List<dynamic> payloadList = [];
     for(var line in normalCriticalAlarm){
       for(var alarmIndex = 0;alarmIndex < line.normal.length;alarmIndex++){

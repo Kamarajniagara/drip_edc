@@ -156,7 +156,7 @@ class _ConnectionGridListTileState extends State<ConnectionGridListTile> with Si
 int getNotConfiguredObjectByObjectId(int objectId, ConfigMakerProvider configPvd){
   List<DeviceObjectModel> notConfigured = configPvd.listOfGeneratedObject.where((object) => (object.objectId == objectId && object.controllerId == null)).toList();
   for(var obj in notConfigured){
-    print("obj : ${obj.toJson()}");
+   // print("obj : ${obj.toJson()}");
   }
   return notConfigured.length;
 }

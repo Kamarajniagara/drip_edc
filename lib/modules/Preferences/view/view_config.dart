@@ -175,7 +175,7 @@ class _ViewConfigState extends State<ViewConfig> {
       }
     } else {
       if (mqttProvider.viewSettingsList.isNotEmpty && mqttProvider.cCList.contains(deviceId)) {
-        // //debugPrint('Received response (non-LORA) for $deviceId - cancelling timer');
+        //debugPrint('Received response (non-LORA) for $deviceId - cancelling timer');
         _timeoutTimer?.cancel();
         _hasTimedOut = false;
       }

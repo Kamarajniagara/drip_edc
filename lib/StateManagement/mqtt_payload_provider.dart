@@ -207,7 +207,7 @@ class MqttPayloadProvider with ChangeNotifier {
            device.connectionState= BlueConnectionState.values[status];
            notifyListeners();
          } else {
-           ////debugPrint('Invalid status int: $status');
+           //debugPrint('Invalid status int: $status');
          }
          break;
        }
@@ -224,7 +224,7 @@ class MqttPayloadProvider with ChangeNotifier {
              notifyListeners(); 
            }
          } else {
-           ////debugPrint('Invalid status int: $status');
+           //debugPrint('Invalid status int: $status');
          }
          break;
        }
@@ -644,8 +644,8 @@ class MqttPayloadProvider with ChangeNotifier {
          notifyListeners();
        }
        catch (e, stackTrace) {
-         ////debugPrint('Error parsing JSON: $e');
-         ////debugPrint('Stacktrace while parsing json : $stackTrace');
+         //debugPrint('Error parsing JSON: $e');
+         //debugPrint('Stacktrace while parsing json : $stackTrace');
        }
 
      }
@@ -663,6 +663,7 @@ class MqttPayloadProvider with ChangeNotifier {
 
       try {
         Map<String, dynamic> data = _receivedPayload.isNotEmpty? jsonDecode(_receivedPayload) : {};
+        //print('receivedPayload:$_receivedPayload');
 
         if(data['mC']=='2400'){
 
@@ -693,13 +694,13 @@ class MqttPayloadProvider with ChangeNotifier {
                   : "";
             }
           } catch (e) {
-            ////debugPrint("Error: $e");
+            //debugPrint("Error: $e");
           }
 
           final cm = data['cM'];
           if (cm == null || cm is! Map || !cm.containsKey('2401') || cm['2401'] == null ||
               cm['2401'] is! String || (cm['2401'] as String).isEmpty) {
-            ////debugPrint("2401 key NOT FOUND → stopping execution");
+            //debugPrint("2401 key NOT FOUND → stopping execution");
             return;
           }
 
@@ -841,26 +842,23 @@ class MqttPayloadProvider with ChangeNotifier {
               uard4MessagesSet.add(msg);
             }
           }
-
         }
 
         if(data['mC']=='7400'){
 
          String loraVersion = data['cM']['7401'];
          final parts = loraVersion.split(',');
-         if(parts[0] == '1')
-           {
+         if(parts[0] == '1') {
              final rawFrequency = int.parse(parts[2]);
              final frequency = (rawFrequency / 10).toStringAsFixed(1);
 
              Loara1verssion = "${parts[1]},$frequency,${parts[3]}";
-           }
-         else
-           {
+         }
+         else {
              final rawFrequency = int.parse(parts[2]);
              final frequency = (rawFrequency / 10).toStringAsFixed(1);
              Loara2verssion = "${parts[1]},$frequency,${parts[3]}";
-           }
+         }
 
         }
 
@@ -874,8 +872,8 @@ class MqttPayloadProvider with ChangeNotifier {
           notifyListeners();
         }
       } catch (e, stackTrace) {
-        ////debugPrint('Error parsing JSON: $e');
-        ////debugPrint('Stacktrace while parsing json : $stackTrace');
+        //debugPrint('Error parsing JSON: $e');
+        //debugPrint('Stacktrace while parsing json : $stackTrace');
       }
       finally{
         notifyListeners();

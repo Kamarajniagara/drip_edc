@@ -200,7 +200,7 @@ ValveResponseModel valveResponseModelFromJson(String str) =>
     for (final value in values) {
       if (value.startsWith(serialNumber)) {
         final parts = value.split(',');
-        print('getvalvestatus----$serialNumber--->${parts[1]}');
+        //print('getvalvestatus----$serialNumber--->${parts[1]}');
         return int.parse(parts[1]);
       }
     }
@@ -227,9 +227,9 @@ int getValuepercentage(String serialNumber, Map<String, dynamic>? liveMessage) {
     final values = data.split(';');
     for (final value in values) {
       if (value.startsWith(serialNumber)) {
-        print('value:value--->$value');
+        //print('value:value--->$value');
         final parts = value.split(',');
-        print('getpercentage----$serialNumber--->${parts[2]}');
+        //print('getpercentage----$serialNumber--->${parts[2]}');
         return int.parse(parts[2]);
       }
     }

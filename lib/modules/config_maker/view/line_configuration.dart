@@ -41,8 +41,12 @@ class _LineConfigurationState extends State<LineConfiguration> {
 
   @override
   Widget build(BuildContext context) {
-    IrrigationLineModel? selectedIrrigationLine = widget.configPvd.line.cast<IrrigationLineModel?>().firstWhere((line)=> line!.commonDetails.sNo == widget.configPvd.selectedLineSno, orElse: ()=> null);
-    print('selectedIrrigationLine ::: ${selectedIrrigationLine!.commonDetails.name}');
+
+    IrrigationLineModel? selectedIrrigationLine = widget.configPvd.line.cast<IrrigationLineModel?>().firstWhere((line)=>
+    line!.commonDetails.sNo == widget.configPvd.selectedLineSno, orElse: ()=> null);
+
+    debugPrint('selectedIrrigationLine ::: ${selectedIrrigationLine!.commonDetails.name}');
+
     return Padding(
         padding: const EdgeInsets.all(8),
       child: LayoutBuilder(builder: (context, constraint){

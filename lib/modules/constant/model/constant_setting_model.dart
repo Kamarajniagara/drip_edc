@@ -27,7 +27,7 @@ class ConstantSettingModel{
   });
 
   factory ConstantSettingModel.fromJson(data, oldValue){
-    print('name : ${data['title']}  ${data['common']}');
+    //print('name : ${data['title']}  ${data['common']}');
     return ConstantSettingModel(
         sNo: data['sNo'],
         title: data['title'],
