@@ -80,9 +80,9 @@ class _ResetVerssionState extends State<ResetVerssion> {
       var response = await repository.getUserDeviceFirmwareDetails({"userId": widget.userId});
       if (response.statusCode == 200) {
         setState(() {
-          print("widget.userId:${widget.userId}");
+          //print("widget.userId:${widget.userId}");
           var jsondata = jsonDecode(response.body);
-          print('jsondata:$jsondata');
+          //print('jsondata:$jsondata');
           valAssing(jsondata['data']);
 
           MqttService().connect();
@@ -92,8 +92,8 @@ class _ResetVerssionState extends State<ResetVerssion> {
       }
     }
     catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
 
 
@@ -271,7 +271,7 @@ class _ResetVerssionState extends State<ResetVerssion> {
                                         Colors.teal.shade100)),
                                 onPressed: () {
                                   setState(() {
-                                    print('mergedList[index]:${mergedList[index]['modelId']}');
+                                    //print('mergedList[index]:${mergedList[index]['modelId']}');
                                     selectindex = index;
                                     if (AppConstants.pumpList.contains(mergedList[index]['modelId'])) {
                                       Navigator.push(
@@ -679,12 +679,11 @@ class _ResetVerssionState extends State<ResetVerssion> {
       }
     }
     if(kDebugMode) {
-      print("selectindex----$selectindex");
+      //print("selectindex----$selectindex");
 
-      print("payLoadFinal----$payLoadFinal");
-      print("payLoadFinal----${Environment
-          .mqttPublishTopic}/${mergedList[selectindex!]["deviceId"]}");
-    }
+      //print("payLoadFinal----$payLoadFinal");
+      //print("payLoadFinal----${Environment
+     }
     MqttService().topicToPublishAndItsMessage(jsonEncode(payLoadFinal), '${Environment.mqttPublishTopic}/${mergedList[selectindex ?? 0]["deviceId"]}');
     fetchData();
   }

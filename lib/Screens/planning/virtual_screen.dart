@@ -100,7 +100,7 @@ class _VirtualMeterScreenState extends State<VirtualMeterScreen>
         "userId":  widget.userId,
         "controllerId": widget.controllerId
       });
-      // print("getUserDetails.body ${getUserDetails.body}");
+      // //print("getUserDetails.body ${getUserDetails.body}");
       // final jsonData = jsonDecode(getUserDetails.body);
       if (getUserDetails.statusCode == 200) {
         setState(() {
@@ -114,8 +114,8 @@ class _VirtualMeterScreenState extends State<VirtualMeterScreen>
     }
     catch (e, stackTrace) {
       mqttPayloadProvider.httpError = true;
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
 
 
@@ -319,7 +319,7 @@ class _VirtualMeterScreenState extends State<VirtualMeterScreen>
                                             value.toString();
                                         Selectindexrow = index;
                                         // checklistdropdown();
-                                        //   print(jsonEncode(_conditionModel.data!.dropdown));
+                                        //   //print(jsonEncode(_conditionModel.data!.dropdown));
                                       });
                                     },
                                     value: formulajson[index]['action'] == ''
@@ -467,7 +467,7 @@ class _VirtualMeterScreenState extends State<VirtualMeterScreen>
                                     )))
                           ],
                           //                          onSelectChanged: (isSelected) {
-                          //    print('Row $index selected: $isSelected');
+                          //    //print('Row $index selected: $isSelected');
                           // },
                         )))),
       ),

@@ -127,8 +127,7 @@ class NotificationServiceCall {
   }
   void _navigateToScreen(Map<String, dynamic> notification) {
     // Implement navigation logic based on notification data
-    print('Navigate based on: $notification');
-    // Example: Navigate to a specific screen if notification contains a route
+     // Example: Navigate to a specific screen if notification contains a route
     // if (notification['data']['route'] != null) {
     //   Navigator.pushNamed(context, notification['data']['route']);
     // }

@@ -48,7 +48,6 @@ class _CountryPickerState extends State<CountryPicker> {
   //build method for UI render
   @override
   Widget build(BuildContext context) {
-    print('CountryPicker call');
     return Container(
       child: InkResponse(
         onTap: () {

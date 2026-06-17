@@ -21,7 +21,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         await _auth.signInWithCredential(credential);
       },
       verificationFailed: (FirebaseAuthException e) {
-        print('Verification failed: ${e.message}');
+        //print('Verification failed: ${e.message}');
       },
       codeSent: (String verificationId, int? resendToken) {
         setState(() {

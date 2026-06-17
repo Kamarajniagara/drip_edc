@@ -185,9 +185,9 @@ class _ControllerLogState extends State<ControllerLog> with SingleTickerProvider
     final String dateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     mqttPayloadProvider = Provider.of<MqttPayloadProvider>(context, listen: false);
-    print(' mqttPayloadProvider.traceLog----->${ mqttPayloadProvider.traceLog}');
+    //print(' mqttPayloadProvider.traceLog----->${ mqttPayloadProvider.traceLog}');
    List<String> traceData =  mqttPayloadProvider.traceLog;
-   print('traceData----->$traceData');
+   //print('traceData----->$traceData');
     SftpService sftpService = SftpService();
     int connectResponse =  await sftpService.connect();
     if(connectResponse == 200){
@@ -201,10 +201,10 @@ class _ControllerLogState extends State<ControllerLog> with SingleTickerProvider
       int uploadResponse = await sftpService.uploadFile(localFileName: localFileNameForTrace, remoteFilePath: '/home/ubuntu/oro2024/OroGem/OroGemLogs/${widget.deviceID}_${type}_${dateString}.txt');
       if(uploadResponse == 200){
         _showSnackBar("/home/ubuntu/oro2024/OroGem/OroGemLogs/${widget.deviceID}_${type}_${dateString}.txt \n FTP upload success'...");
-        print('upload success');
+        //print('upload success');
       }else{
         _showSnackBar("FTP upload failed...");
-        print('upload failed');
+        //print('upload failed');
       }
       sftpService.disconnect();
     }
@@ -553,13 +553,13 @@ class _ControllerLogState extends State<ControllerLog> with SingleTickerProvider
             final result = await context.read<CommunicationService>().sendCommand(payload: payLoadFinal,
                serverMsg: '');
            if (result['http'] == true) {
-             //debugPrint("Payload sent to Server");
+             //debug//print("Payload sent to Server");
            }
            if (result['mqtt'] == true) {
-             //debugPrint("Payload sent to MQTT Box");
+             //debug//print("Payload sent to MQTT Box");
            }
            if (result['bluetooth'] == true) {
-             //debugPrint("Payload sent via Bluetooth");
+             //debug//print("Payload sent via Bluetooth");
            }
 
       } finally {

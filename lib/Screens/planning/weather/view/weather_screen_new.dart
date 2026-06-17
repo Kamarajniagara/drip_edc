@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as AppLog;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -282,7 +283,8 @@ class _LineTabViewState extends State<_LineTabView> {
       String tempText,
       String windText,
       String humidityText,
-      ) {
+      )
+  {
     return Row(
       children: [
         Padding(
@@ -297,7 +299,7 @@ class _LineTabViewState extends State<_LineTabView> {
                       icon:  const Icon(Icons.refresh),
                       onPressed: () {
                         Request();
-                        widget.vm.fetchWeatherData(widget.customerId, widget.userId);
+                        widget.vm.fetchWeatherData(widget.customerId, widget.userId,);
                       },
                     ),
                     Text("Get Live Data")
@@ -319,7 +321,7 @@ class _LineTabViewState extends State<_LineTabView> {
               Expanded(
     child: RefreshIndicator(
     onRefresh: () async {
-    widget.vm.fetchWeatherData(widget.customerId, widget.userId);
+    widget.vm.fetchWeatherData(widget.customerId, widget.userId,);
     // Wait a little to show the indicator
     await Future.delayed(const Duration(milliseconds: 500));
     },
@@ -334,10 +336,9 @@ class _LineTabViewState extends State<_LineTabView> {
                     children: station.sensors.map<Widget>((s) {
                       return GestureDetector(
                         onTap: (){
-                          // print('deviceID ->${station.device[selectedStationIndex].deviceId}');
-                          print('device ->${station.device.controllerId}');
-                          print('deviceID ->${station}');
-                           // print('userId ->${widget.userId} customerId ->${widget.customerId}');
+                          // AppLog.log('deviceID ->${station.device[selectedStationIndex].deviceId}');
+
+                           // AppLog.log('userId ->${widget.userId} customerId ->${widget.customerId}');
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -385,7 +386,8 @@ class _LineTabViewState extends State<_LineTabView> {
       String tempText,
       String windText,
       String humidityText,
-      ) {
+      )
+  {
     return   ListView(
         padding: const EdgeInsets.all(8),
         children: [

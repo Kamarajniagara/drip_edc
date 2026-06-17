@@ -30,18 +30,18 @@ class OverAllUse extends ChangeNotifier{
   }
 
   void updateSelectedMenu(int currentMenuId) {
-    print("currentMenuId $currentMenuId");
+    //print("currentMenuId $currentMenuId");
 
     int currentIndex = menuIdList.indexWhere((element) => element == currentMenuId);
     if (currentIndex != -1) {
       int nextIndex = (currentIndex + 1) % menuIdList.length;
       selectedMenu = menuIdList[nextIndex];
     } else {
-      print("currentMenuId not found in menuIdList");
+      //print("currentMenuId not found in menuIdList");
       selectedMenu = 0;
     }
 
-    print("selectedMenu $selectedMenu");
+    //print("selectedMenu $selectedMenu");
     notifyListeners();
   }
 
@@ -94,7 +94,7 @@ class OverAllUse extends ChangeNotifier{
   }
 
   void editControllerType(int value){
-    print("editControllerType --->$value");
+    //print("editControllerType --->$value");
     controllerType = value;
     notifyListeners();
   }
@@ -137,7 +137,7 @@ class OverAllUse extends ChangeNotifier{
         break;
       }
       case ('other') :{
-        print(other);
+        //print(other);
         other = value;
         break;
       }

@@ -83,8 +83,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
   }
 
   Future<void> fetchData() async {
-    print('fetchData ');
-    final url = Uri.parse('http://13.235.254.21:9000/getConfigs');
+     final url = Uri.parse('http://13.235.254.21:9000/getConfigs');
 
     try {
       final response =
@@ -170,7 +169,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
     if(widget.communicationType == "MQTT") {
       List checkTopic =
       getMqttTopic(selectedPlatform!, selectedVersion!, selectedDealer!);
-      print('checkTopic---->$checkTopic,$macAddress');
+      //print('checkTopic---->$checkTopic,$macAddress');
       String topic = checkTopic[0];
       String oldnewcheck = checkTopic[1];
       if (oldnewcheck == '1') {
@@ -183,7 +182,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           jsonEncode(payload),
           "$topic${_macController.text}",
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       } else {
         final payload = {
           "6100": {"6101": formatted}
@@ -192,7 +191,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           jsonEncode(payload),
           "$topic${_macController.text}",
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       }
     }
     else
@@ -204,19 +203,19 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         });
         final result = await context.read<CommunicationService>().sendCommand(payload: payLoadFinal,
             serverMsg: '');
-        //debugPrint("Payload sent to Server$payLoadFinal");
+        //debug//print("Payload sent to Server$payLoadFinal");
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Settings sent Ble")),
         );
         if (result['http'] == true) {
-          //debugPrint("Payload sent to Server");
+          //debug//print("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          //debugPrint("Payload sent to MQTT Box");
+          //debug//print("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          //debugPrint("Payload sent via Bluetooth");
+          //debug//print("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -246,10 +245,10 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
       String selectedPlatform, String selectedVersion, String selecteddealer) {
     if (selecteddealer == 'ORO') {
       if (selectedPlatform == 'AWS') {
-        print('return ORO AWS');
+        //print('return ORO AWS');
          if(F.appFlavor == Flavor.agritel)
           {
-            print("agritel");
+            //print("agritel");
                return ['AgritelAppToFirmware/', '0'];
            }
 
@@ -260,17 +259,17 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
       }
     } else {
       if (selectedPlatform == 'AWS') {
-        print('return LK AWS');
+        //print('return LK AWS');
         if (selectedVersion == 'Version 1.0') return ['AppsToFirmware/', '1'];
       } else {
-        print('return LK azure');
+        //print('return LK azure');
         if (selectedVersion == 'Version 1.0')
           return ['AppsToFirmware/', '1'];
         else
           return ['AppToFirmware/', '0'];
       }
     }
-    print('return else');
+    //print('return else');
     return ['AppToFirmware/', '0'];
   }
 
@@ -319,13 +318,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("view settings sent Ble")),
         );
         if (result['http'] == true) {
-          //debugPrint("Payload sent to Server");
+          //debug//print("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          //debugPrint("Payload sent to MQTT Box");
+          //debug//print("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          //debugPrint("Payload sent via Bluetooth");
+          //debug//print("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -387,7 +386,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("update settings sent")),
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       } else {
         final payload = {
           "5700": {"5701": "28"}
@@ -399,7 +398,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("update settings sent")),
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       }
     } else   {
       //bluetooth
@@ -413,13 +412,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("update settings sent Ble")),
         );
         if (result['http'] == true) {
-          //debugPrint("Payload sent to Server");
+          //debug//print("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          //debugPrint("Payload sent to MQTT Box");
+          //debug//print("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          //debugPrint("Payload sent via Bluetooth");
+          //debug//print("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -465,7 +464,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("update settings sent")),
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       } else {
         final payload = {
           "5700": {"5701": "3"}
@@ -477,7 +476,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("update settings sent")),
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       }
     } else   {
       //bluetooth
@@ -491,13 +490,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("update settings sent Ble")),
         );
         if (result['http'] == true) {
-          //debugPrint("Payload sent to Server");
+          //debug//print("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          //debugPrint("Payload sent to MQTT Box");
+          //debug//print("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          //debugPrint("Payload sent via Bluetooth");
+          //debug//print("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -542,7 +541,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Restart settings sent")),
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       } else {
         final payload = {
           "5700": {"5701": "2"}
@@ -554,7 +553,7 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Restart settings sent")),
         );
-        print('payload $payload  \n $topic${_macController.text}');
+        //print('payload $payload  \n $topic${_macController.text}');
       }
     } else   {
       //bluetooth
@@ -568,13 +567,13 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
           const SnackBar(content: Text("Restart settings sent Ble")),
         );
         if (result['http'] == true) {
-          //debugPrint("Payload sent to Server");
+          //debug//print("Payload sent to Server");
         }
         if (result['mqtt'] == true) {
-          //debugPrint("Payload sent to MQTT Box");
+          //debug//print("Payload sent to MQTT Box");
         }
         if (result['bluetooth'] == true) {
-          //debugPrint("Payload sent via Bluetooth");
+          //debug//print("Payload sent via Bluetooth");
         }
 
       } finally {
@@ -654,8 +653,8 @@ class _ConfigureMqttState extends State<ConfigureMqtt> {
                     //     ? F.appFlavor = Flavor.oroProduction
                     //     : F.appFlavor = Flavor.smartComm;
 
-                    //print('flaVOR ${F.appFlavor}');
-                    //print('${AppConstants.mqttUrl}');
+                    ////print('flaVOR ${F.appFlavor}');
+                    ////print('${AppConstants.mqttUrl}');
                     selectedPlatform = value;
                   });
                 },

@@ -124,8 +124,8 @@ class _MapScreenallState extends State<MapScreenall> {
       }
     } catch (e, stackTrace) {
       mqttPayloadProvider.httpError = true;
-      print('❌ Error fetching data: $e');
-      print('🪵 Stack: $stackTrace');
+      //print('❌ Error fetching data: $e');
+      //print('🪵 Stack: $stackTrace');
     }
   }
 
@@ -148,8 +148,8 @@ class _MapScreenallState extends State<MapScreenall> {
 
     for (var device in devices) {
       if (device.geography?.lat != null && device.geography?.long != null) {
-        print(
-            "✅ Device ${device.deviceName} at ${device.geography!.lat}, ${device.geography!.long}");
+        //print(
+        //     "✅ Device ${device.deviceName} at ${device.geography!.lat}, ${device.geography!.long}");
         markers.add(
           Marker(
             markerId: MarkerId('device-${device.deviceId}'),
@@ -166,8 +166,8 @@ class _MapScreenallState extends State<MapScreenall> {
 
       for (var obj in device.connectedObject ?? []) {
         if (obj.lat != null && obj.long != null) {
-          print(
-              "✅ Object ${obj.name ?? obj.objectName} at ${obj.lat}, ${obj.long}");
+          //print(
+          //     "✅ Object ${obj.name ?? obj.objectName} at ${obj.lat}, ${obj.long}");
           markers.add(
             Marker(
               markerId: MarkerId('object-${obj.sNo}'),
@@ -183,14 +183,14 @@ class _MapScreenallState extends State<MapScreenall> {
       }
     }
 
-    print('📍 Total markers: ${markers.length}');
+    //print('📍 Total markers: ${markers.length}');
     return markers;
   }
 
   BitmapDescriptor _getMarkerIcon(int? status,String type,int? percentage) {
 
     if (type.contains('Valve')) {
-      print('_getMarkerIcon Status:$status, Percentage:$percentage');
+      //print('_getMarkerIcon Status:$status, Percentage:$percentage');
 
       if (status == 1 || status == 2) {
         if (percentage == 100) {

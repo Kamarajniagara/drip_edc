@@ -48,12 +48,12 @@ class _GroupListScreenState extends State<GroupListScreen> {
         index < _groupdata.data!.valveGroup!.length) {
       _groupdata.data!.valveGroup!.removeAt(index);
     } else {
-      print("Invalid index or valveGroup is null.");
+      //print("Invalid index or valveGroup is null.");
     }
   }
 
   Future<void> fetchData() async {
-    print("fetch data Call");
+    //print("fetch data Call");
     var overAllPvd = Provider.of<OverAllUse>(context, listen: false);
 
     Map<String, Object> body = {
@@ -73,7 +73,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
   }
 
   Future<void> createValveGroup() async {
-    print("createvalvegroup call");
+    //print("createvalvegroup call");
     final Repository repository = Repository(HttpService());
     Map<String, dynamic> body = {
       "userId": widget.customerId,

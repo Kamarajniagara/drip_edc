@@ -94,7 +94,7 @@ class _FrequencyPageState extends State<FrequencyPage> {
   void _showSnackBar(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
   Future<void> _handleSend() async {
-    print('----_handleSend');
+    //print('----_handleSend');
 
     String freq1 = frequency1Controller.text;
     String freq2 = frequency2Controller.text;
@@ -109,7 +109,7 @@ class _FrequencyPageState extends State<FrequencyPage> {
     Map<String, dynamic> payLoadFinal = {
       "6500": {"6501": "${formatNumber(freq1)},$sf1,${formatNumber(freq2)},$sf2"}
     };
-    print('payLoadFinal----$payLoadFinal');
+    //print('payLoadFinal----$payLoadFinal');
 
     Map<String, dynamic> body = {
       "userId": widget.userId,
@@ -136,8 +136,8 @@ class _FrequencyPageState extends State<FrequencyPage> {
     String val = loraIndex == 1 ? "29" : "30";
     Map<String, dynamic> payLoadFinal = {"5700": {"5701": val}};
     String topic = "${Environment.mqttPublishTopic}/${widget.deviceId}";
-    print('payLoadFinal----$payLoadFinal');
-    print('topic----$topic');
+    //print('payLoadFinal----$payLoadFinal');
+    //print('topic----$topic');
     MqttService().topicToPublishAndItsMessage(jsonEncode(payLoadFinal), topic);
 
     Future.delayed(const Duration(seconds: 4), () {
@@ -171,7 +171,7 @@ class _FrequencyPageState extends State<FrequencyPage> {
         });
       }
     } catch (e) {
-      print("Error parsing MQTT payload: $e");
+      //print("Error parsing MQTT payload: $e");
     }
   }
 
@@ -181,7 +181,7 @@ class _FrequencyPageState extends State<FrequencyPage> {
     required TextEditingController sfCtrl,
     required int loraIndex,
   }) {
-    print("loRa1VersionState:$loRa1VersionState,$loRa2VersionState");
+    //print("loRa1VersionState:$loRa1VersionState,$loRa2VersionState");
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 3,

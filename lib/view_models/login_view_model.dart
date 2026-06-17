@@ -65,7 +65,7 @@ class LoginViewModel extends ChangeNotifier {
         notifyListeners();
         return;
       } else if(!kIsWeb && (token == null || token.isEmpty)){
-        print("token in the else :: $token");
+        //print("token in the else :: $token");
         isLoading = false;
         errorMessage = "Device token not generated";
         notifyListeners();
@@ -103,9 +103,9 @@ class LoginViewModel extends ChangeNotifier {
         notifyListeners();
       }
     } catch (error) {
-      print("error:${error.toString()}");
+      //print("error:${error.toString()}");
       isLoading = false;
-      //debugPrint('$error');
+      //debug//print('$error');
       errorMessage = "Unexpected error occurred.";
       notifyListeners();
     }

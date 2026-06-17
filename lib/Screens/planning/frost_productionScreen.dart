@@ -400,8 +400,7 @@ class _ConditionUIState extends State<FrostMobUI>
   }
 
   Widget rain() {
-    print('rain');
-    // List<FrostProtection>? Listofvalue = _currentSelection == 0
+     // List<FrostProtection>? Listofvalue = _currentSelection == 0
     //     ? _frostProtectionModel.frostProtection
     //     : _frostProtectionModel.rainDelay;
     List<FrostProtection>? Listofvalue =  _frostProtectionModel.rainDelay;

@@ -82,11 +82,8 @@ class _LoginScreenState extends State<LoginScreenOTP> {
      if (response.statusCode == 200) {
        if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        print("data$data");
-         if (data["code"] == 200) {
-
-
-          if (mounted) {
+          if (data["code"] == 200) {
+           if (mounted) {
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/dashboard',

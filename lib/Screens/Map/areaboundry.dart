@@ -45,19 +45,19 @@ class _MapScreenAreaState extends State<MapScreenArea> {
   }
 
   Future<void> fetchData() async {
-    print('fetchData');
+    //print('fetchData');
     try{
       final Repository repository = Repository(HttpService());
       var getUserDetails = await repository.getgeographyArea({
         "userId": widget.customerId,
         "controllerId" : widget.controllerId
       });
-      // print('getUserDetails${getUserDetails.body.runtimeType}');
+      // //print('getUserDetails${getUserDetails.body.runtimeType}');
       // final jsonData = jsonDecode(getUserDetails.body);
       if (getUserDetails.statusCode == 200) {
         setState(() {
           var jsonData = getUserDetails.body;
-          print('jsonData${jsonData.runtimeType}');
+          //print('jsonData${jsonData.runtimeType}');
 
           _valveResponseModel = valveResponseModelFromJson(jsonData);
           setState(() {
@@ -73,8 +73,8 @@ class _MapScreenAreaState extends State<MapScreenArea> {
       }
     }
     catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
   }
 
@@ -103,7 +103,7 @@ class _MapScreenAreaState extends State<MapScreenArea> {
     try {
 
       List<Map<String, dynamic>> jsondata = convertValvesToJson();
-      print('\n json: $jsondata');
+      //print('\n json: $jsondata');
 
 
       Map<String, dynamic> body = {
@@ -112,20 +112,20 @@ class _MapScreenAreaState extends State<MapScreenArea> {
         "valveGeographyArea" : jsondata,
         "modifyUser" : widget.userId
       };
-      print('\n body:$body');
+      //print('\n body:$body');
 
       final Repository repository = Repository(HttpService());
       final response = await repository.updategeographyArea(body);
-      print('response:${response.body}');
+      //print('response:${response.body}');
       if (response.statusCode != 200) {
-        print('Failed to send valve : ${response.body}');
+        //print('Failed to send valve : ${response.body}');
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('All valves sent successfully!')),
       );
     } catch (e) {
-      print('Error sending valves: $e');
+      //print('Error sending valves: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to send valves')),
       );

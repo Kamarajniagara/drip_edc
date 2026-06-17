@@ -51,12 +51,12 @@ class _DeviceListScreenState extends State<DeviceListScreen> {
          "userId": widget.customerId,
          "controllerId" :  widget.controllerId
        });
-       print('getUserDetails${getUserDetails.body}');
+       //print('getUserDetails${getUserDetails.body}');
        // final jsonData = jsonDecode(getUserDetails.body);
        if (getUserDetails.statusCode == 200) {
          setState(() {
            var jsonData = jsonDecode(getUserDetails.body);
-           print('jsonData$jsonData');
+           //print('jsonData$jsonData');
             mqttPayloadProvider.updateMapData(jsonData);
          });
        } else {
@@ -65,8 +65,8 @@ class _DeviceListScreenState extends State<DeviceListScreen> {
      }
      catch (e, stackTrace) {
        mqttPayloadProvider.httpError = true;
-       print(' Error overAll getData => ${e.toString()}');
-       print(' trace overAll getData  => ${stackTrace}');
+       //print(' Error overAll getData => ${e.toString()}');
+       //print(' trace overAll getData  => ${stackTrace}');
      }
     }
 
@@ -78,7 +78,7 @@ class _DeviceListScreenState extends State<DeviceListScreen> {
        builder: (context, mqttProvider, _) {
          final deviceList = mqttProvider.mapModelInstance.data?.deviceList;
 
-         print("deviceList:->${deviceList.toString()}");
+         //print("deviceList:->${deviceList.toString()}");
 
          if (deviceList == null || deviceList.isEmpty) {
            return Scaffold(
@@ -204,10 +204,10 @@ var data = mqttPayloadProvider.mapModelInstance.data?.toJson();
        "userGeography": data!['deviceList'],
        "createUser": widget.userId
      };
-     print(body);
+     //print(body);
      var getUserDetails = await repository.creategeography(body);
      var jsonDataResponse = jsonDecode(getUserDetails.body);
-      print(jsonDataResponse);
+      //print(jsonDataResponse);
       GlobalSnackBar.show(context, jsonDataResponse['message'], 200);
    }
 }

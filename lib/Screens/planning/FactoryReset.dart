@@ -54,8 +54,8 @@ class _ResetAccumalationScreenState extends State<ResetAccumalationScreen>
       }
     }
     catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
 
 
@@ -69,8 +69,8 @@ class _ResetAccumalationScreenState extends State<ResetAccumalationScreen>
 
     }
     catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
 
 
@@ -344,8 +344,8 @@ class _ResetAccumalationScreenState extends State<ResetAccumalationScreen>
       // MQTTManager().publish( payLoadFinal, 'AppToFirmware/${widget.deviceID}');
     }
     catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
   }
 

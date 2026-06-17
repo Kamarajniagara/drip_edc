@@ -1,4 +1,4 @@
-class SensorHourReport {
+class SensorHourReportGsm {
   final String hour;
   final String deviceSrNo;
   final String sensorSrNo;
@@ -8,7 +8,7 @@ class SensorHourReport {
   final String maxValue;
   final String averageValue;
 
-  SensorHourReport({
+  SensorHourReportGsm({
     required this.hour,
     required this.deviceSrNo,
     required this.sensorSrNo,
@@ -24,14 +24,14 @@ class SensorHourReport {
     return '$hour → value:$value min:$minValue max:$maxValue avg:$averageValue error:$errorCode';
   }
 }
-SensorHourReport? parseSensorHourData({
+SensorHourReportGsm? parseSensorHourData({
   required String raw,
   required String hour,
   required String deviceSrNo,
   required String targetSensor,
 }) {
 
-  SensorHourReport zeroReport() => SensorHourReport(
+  SensorHourReportGsm zeroReport() => SensorHourReportGsm(
     hour: hour,
     deviceSrNo: deviceSrNo,
     sensorSrNo: targetSensor,
@@ -45,16 +45,12 @@ SensorHourReport? parseSensorHourData({
 
   // 1️⃣ Split devices
   final deviceBlocks = raw.split(';');
-
+ 
   for (final deviceBlock in deviceBlocks) {
     if (!deviceBlock.contains(':')) continue;
 
     final deviceParts = deviceBlock.split(':');
-     final currentDeviceSrNo = deviceParts[0].trim();
-
-
-    // 2️⃣ Match device
-    if (currentDeviceSrNo != deviceSrNo) continue;
+ 
 
     final sensorsRaw = deviceParts[1];
      // 3️⃣ Split sensors
@@ -62,7 +58,7 @@ SensorHourReport? parseSensorHourData({
      for (final sensorBlock in sensorBlocks) {
       final parts = sensorBlock.split(',');
 
-      if (parts.length < 6) continue;
+      if (parts.length < 5) continue;
 
       final sensorSrNo = parts[0].trim();
 
@@ -72,7 +68,7 @@ SensorHourReport? parseSensorHourData({
       String v(int i) => parts[i].trim().isEmpty ? '0' : parts[i].trim();
 
       // 5️⃣ Create report
-      return SensorHourReport(
+      return SensorHourReportGsm(
         hour: hour,
         deviceSrNo: deviceSrNo,
         sensorSrNo: sensorSrNo,
@@ -80,7 +76,7 @@ SensorHourReport? parseSensorHourData({
         errorCode: v(2),
         minValue: v(3),
         maxValue: v(4),
-        averageValue: v(5),
+        averageValue: "NA",
       );
     }
   }
@@ -90,12 +86,12 @@ SensorHourReport? parseSensorHourData({
 
 
 
-List<SensorHourReport> getSingleSensorReport({
+List<SensorHourReportGsm> getSingleSensorReport({
   required Map<String, dynamic> apiResponse,
   required String targetDevice,
   required String targetSensor,
 }) {
-  final List<SensorHourReport> report = [];
+  final List<SensorHourReportGsm> report = [];
 
   if (apiResponse['data'] == null || apiResponse['data'].isEmpty) {
     return report;
@@ -114,10 +110,13 @@ List<SensorHourReport> getSingleSensorReport({
     final deviceBlocks = value.toString().split(';');
 
     for (final block in deviceBlocks) {
+      //print("block:$block");
       if (!block.contains(':')) continue;
 
       // 2️⃣ match device
       final deviceSplit = block.split(':');
+      //print("deviceSplit:$deviceSplit");
+
       if (deviceSplit.length != 2) continue;
 
       final deviceId = deviceSplit[0].trim();
@@ -125,6 +124,7 @@ List<SensorHourReport> getSingleSensorReport({
 
       // 3️⃣ _ → sensor blocks
       final sensors = deviceSplit[1].split('_');
+      //print("sensors:$sensors");
 
       for (final sensorRaw in sensors) {
         // 4️⃣ , → values (inside parseSensorRecord)

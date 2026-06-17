@@ -19,7 +19,7 @@ class FileLogger {
   static Future<void> writeToFile(String text) async {
     final file = await _localFile;
     await file.writeAsString('$text\n', mode: FileMode.append);
-    print('File written: $text');
+    //print('File written: $text');
   }
 
   static Future<String> readFromFile() async {
@@ -49,9 +49,9 @@ class FileLogger {
       await localFile.writeAsString(traceData.join('\n$text'));
       int uploadResponse = await sftpService.uploadFile(localFileName: localFileNameForTrace, remoteFilePath: '/home/ubuntu/oro2024/OroGem/OroGemLogs$deviceId.txt');
       if(uploadResponse == 200){
-        print('success');
+        //print('success');
        }else{
-        print('failed');
+        //print('failed');
        }
       sftpService.disconnect();
     }

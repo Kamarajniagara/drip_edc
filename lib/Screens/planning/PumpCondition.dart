@@ -64,8 +64,8 @@ class _PumpConditionScreenState extends State<PumpConditionScreen> {
         });
       }
     } catch (e, stackTrace) {
-      print('Error in fetchData: $e');
-      print('Stack trace: $stackTrace');
+      //print('Error in fetchData: $e');
+      //print('Stack trace: $stackTrace');
     }
   }
 
@@ -256,7 +256,7 @@ class _PumpConditionScreenState extends State<PumpConditionScreen> {
      final repository = Repository(HttpService());
 
     String mqttSendData = convertPumpDataToString(pumpConditionModel);
-    print('mqttSendData$mqttSendData');
+    //print('mqttSendData$mqttSendData');
 
     // Prepare JSON for server
     Map<String, dynamic> pumpConditionJson = pumpConditionModel.toJson();
@@ -272,7 +272,7 @@ class _PumpConditionScreenState extends State<PumpConditionScreen> {
         {"7101": isNova ? novadata : mqttSendData},
     };
 
-    print("payLoadFinal,$payLoadFinal");
+    //print("payLoadFinal,$payLoadFinal");
     // Main request body
     Map<String, dynamic> body = {
       "userId": widget.customerId,
@@ -287,7 +287,7 @@ class _PumpConditionScreenState extends State<PumpConditionScreen> {
       final getUserDetails = await repository.updateUserPlanningPumpCondition(body);
       final jsonDataResponse = jsonDecode(getUserDetails.body);
 
-      print('Response ---> $jsonDataResponse');
+      //print('Response ---> $jsonDataResponse');
 
       if (MqttService().isConnected == true) {
         await validatePayloadSent(
@@ -313,8 +313,8 @@ class _PumpConditionScreenState extends State<PumpConditionScreen> {
         jsonDataResponse['code'],
       );
     } catch (e ,stacktrace) {
-      print("Error in _sendData: $e");
-      print("stacktrace in _sendData: $stacktrace");
+      //print("Error in _sendData: $e");
+      //print("stacktrace in _sendData: $stacktrace");
       GlobalSnackBar.show(context, 'Error sending data: $e', 500);
     }
   }

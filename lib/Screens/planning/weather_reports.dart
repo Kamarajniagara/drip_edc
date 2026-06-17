@@ -79,12 +79,12 @@ class _ReportPageState extends State<ReportPage> {
       });
 
       final jsonData = jsonDecode(getUserDetails.body);
-      print('jsonData  fetch device  ${jsonData['data']['deviceList']}');
-      print('jsonData  fetch irrigationLine ${jsonData['data']['irrigationLine']}');
+      //print('jsonData  fetch device  ${jsonData['data']['deviceList']}');
+      //print('jsonData  fetch irrigationLine ${jsonData['data']['irrigationLine']}');
       if (jsonData['code'] == 200) {
         setState(() {
           {
-               print("---hourly data----$jsonData");
+               //print("---hourly data----$jsonData");
               Map<String, dynamic> data = jsonData;
                dayData = data[0];
                isLoading = false;
@@ -92,7 +92,7 @@ class _ReportPageState extends State<ReportPage> {
          });
       }
     } catch (e, stackTrace) {
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
 
   }
