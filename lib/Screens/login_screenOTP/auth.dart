@@ -14,7 +14,7 @@ class AuthService{
   // create user obj based on firebaseUser
 
   String _userFromFirebasUser(user){
-    print("user.uid = ${user.uid}");
+    //print("user.uid = ${user.uid}");
     final result = CreateUser(uid: user.uid);
     return user.uid;
   }
@@ -27,11 +27,11 @@ class AuthService{
     try{
       final result = await _auth.signInAnonymously();
       final user = result.user;
-      // print(user?.uid);
+      // //print(user?.uid);
       return _userFromFirebasUser(user);
     } on FirebaseAuthException catch(e){
-      print(e.toString());
-      print('error is worked');
+      //print(e.toString());
+      //print('error is worked');
       return null;
     }
   }
@@ -45,7 +45,7 @@ class AuthService{
       return _userFromFirebasUser(user);
 
     } on FirebaseAuthException catch(e){
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }
@@ -55,14 +55,14 @@ class AuthService{
     try{
       return await _auth.signOut();
     } on FirebaseAuthException catch(e){
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }
 
   //sign with phone number
   Future<String> verifyPhoneNumber(String phoneNumber) async {
-    print('phone number is : $phoneNumber');
+    //print('phone number is : $phoneNumber');
     Completer<String> completer = Completer<String>();
     try {
       await _auth.verifyPhoneNumber(
@@ -71,22 +71,22 @@ class AuthService{
           await _auth.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseAuthException exception) async{
-          print(exception.message);
+          //print(exception.message);
         },
         codeSent: (String verificationId, int? resendToken) async{
           verificationIdReceived = verificationId;
           completer.complete(verificationId);
-          print('verificationId is : $verificationIdReceived');
+          //print('verificationId is : $verificationIdReceived');
         },
         codeAutoRetrievalTimeout: (String verificationId) async{
-          print('TimeOut');
+          //print('TimeOut');
         },
         timeout: await Duration(seconds: 60),
       );
-      print(await 'verificationIdReceived : ${verificationIdReceived}.............');
+      //print(await 'verificationIdReceived : ${verificationIdReceived}.............');
       return completer.future;
     }on FirebaseAuthException catch(e) {
-      print('Error verifying phone number: ${e.message}');
+      //print('Error verifying phone number: ${e.message}');
       return 'null';
     }
   }

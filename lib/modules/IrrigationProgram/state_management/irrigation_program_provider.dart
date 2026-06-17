@@ -30,7 +30,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   }
 
   void clearDispose() {
-    // // // print("invoked");
+    // // // //print("invoked");
     irrigationLine?.sequence = [];
     currentIndex = 0;
     addNext = false;
@@ -78,7 +78,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         "controllerId": controllerId,
         "serialNumber": serialNumber
       };
-      // print("userData ==> $userData");
+      // //print("userData ==> $userData");
       var userBody = {
         ...userData,
         "groupId": groupId,
@@ -125,7 +125,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         _pump = (processedData['pump'] as List).map((element) => ProgramPump.fromJson(element as Map<String, dynamic>)).toList();
         _moistureSensor = (processedData['moistureSensor'] as List).map((element) => ProgramMoistureSensor.fromJson(element as Map<String, dynamic>)).toList();
 
-        // print("_sampleIrrigationLine :: ${_sampleIrrigationLine!.map((e) => e.irrigationLine.toJson())}");
+        // //print("_sampleIrrigationLine :: ${_sampleIrrigationLine!.map((e) => e.irrigationLine.toJson())}");
         if(_fertilizerSite != null) {
           _agitators = fertilizerSite!.map((e) {
             return e.agitator != null ? List<DeviceObjectModel>.from(e.agitator!) : [];
@@ -148,7 +148,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         await Future.delayed(Duration.zero,() {
           _irrigationLine = SequenceModel.fromJson(sequenceJson);
           for (var element in _irrigationLine!.sequence) {
-            // print("element in sequence :: $element");
+            // //print("element in sequence :: $element");
            /* element['valve'].removeWhere((e) => configObjects.any((config) => config['sNo'] != e['sNo']));
             element['mainValve'].removeWhere((e) => configObjects.any((config) => config['sNo'] != e['sNo']));*/
           }
@@ -162,7 +162,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
           for(int i = 0; i < _irrigationLine!.sequence.length; i++) {
             _irrigationLine!.sequence[i]['sNo'] = '${i+1}';
           }
-          // print("Serial number :: ${_irrigationLine!.sequence.map((e) => e['sNo'])}");
+          // //print("Serial number :: ${_irrigationLine!.sequence.map((e) => e['sNo'])}");
         }
       } else {
         log("HTTP Request failed or received an unexpected response.");
@@ -243,8 +243,8 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         _irrigationLine!.sequence[i]['sNo'] = '${i+1}';
       }
     }
-    // print("invoked");
-    // print("Sequence after deletion :: ${_irrigationLine!.sequence}");
+    // //print("invoked");
+    // //print("Sequence after deletion :: ${_irrigationLine!.sequence}");
     notifyListeners();
   }
 
@@ -263,7 +263,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   }
 
   void updateNextButton(indexToShow) {
-    // // print("indexToShow in the update next button ==> $indexToShow");
+    // // //print("indexToShow in the update next button ==> $indexToShow");
     if(indexToShow == irrigationLine!.sequence.length) {
       addNew = true;
       addNext = false;
@@ -334,7 +334,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       if(_irrigationLine!.sequence[i]['name'].contains('Sequence')) {
         _irrigationLine!.sequence[i]['name'] = 'Sequence ${serialNumber == 0 ? serialNumberCreation : serialNumber}.${i+1}';
       }
-      // print("\n");
+      // //print("\n");
     }
     notifyListeners();
   }
@@ -551,7 +551,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     } else {
       final selectedRtcKey = sampleScheduleModel!.scheduleByDays.rtc.keys.toList()[selectedRtc];
       sampleScheduleModel!.scheduleByDays.rtc[selectedRtcKey][property] = newTime;
-      // print(sampleScheduleModel!.scheduleAsRunList.rtc[selectedRtcKey]['maxTime']);
+      // //print(sampleScheduleModel!.scheduleAsRunList.rtc[selectedRtcKey]['maxTime']);
     }
     notifyListeners();
   }
@@ -567,7 +567,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   void updateDate(newDate, dateType) {
     if(selectedScheduleType == scheduleTypes[1]) {
       sampleScheduleModel!.scheduleAsRunList.schedule[dateType] = newDate.toString();
-      // print(sampleScheduleModel!.scheduleAsRunList.schedule[dateType]);
+      // //print(sampleScheduleModel!.scheduleAsRunList.schedule[dateType]);
     } else if(selectedScheduleType == scheduleTypes[2]) {
       sampleScheduleModel!.scheduleByDays.schedule[dateType] = newDate.toString();
     }
@@ -629,7 +629,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         }
       }
     }
-    // print(type);
+    // //print(type);
     notifyListeners();
   }
 
@@ -742,7 +742,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   }
 
   void updateConditions(title, sNo, newValue, conditionTypeIndex) {
-    // // print('$title, $sNo, $newValue, $conditionTypeIndex');
+    // // //print('$title, $sNo, $newValue, $conditionTypeIndex');
     _sampleConditions!.condition[conditionTypeIndex].value = {
       "sNo": sNo,
       "name" : newValue
@@ -892,7 +892,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     selectedCentralSite = 0;
     selectedLocalSite = 0;
     selectedInjector = 0;
-    // // print('first');
+    // // //print('first');
     if(sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'].length != 0){
       ec.text = sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][0]['ecValue'].toString() ?? '';
       ph.text = sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][0]['phValue'].toString() ?? '';
@@ -930,7 +930,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         "controllerId": controllerId,
         "serialNumber": serialNumber
       };
-      // print("userData : ${userData}");
+      // //print("userData : ${userData}");
       var getWaterAndFert = await repository.getUserProgramWaterAndFert(userData);
       var getRecipe = await repository.getUserFertilizerSet(userData);
       clearWaterFert();
@@ -1242,7 +1242,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       'selectedCentralSite' : 0,
       'selectedLocalSite' : 0,
     });
-    // print('generateNew : $generateNew');
+    // //print('generateNew : $generateNew');
     return generateNew;
   }
 
@@ -1271,8 +1271,8 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     if(localOrCentral == 'central'){
       if(CentralpgmMode == true){
         for(var slt in selectionModel!.data!.centralFertilizerSite!){
-          // // print('slt.selected : ${slt.selected}');
-          // // print('slt.sNo : ${slt.sNo}');
+          // // //print('slt.selected : ${slt.selected}');
+          // // //print('slt.sNo : ${slt.sNo}');
           if(slt.selected == true){
             if(checkList.contains(slt.sNo)){
               visible = true;
@@ -1321,11 +1321,11 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     var myOldSeq = [];
     if(valSeqList.isNotEmpty){
       for(var i in valSeqList){
-        // print("sequence sno == ${i['sNo']}");
+        // //print("sequence sno == ${i['sNo']}");
         givenSeq.add(i['sNo']);
       }
     }
-    // print('givenSeq : $givenSeq');
+    // //print('givenSeq : $givenSeq');
     if(sequenceData.isNotEmpty){
       for(var i in sequenceData){
         myOldSeq.add(i['sNo']);
@@ -1334,7 +1334,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     var generateNew = [];
     var central = [];
     var local = [];
-    // print("apiData : $apiData");
+    // //print("apiData : $apiData");
     for(var site in apiData['fertilizerSite']){
       if(site['siteMode'] == 1){
         central.add(site);
@@ -1387,7 +1387,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     if(sequenceData.isNotEmpty){
       selectedGroup = 0;
       waterValueInTime = sequenceData[selectedGroup]['timeValue'];
-      // print('waterValueInTime : ${waterValueInTime}');
+      // //print('waterValueInTime : ${waterValueInTime}');
       waterQuantity.text = sequenceData[selectedGroup]['quantityValue'] ?? '';
       preValue.text = sequenceData[selectedGroup]['preValue'] ?? '';
       postValue.text = sequenceData[selectedGroup]['postValue'] ?? '';
@@ -1402,10 +1402,10 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       segmentedControlCentralLocal = 1;
     }
     for(var seq in sequenceData){
-      // print('seq ==== ${seq['sNo']}');
+      // //print('seq ==== ${seq['sNo']}');
     }
 
-    // print('after seq : ${sequenceData}');
+    // //print('after seq : ${sequenceData}');
     refreshTime();
     notifyListeners();
   }
@@ -1557,7 +1557,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         'ImmediateStopByCondition' : sq['levelSno'],
         'Name' : sq['seqName'],
       };
-      // print('jsonPayload :: $jsonPayload');
+      // //print('jsonPayload :: $jsonPayload');
       payload += jsonPayload.values.toList().join(',');
     }
     return payload;
@@ -1622,9 +1622,9 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         }
       }
       payload += payload.isNotEmpty ? ';' : '';
-      /*print('sq :: $sq');
-      print('sq moisture :: ${sq['moistureSno']}');
-      print('sq level :: ${sq['levelSno']}');*/
+      /*//print('sq :: $sq');
+      //print('sq moisture :: ${sq['moistureSno']}');
+      //print('sq level :: ${sq['levelSno']}');*/
       var getValve = [];
       for(var v = 0;v < 4;v++){
         if(sq['valve'].length > v){
@@ -1674,7 +1674,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       subLists.add(originalList.sublist(i, end));
     }
     payLoadList = subLists.map((e) => (e as List).join(';')).toList();
-    // print('payLoadList :: ${jsonEncode(payLoadList)}');
+    // //print('payLoadList :: ${jsonEncode(payLoadList)}');
     return payLoadList;
   }
 
@@ -1693,7 +1693,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   }
 
   dynamic editWaterSetting(String title, String value){
-    print("water method updated...........111111");
+    //print("water method updated...........111111");
 
     if(title == 'method'){
       var maxFertInSec = getMaxFertilizerValueForSelectedSequence();
@@ -1742,7 +1742,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         sequenceData[selectedGroup]['quantityValue'] = DataConvert().convertTimeToLiters(sequenceData[selectedGroup]['timeValue'], getNominalFlow());
       }
       sequenceData[selectedGroup]['method'] = value;*/
-      print("water method updated...........");
+      //print("water method updated...........");
     }else if(title == 'timeValue'){
       sequenceData[selectedGroup]['timeValue'] = value;
       refreshTime();
@@ -1752,7 +1752,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       int currentWaterValueInSec = waterValueInSec();
       if(currentWaterValueInSec > (24*3600)){
         var oneDayQuantity = flowRate() * (24*3600);
-        // print('one day == > $oneDayQuantity');
+        // //print('one day == > $oneDayQuantity');
         sequenceData[selectedGroup]['quantityValue'] = '${oneDayQuantity.toInt()}';
         waterQuantity.text = '${oneDayQuantity.toInt()}';
         refreshTime();
@@ -1760,7 +1760,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       }
       var diff = (postValueInSec() + preValueInSec() + maxFertInSec);
       var quantity = diff * flowRate();
-      // print('quantity : ${quantity}');
+      // //print('quantity : ${quantity}');
       if(quantity != 0){
         if((value != '' ? int.parse(value) : 0) <= quantity.toInt()){
           sequenceData[selectedGroup]['quantityValue'] = '${quantity.toInt()}';
@@ -1779,7 +1779,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   }
 
   int parseTimeString(String timeString) {
-    print("timeString : $timeString");
+    //print("timeString : $timeString");
     List<String> parts = timeString.split(':');
     int totalSeconds = ((int.parse(parts[0]) * 3600) + (int.parse(parts[1]) * 60) + (int.parse(parts[2])));
     return totalSeconds;
@@ -1799,19 +1799,19 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
 
   void refreshTime(){
     if(sequenceData[selectedGroup]['method'] == 'Quantity'){
-      // print('stoped it1');
-      // print('flow : ${getNominalFlow()}');
+      // //print('stoped it1');
+      // //print('flow : ${getNominalFlow()}');
       var hour = (sequenceData[selectedGroup]['quantityValue'] == '' ? 0 : int.parse(sequenceData[selectedGroup]['quantityValue']))/getNominalFlow();
-      // print('hour : $hour');
+      // //print('hour : $hour');
       waterValueInTime = DataConvert().convertHoursToTime((sequenceData[selectedGroup]['quantityValue'] == '' ? 0 : int.parse(sequenceData[selectedGroup]['quantityValue']))/getNominalFlow());
-      // print('stoped it1.1');
+      // //print('stoped it1.1');
       waterValueInQuantity = sequenceData[selectedGroup]['quantityValue'];
     }else{
-      // print('stoped it2');
+      // //print('stoped it2');
       waterValueInQuantity = DataConvert().convertTimeToLiters(sequenceData[selectedGroup]['timeValue'],getNominalFlow()).toString();
       waterValueInTime = sequenceData[selectedGroup]['timeValue'];
     }
-    // print('waterValueInTime : $waterValueInTime, waterValueInQuantity : $waterValueInQuantity');
+    // //print('waterValueInTime : $waterValueInTime, waterValueInQuantity : $waterValueInQuantity');
     notifyListeners();
   }
 
@@ -1824,21 +1824,21 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
           if(sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['needEcValue'] != null){
             sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['needEcValue'] = false;
           }
-          // print('ecValue');
+          // //print('ecValue');
           if(sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['ecValue'] != null){
             sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['ecValue'] = 0;
           }
-          // print('needPhValue');
+          // //print('needPhValue');
 
           if(sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['needPhValue'] != null){
             sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['needPhValue'] = false;
           }
-          // print('phValue');
+          // //print('phValue');
 
           if(sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['phValue'] != null){
             sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['phValue'] = 0;
           }
-          // print('fertilizer');
+          // //print('fertilizer');
           for(var fert = 0;fert < sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['fertilizer'].length;fert++){
             sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['fertilizer'][fert]['method'] = 'Time';
             sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'selectedCentralSite' : 'selectedLocalSite']]['fertilizer'][fert]['timeValue'] = '00:00:00';
@@ -1849,7 +1849,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         break;
       }
       case ('selectedGroup'):{
-        // print('waterValueInTime : $waterValueInTime, waterValueInQuantity : $waterValueInQuantity');
+        // //print('waterValueInTime : $waterValueInTime, waterValueInQuantity : $waterValueInQuantity');
         selectedGroup = value;
         waterQuantity.text = sequenceData[selectedGroup]['quantityValue'] ?? '';
         preValue.text = sequenceData[selectedGroup]['preValue'];
@@ -1868,7 +1868,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
             getInjectorController(index).text = sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][0]['fertilizer'][index]['quantityValue'].toString() ?? '';
           }
         }
-        // // print('--------------${jsonEncode(sequenceData[selectedGroup])}');
+        // // //print('--------------${jsonEncode(sequenceData[selectedGroup])}');
         break;
       }
       case ('selectedLocalSite'):{
@@ -1942,13 +1942,13 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
             }
           }
         }catch(e, stackTrace){
-          print('e : $e');
-          print('stackTrace : $stackTrace');
+          //print('e : $e');
+          //print('stackTrace : $stackTrace');
         }
       }
       break;
       case ('applyRecipe') : {
-        // // print('value : $value');
+        // // //print('value : $value');
         if(value == false){
           for(var i in sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing']){
             i['recipe'] = -1;
@@ -2033,7 +2033,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     if(title == 'centralDosing'){
       sequenceData[selectedGroup]['centralDosing'][selectedCentralSite][ecOrPh] = value;
     }else if(title == 'localDosing'){
-      // // print(value);
+      // // //print(value);
       sequenceData[selectedGroup]['localDosing'][selectedLocalSite][ecOrPh] = value;
     }
     notifyListeners();
@@ -2064,7 +2064,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       if(sequenceData[selectedGroup]['quantityValue'] == '0'){
         sec = 0;
       }else{
-        print(sequenceData[selectedGroup]['quantityValue']);
+        //print(sequenceData[selectedGroup]['quantityValue']);
         sec = ((sequenceData[selectedGroup]['quantityValue'] != '' ? int.parse(sequenceData[selectedGroup]['quantityValue']) : 0)/valveFlowRate).round();
       }
     }
@@ -2114,7 +2114,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       for(var flwRate in nominalFlowRate){
         totalFlowRate = totalFlowRate + int.parse(flwRate);
       }
-      // // print('nominalFlowRate : $nominalFlowRate');
+      // // //print('nominalFlowRate : $nominalFlowRate');
       var valveFlowRate = totalFlowRate * 0.00027778;
       if(sequenceData[selectedGroup]['preValue'] == '0'){
         sec = 0;
@@ -2122,7 +2122,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         sec = ((sequenceData[selectedGroup]['preValue'] != '' ? int.parse(sequenceData[selectedGroup]['preValue']) : 0)/valveFlowRate).toInt();
       }
     }
-    // // print('pre in seconds : $sec');
+    // // //print('pre in seconds : $sec');
     return sec;
   }
 
@@ -2170,11 +2170,11 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
 
     }
     var totalFlowRate = 0;
-    // // print('nominalFlowRate : ${nominalFlowRate}');
+    // // //print('nominalFlowRate : ${nominalFlowRate}');
     for(var flwRate in nominalFlowRate){
       totalFlowRate = totalFlowRate + int.parse(flwRate);
     }
-    // print('totalFlowRate : ${totalFlowRate}');
+    // //print('totalFlowRate : ${totalFlowRate}');
     var valveFlowRate = totalFlowRate * 0.00027778;
     return valveFlowRate;
   }
@@ -2191,11 +2191,11 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       }
     }
     var totalFlowRate = 0;
-    // // print('nominalFlowRate : ${nominalFlowRate}');
+    // // //print('nominalFlowRate : ${nominalFlowRate}');
     for(var flwRate in nominalFlowRate){
       totalFlowRate = totalFlowRate + int.parse(flwRate);
     }
-    // print('totalFlowRate : ${totalFlowRate}');
+    // //print('totalFlowRate : ${totalFlowRate}');
     return totalFlowRate;
   }
 
@@ -2259,10 +2259,10 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       case 'preValue' :{
         if(sequenceData[index]['prePostMethod'] != 'Time'){
           var maxFertInSec = getMaxFertilizerValueForSelectedSequence();
-          // print('preValue maxFertInSec :${maxFertInSec}');
+          // //print('preValue maxFertInSec :${maxFertInSec}');
           var diff = waterValueInSec() - (postValueInSec() + maxFertInSec);
           var quantity = diff * flowRate();
-          // print('quantity : ${quantity}');
+          // //print('quantity : ${quantity}');
           if(int.parse(value) >= quantity.toInt()){
             sequenceData[index]['preValue'] = '${quantity.toInt()}';
             preValue.text = '${quantity.toInt()}';
@@ -2280,7 +2280,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
           var maxFertInSec = getMaxFertilizerValueForSelectedSequence();
           var diff = waterValueInSec() - (preValueInSec() + maxFertInSec);
           var quantity = diff * flowRate();
-          // // print('post diff : ${quantity}');
+          // // //print('post diff : ${quantity}');
           if(int.parse(value) >= quantity.toInt()){
             sequenceData[index]['postValue'] = '${quantity.toInt()}';
             postValue.text = '${quantity.toInt()}';
@@ -2308,9 +2308,9 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   // }
 
   void editOnOffInInjector(String centralOrLocal,int index,bool value){
-    // // print('sequenceData check1 : ${jsonEncode(sequenceData)}');
+    // // //print('sequenceData check1 : ${jsonEncode(sequenceData)}');
     sequenceData[selectedGroup][centralOrLocal][centralOrLocal == 'centralDosing' ? selectedCentralSite : selectedLocalSite]['fertilizer'][index]['onOff'] = value;
-    // // print('sequenceData check2 : ${jsonEncode(sequenceData)}');
+    // // //print('sequenceData check2 : ${jsonEncode(sequenceData)}');
     notifyListeners();
   }
 
@@ -2318,12 +2318,12 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     var nominalFlowRate = 0;
     for(var channelInConstant in constantSetting['fertilizerChannel']){
       if(channelInConstant['sNo'] == sequenceData[selectedGroup][segmentedControlCentralLocal == 0 ? 'centralDosing' : 'localDosing'][0]['fertilizer'][index]['sNo']){
-        print("channelInConstant => $channelInConstant");
+        //print("channelInConstant => $channelInConstant");
         var channelFlowRate = channelInConstant['setting'][0]['value'].toString();
         nominalFlowRate = channelFlowRate == '' ? 0 : int.parse(channelFlowRate);
       }
     }
-    print("nominalFlowRate => $nominalFlowRate");
+    //print("nominalFlowRate => $nominalFlowRate");
     return nominalFlowRate * 0.0002778;
   }
 
@@ -2344,7 +2344,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         var injectorPer1000L = howMany1000In_fertilizerGapInLiters * userInput;
         var flowRate = getFlowRate(index);
         var maxFertilizerLimitInLiters = diff * flowRate;
-        print('howMany1000In_fertilizerGapInLiters => $howMany1000In_fertilizerGapInLiters  fertilizerGapInLiters => $fertilizerGapInLiters injectorPer1000L => $injectorPer1000L  maxFertilizerLimitInLiters => $maxFertilizerLimitInLiters');
+        //print('howMany1000In_fertilizerGapInLiters => $howMany1000In_fertilizerGapInLiters  fertilizerGapInLiters => $fertilizerGapInLiters injectorPer1000L => $injectorPer1000L  maxFertilizerLimitInLiters => $maxFertilizerLimitInLiters');
         if(editingSelectedFertilizer['method'] == 'Pro.quant per 1000L'){
           if(injectorPer1000L > maxFertilizerLimitInLiters){
             editingSelectedFertilizer['quantityValue'] = ((maxFertilizerLimitInLiters /
@@ -2507,7 +2507,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     try {
       final response = await repository.getUserProgramSelection(userData);
       final jsonData = json.decode(response.body);
-      print("selected objects :: ${jsonData['data']['selection']['selected']}");
+      //print("selected objects :: ${jsonData['data']['selection']['selected']}");
       _additionalData = null;
       _selectedObjects = [];
 
@@ -2516,8 +2516,8 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
             .map((e) => DeviceObjectModel.fromJson(e as Map<String, dynamic>))
             .toList();
 
-        print("configObjects: $configObjects");
-        print("selectedObjects before filter: ${_selectedObjects!.map((e) => e.toJson()).toList()}");
+        //print("configObjects: $configObjects");
+        //print("selectedObjects before filter: ${_selectedObjects!.map((e) => e.toJson()).toList()}");
 
         if (configObjects.isNotEmpty) {
           _selectedObjects!.removeWhere((element) => !configObjects.any((element2) {
@@ -2527,18 +2527,18 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
               irrigationPumpSnoList.contains(element.sNo);
               // sampleIrrigationLine!.map((e) => e.irrigationPump
             }
-            print("Comparing element.sNo: ${element.sNo} with configSNo: $configSNo");
+            //print("Comparing element.sNo: ${element.sNo} with configSNo: $configSNo");
             return element.objectId == 5
                 ? sampleIrrigationLine!.map((e) => e.irrigationPump ?? []).expand((list) => list).toList().map((ele) => ele.sNo).toList().contains(element.sNo)
                 : configSNo == element.sNo;
           }));
         } else {
-          print("Warning: configObjects is empty, skipping filter");
+          //print("Warning: configObjects is empty, skipping filter");
         }
       } else {
         _selectedObjects = [];
       }
-      print("selected objects in the get function :: ${_selectedObjects!.map((e) => e.toJson()).toList()}");
+      //print("selected objects in the get function :: ${_selectedObjects!.map((e) => e.toJson()).toList()}");
       _additionalData = AdditionalData.fromJson(jsonData['data']['selection']);
     } catch (e) {
       log('Error: $e');
@@ -2663,7 +2663,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         "controllerId": controllerId,
       };
 
-      print("user data in programLibraryData :: $userData");
+      //print("user data in programLibraryData :: $userData");
       var getUserProgramName = await repository.getProgramLibraryData(userData);
       // var getUserProgramName = await httpService.postRequest('getUserProgramLibrary', userData);
       _programLibrary = null;
@@ -2671,7 +2671,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         final responseJson = getUserProgramName.body;
         final convertedJson = jsonDecode(responseJson);
         _programLibrary = ProgramLibrary.fromJson(convertedJson);
-        print("program library data => ${convertedJson['data']['conditionLibraryCount']}");
+        //print("program library data => ${convertedJson['data']['conditionLibraryCount']}");
         priority = _programDetails?.priority != "" ? _programDetails?.priority ?? "None" : "None";
         conditionsLibraryIsNotEmpty = convertedJson['data']['conditionLibraryCount'] != 0;
         // irrigationProgramType = _programLibrary?.program[serialNumber].programType == "Irrigation Program" ? true : false;
@@ -2793,7 +2793,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     String? programType,
     bool? conditionLibrary,
   }) {
-    print("conditionLibrary :: $conditionLibrary");
+    //print("conditionLibrary :: $conditionLibrary");
     List<String> labels = [];
     List<IconData> icons = [];
 
@@ -2870,10 +2870,10 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         "controllerReadStatus": controllerReadStatus,
         "hardware": hardwareData
       };
-      //debugPrint("userData => $userData");
+      //debug//print("userData => $userData");
       var updateUserProgramDetails = await repository.updateProgramDetails(userData);
       // var updateUserProgramDetails = await httpService.putRequest('updateUserProgramDetails', userData);
-      print("updateUserProgramDetails : ${updateUserProgramDetails.body}");
+      //print("updateUserProgramDetails : ${updateUserProgramDetails.body}");
       if (updateUserProgramDetails.statusCode == 200) {
         final responseJson = updateUserProgramDetails.body;
         final convertedJson = jsonDecode(responseJson);
@@ -3047,7 +3047,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
     });
 
     final centralFilterSite = filterSite!.where((site) {
-      // print("Central filter site ==> ${site.filterSite?.sNo}");
+      // //print("Central filter site ==> ${site.filterSite?.sNo}");
       for (var i = 0; i < selectedObjects!.length; i++) {
         if (site.siteMode == 1 && selectedObjects![i].objectId == 4 && selectedObjects![i].sNo == site.filterSite?.sNo) {
           return true;
@@ -3080,7 +3080,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         ? firstDate
         : DateTime.parse(endDate);
     List totalAgitators = [];
-   /* print('head unit pause :: ${sampleIrrigationLine!.where((headUnit) {
+   /* //print('head unit pause :: ${sampleIrrigationLine!.where((headUnit) {
       var sampleLineValveList = headUnit.valve!.map((valve) => valve.sNo).toList();
       dynamic valveList = irrigationLine!.sequence.map((seq) {
         return seq['valve'];
@@ -3091,7 +3091,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
       return usedValveInSequence.isEmpty;
     }).map((e) => e.irrigationLine).toList().map((e) => e.sNo).toList().join("_")}');*/
 
-  /*  print('Head unit to pause :: ${
+  /*  //print('Head unit to pause :: ${
         sampleIrrigationLine!.where((headUnit) {
           sampleIrrigationLine!.map((element) => element.irrigationLine.sNo).toList();
           selectedObjects!.map((element) => element.sNo).toList();
@@ -3110,12 +3110,12 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         .expand((e) => e['valve'].map((valve) => valve['sNo']))
         .toList();
 
-    print("selectedAgitators :: $selectedAgitators");
+    //print("selectedAgitators :: $selectedAgitators");
     if(agitators != null && agitators!.isNotEmpty) {
       totalAgitators = agitators!.map((e) => e.sNo).toList();
     }
 
-    /*print("filter selection :: ${centralFilterSite.toList().isNotEmpty
+    /*//print("filter selection :: ${centralFilterSite.toList().isNotEmpty
         ? centralFilterSite
         .where((element) => selectedObjects!.any((ele) => ele.sNo == element.filterSite!.sNo))
         .map((e) => e.filters != null ? List<DeviceObjectModel>.from(e.filters!) : [])
@@ -3126,9 +3126,9 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         .join('_')
         : ''}");
 
-    print("selectedObjects in the dataToMqtt :: ${selectedObjects!.map((e) => e.sNo)}");*/
+    //print("selectedObjects in the dataToMqtt :: ${selectedObjects!.map((e) => e.sNo)}");*/
 
-    /*print("not selected agitators :: ${totalAgitators
+    /*//print("not selected agitators :: ${totalAgitators
         .where((agitator) => !(selectedAgitators ?? []).contains(agitator))
         .toList().join(',')}");
     */
@@ -3357,17 +3357,17 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
   List<int> _getPayloadForEcoGemPumpAndFilter({required objectId}) {
     final configObject = configObjects.where((pump) => pump['objectId'] == objectId).map((e) => e['sNo']).toList();
     final selectedObject = selectedObjects!.where((pump) => pump.objectId == objectId).map((e) => e.sNo).toList();
-    print("configObject in the _getPayloadForEcoGemPumpAndFilter :: $configObject");
-    print("selectedObject in the _getPayloadForEcoGemPumpAndFilter :: $selectedObject");
+    //print("configObject in the _getPayloadForEcoGemPumpAndFilter :: $configObject");
+    //print("selectedObject in the _getPayloadForEcoGemPumpAndFilter :: $selectedObject");
     var payload = [0,0];
     for(var obj in selectedObject){
-      print("obj in the for loop :: $obj");
-      print("index in the for loop :: ${configObject.indexOf(obj)}");
+      //print("obj in the for loop :: $obj");
+      //print("index in the for loop :: ${configObject.indexOf(obj)}");
       int indexOfObject = configObject.isEmpty ? 0 : configObject.indexOf(obj);
       payload[indexOfObject] = 1;
-      print("payload[indexOfObject] :: ${payload[indexOfObject]}");
+      //print("payload[indexOfObject] :: ${payload[indexOfObject]}");
     }
-    print("payload in _getPayloadForEcoGemPumpAndFilter :: $payload");
+    //print("payload in _getPayloadForEcoGemPumpAndFilter :: $payload");
     return payload;
   }
 
@@ -3377,10 +3377,10 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         ? sampleScheduleModel!.scheduleAsRunList.schedule
         : sampleScheduleModel!.scheduleByDays.schedule;
 
-    print("selectedObjects :: ${selectedObjects!.map((e) => e.objectId)}");
-    print("selectedObjects :: ${selectedObjects!.map((e) => e.sNo)}");
+    //print("selectedObjects :: ${selectedObjects!.map((e) => e.objectId)}");
+    //print("selectedObjects :: ${selectedObjects!.map((e) => e.sNo)}");
     final centralFilterSite = filterSite!.where((site) {
-      print("Central filter site ==> ${site.filterSite?.sNo}");
+      //print("Central filter site ==> ${site.filterSite?.sNo}");
       for (var i = 0; i < selectedObjects!.length; i++) {
         if (site.siteMode == 1 && selectedObjects![i].objectId == 4 && selectedObjects![i].sNo == site.filterSite?.sNo) {
           return true;
@@ -3403,7 +3403,7 @@ class IrrigationProgramMainProvider extends ChangeNotifier {
         : DateTime.parse(endDate);
     var pumpPayload = _getPayloadForEcoGemPumpAndFilter(objectId: AppConstants.pumpObjectId);
     var filterPayload = _getPayloadForEcoGemPumpAndFilter(objectId: AppConstants.filterObjectId);
-    print("filterPayload :: $filterPayload");
+    //print("filterPayload :: $filterPayload");
     return {
       "2500" : {
         "2502": {
