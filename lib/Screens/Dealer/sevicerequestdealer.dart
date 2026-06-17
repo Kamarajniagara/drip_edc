@@ -43,7 +43,7 @@ class _ServiceRequestsTableState extends State<ServiceRequestsTable> {
       var getUserDetails = await repository.getUserServiceRequestForDealer({
         "userId": widget.userId,
       });
-      // print("getUserDetails :: ${getUserDetails.body}");
+      // //print("getUserDetails :: ${getUserDetails.body}");
       if (getUserDetails.statusCode == 200) {
         setState(() {
           var jsonData = jsonDecode(getUserDetails.body);
@@ -54,8 +54,8 @@ class _ServiceRequestsTableState extends State<ServiceRequestsTable> {
       }
     }
     catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
 
 
@@ -67,8 +67,8 @@ class _ServiceRequestsTableState extends State<ServiceRequestsTable> {
       var getUserDetails = await repository.getUserCriticalAlarmForDealer({
         "userId": widget.userId,
       });
-      print("userId :: ${widget.userId}");
-      // print("getUserCriticalAlarmForDealer ==>  ${getUserDetails.body}");
+      //print("userId :: ${widget.userId}");
+      // //print("getUserCriticalAlarmForDealer ==>  ${getUserDetails.body}");
       // final jsonData = jsonDecode(getUserDetails.body);
       if (getUserDetails.statusCode == 200) {
         setState(() {
@@ -79,8 +79,8 @@ class _ServiceRequestsTableState extends State<ServiceRequestsTable> {
       }
     }
     catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
   }
 
@@ -331,7 +331,7 @@ class _ServiceRequestsTableState extends State<ServiceRequestsTable> {
     // getUserServiceRequest => userId, controllerId
     // createUserServiceRequest => userId, controllerId, requestTypeId, requestDate, requestTime, responsibleUser, estimatedDate, siteLocation, createUser
     // updateUserServiceRequest => userId, controllerId, requestId, requestTypeId, responsibleUser, estimatedDate, status, closedDate, modifyUser
-    print("status--->$status");
+    //print("status--->$status");
     Map<String, dynamic> body = {
       "userId": userid,
       "controllerId": controllerId,
@@ -344,14 +344,14 @@ class _ServiceRequestsTableState extends State<ServiceRequestsTable> {
       status == 'Closed' ? dateFormat.format(DateTime.now()) : null,
       "modifyUser": userid
     };
-    print("body call--->${body}");
+    //print("body call--->${body}");
     final Repository repository = Repository(HttpService());
     var response = await repository.updateUserServiceRequest(body);
     final jsonData = json.decode(response.body);
-    print("response--->${response.body}");
+    //print("response--->${response.body}");
 
-    // print("jsonData--->$jsonData");
-    print("response.statusCode--->${response.statusCode}");
+    // //print("jsonData--->$jsonData");
+    //print("response.statusCode--->${response.statusCode}");
     if (response.statusCode == 200) {
       setState(() {
         GlobalSnackBar.show(context, jsonData['message'], response.statusCode);

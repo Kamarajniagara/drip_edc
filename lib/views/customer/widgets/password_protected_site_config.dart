@@ -73,18 +73,14 @@ class _PasswordProtectedSiteConfigState
 
                   if (getUserDetails.statusCode == 200) {
                     var jsonData = jsonDecode(getUserDetails.body);
-                    //print("jsonData $jsonData");
 
                     if (jsonData['code'] == 200) {
-                      // print("getUserDetails.body: ${getUserDetails.body}");
                       if (ctx.mounted) Navigator.pop(ctx, true); // ✅ close dialog safely
                     } else {
                       if (ctx.mounted) Navigator.pop(ctx, false); // wrong password
                     }
                   }
                 } catch (e, stackTrace) {
-                  //print('Error getData => ${e.toString()}');
-                  //print('Trace getData => $stackTrace');
                   if (ctx.mounted) Navigator.pop(ctx, false);
                 }
               },

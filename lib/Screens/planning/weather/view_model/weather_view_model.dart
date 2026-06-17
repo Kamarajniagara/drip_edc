@@ -41,7 +41,7 @@ class WeatherViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // print('data:$data');
+        // //print('data:$data');
 
         if (data["code"] == 200) {
           weatherModel = WeatherModelNew.fromJson(data["data"]);
@@ -63,7 +63,7 @@ class WeatherViewModel extends ChangeNotifier {
         }
       }
     } catch (e, st) {
-      //debugPrint("Weather error: $e\n$st");
+      //debug//print("Weather error: $e\n$st");
     }
 
     isLoadingWeather = false;

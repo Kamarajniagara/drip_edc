@@ -27,7 +27,6 @@ class UserConstant {
           .toList();
 
     } else {
-      print("configObject is null or missing");
     }
 
     return UserConstant(

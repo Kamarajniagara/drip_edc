@@ -57,7 +57,7 @@ class _watersourceUIState extends State<watersourceUI>
         "userId":  widget.userId,
         "controllerId": widget.controllerId
       });
-      // print("getUserDetails.body ${getUserDetails.body}");
+      // //print("getUserDetails.body ${getUserDetails.body}");
       // final jsonData = jsonDecode(getUserDetails.body);
       if (getUserDetails.statusCode == 200) {
         setState(() {
@@ -70,8 +70,8 @@ class _watersourceUIState extends State<watersourceUI>
     }
     catch (e, stackTrace) {
       mqttPayloadProvider.httpError = true;
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
 
 
@@ -173,7 +173,7 @@ class _watersourceUIState extends State<watersourceUI>
                                           setState(() {
                                             _selectedIndex = index;
                                           });
-                                          print('Tapped on ${index}');
+                                          //print('Tapped on ${index}');
                                         },
                                         child: Container(
                                           // decoration: BoxDecoration(

@@ -74,7 +74,7 @@ class DealerDefinitionInConfigState extends State<DealerDefinitionInConfig> {
       if (getUserDetails.statusCode == 200) {
         setState(() {
           var jsonData = jsonDecode(getUserDetails.body);
-          //print("jsonData:$jsonData");
+          ////print("jsonData:$jsonData");
           data = DataModelDDConfig.fromJson(jsonData);
           indicatorViewHide();
         });
@@ -83,8 +83,8 @@ class DealerDefinitionInConfigState extends State<DealerDefinitionInConfig> {
       }
     }
     catch (e, stackTrace) {
-       print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+       //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
   }
 

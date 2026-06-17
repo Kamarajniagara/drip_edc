@@ -52,7 +52,6 @@ class ProgramUpdater {
               cond.value.actualValue = actualValue;
 
             } else {
-              // print("Condition with sNo=$conditionSerialNo not found in program $serialNumber");
             }
           }
         }

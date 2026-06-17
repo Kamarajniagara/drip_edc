@@ -56,7 +56,7 @@ class _MapScreenAllAreaState extends State<MapScreenAllArea> {
   }
 
   Future<void> fetchData() async {
-    print('Fetching geography data...');
+    //print('Fetching geography data...');
     try {
       final repository = Repository(HttpService());
       final response = await repository.getgeographyArea({
@@ -74,11 +74,11 @@ class _MapScreenAllAreaState extends State<MapScreenAllArea> {
 
         await _updatePolygons();
       } else {
-        print('Failed to load data: ${response.statusCode}');
+        //print('Failed to load data: ${response.statusCode}');
       }
     } catch (e, stackTrace) {
-      print('Error fetching data: $e');
-      print('StackTrace: $stackTrace');
+      //print('Error fetching data: $e');
+      //print('StackTrace: $stackTrace');
     } finally {
       setState(() {
         _isLoading = false;  // Set loading to false once data is fetched
@@ -146,7 +146,7 @@ class _MapScreenAllAreaState extends State<MapScreenAllArea> {
   }
   //COLOR FOR MAP
   Color getColorByStatus(int? status, int? percentage) {
-    print('status:$status,percentage:$percentage');
+    //print('status:$status,percentage:$percentage');
     if (status == 1 || status == 2) {
       if (percentage == 100) {
         return Colors.blue;

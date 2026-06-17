@@ -30,7 +30,6 @@ class _GlobalAlarmInConstantState extends State<GlobalAlarmInConstant> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     mqttService.initializeMQTTClient(state: null);
     mqttService.connect();
@@ -148,7 +147,6 @@ class _GlobalAlarmInConstantState extends State<GlobalAlarmInConstant> {
                                         stateSetter((){
                                           setState((){
                                             if(mqttService.acknowledgementPayload != null){
-                                             // print("(mqttService.acknowledgementPayload =>${(mqttService.acknowledgementPayload.runtimeType)}");
                                               if(validatePayloadFromHardware(mqttService.acknowledgementPayload, ['cC'], widget.userData['deviceId']) && validatePayloadFromHardware(mqttService.acknowledgementPayload!, ['cM', '4201', 'PayloadCode'], '300')){
                                                 if(mqttService.acknowledgementPayload!['cM']['4201']['Code'] == '200'){
                                                   payloadState = HardwareAcknowledgementState.success;
@@ -238,7 +236,6 @@ class _GlobalAlarmInConstantState extends State<GlobalAlarmInConstant> {
   }
 
   Widget getHardwareAcknowledgementWidget(HardwareAcknowledgementState state){
-    //print('state : $state');
     if(state == HardwareAcknowledgementState.notSent){
       return const StatusBox(color:  Colors.black87,child: Text('Do you want to send payload..',),);
     }else if(state == HardwareAcknowledgementState.success){
@@ -282,8 +279,6 @@ class _GlobalAlarmInConstantState extends State<GlobalAlarmInConstant> {
       "createUser" : widget.userData['userId']
     };
     var response = await ConstantRepository().createUserConstant(body);
-   // print('code : $response');
   }
 
 }
-

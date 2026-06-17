@@ -67,8 +67,8 @@ class _FilterBackwashUIState extends State<FilterBackwashUI>
     }
     catch (e, stackTrace) {
       mqttPayloadProvider.httpError = true;
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => ${stackTrace}');
+      // print(' Error overAll getData => ${e.toString()}');
+      // print(' trace overAll getData  => ${stackTrace}');
     }
 
 

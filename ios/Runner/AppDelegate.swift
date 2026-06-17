@@ -13,10 +13,8 @@ import FirebaseMessaging
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     if FirebaseApp.app() == nil {
-      print("Configuring Firebase")
       FirebaseApp.configure()
     } else {
-      print("Firebase already configured")
     }
 
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
@@ -35,7 +33,6 @@ import FirebaseMessaging
 
   override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     Messaging.messaging().apnsToken = deviceToken // Set APNs token for FCM
-      print("apnsToken device token is \(deviceToken)")
 //    let firebaseAuth = Auth.auth()
 //    firebaseAuth.setAPNSToken(deviceToken, type: AuthAPNSTokenType.unknown)
   }

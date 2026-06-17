@@ -48,7 +48,6 @@ class _MyAppState extends State<MyApp> {
         return Routes.login;
       }
     } catch (e) {
-      print("Error in getInitialRoute: $e");
       return Routes.login;
     }
   }

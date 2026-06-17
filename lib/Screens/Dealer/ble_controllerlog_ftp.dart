@@ -19,8 +19,7 @@ class FileLogger {
   static Future<void> writeToFile(String text) async {
     final file = await _localFile;
     await file.writeAsString('$text\n', mode: FileMode.append);
-    print('File written: $text');
-  }
+   }
 
   static Future<String> readFromFile() async {
     try {

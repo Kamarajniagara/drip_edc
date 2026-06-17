@@ -135,8 +135,8 @@ class _PumpTopicChangePageState extends State<PumpTopicChangePage> {
     } catch (e, stacktrace) {
       if (!mounted) return;
       setState(() {
-        print(e);
-        print(stacktrace);
+        //print(e);
+        //print(stacktrace);
         errorMessage = 'Error fetching data: $e';
         isLoading = false;
       });
@@ -168,7 +168,7 @@ class _PumpTopicChangePageState extends State<PumpTopicChangePage> {
   }
 
   String formatIp(String ip) {
-    print('ip: $ip');
+    //print('ip: $ip');
     return ip.split('.')
         .map((part) => part.padLeft(3, '0'))
         .join('.');
@@ -186,7 +186,7 @@ class _PumpTopicChangePageState extends State<PumpTopicChangePage> {
       sentStatus[fieldName] = true;
     });
 
-    print("Send $fieldName: ${controller.text}");
+    //print("Send $fieldName: ${controller.text}");
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text("$fieldName Sent")));
   }
@@ -208,7 +208,7 @@ class _PumpTopicChangePageState extends State<PumpTopicChangePage> {
 
       String Sendalldataip = "${config!['MQTT_USER_NAME']},${config['MQTT_PASSWORD']},${formatIp(config['MQTT_IP'])}";
 
-      print('Sendalldataip:   $Sendalldataip');
+      //print('Sendalldataip:   $Sendalldataip');
 
      Map<String, dynamic> payLoadFinalip = {
        "sentSms":"mqttcred,$Sendalldataip,"};
@@ -242,7 +242,7 @@ class _PumpTopicChangePageState extends State<PumpTopicChangePage> {
         _showSnackBar(data["message"]);
       }
     }
-    print('topic:------> ${topic == 'topic' ? payLoadFinaltopic : topic == 'ip' ? payLoadFinalip : topic == 'reset' ? payLoadReset : payLoadview}');
+    //print('topic:------> ${topic == 'topic' ? payLoadFinaltopic : topic == 'ip' ? payLoadFinalip : topic == 'reset' ? payLoadReset : payLoadview}');
 
      MqttService().topicToPublishAndItsMessage(jsonEncode(topic == 'topic' ? payLoadFinaltopic : topic == 'ip' ? payLoadFinalip : topic == 'reset' ? payLoadReset : payLoadview),'${Environment.mqttPublishTopic}/${widget.deviceID}');
 
@@ -316,7 +316,7 @@ class _PumpTopicChangePageState extends State<PumpTopicChangePage> {
       sentStatus.updateAll((key, value) => true);
     });
 
-    print("Send All Fields: $fields");
+    //print("Send All Fields: $fields");
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text("All Fields Sent")));
   }

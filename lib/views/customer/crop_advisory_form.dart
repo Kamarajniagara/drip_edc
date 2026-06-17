@@ -120,7 +120,6 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
                       _dropdown("Crop Name", crops['Crops']!, (val) => setState(() => cropName = val), selected: cropName),
                       _textField("Crop Variety", _cvController),
                       _dateField("Sowing Date", (val) {
-                        //debugPrint("Selected Date: $val");
                       }),
                       _dropdown("Stage of Crop", ["Germination", "Flowering", "Harvest"], (val) => setState(() => stage = val), selected: stage),
                     ],
@@ -377,12 +376,10 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
 
             setState(() {});
           } else {
-            print("Data is empty");
           }
         }
       }
     } catch (error) {
-      //debugPrint(error as String?);
     }
   }
 
@@ -404,7 +401,6 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
         }
       }
     } catch (error) {
-      //debugPrint(error as String?);
     }
   }
 

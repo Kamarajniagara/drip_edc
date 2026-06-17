@@ -150,13 +150,13 @@ class ConfigMakerProvider extends ChangeNotifier{
         if(!object.assignObject.contains(sNo)){
           object.assignObject.add(sNo);
           if (kDebugMode) {
-            print('added : ${object.toJson()}');
+            //print('added : ${object.toJson()}');
           }
         }
       }else if(object.objectId == objectId && !listOfSerialNo.contains(object.sNo)) {
         object.assignObject.remove(sNo);
         if (kDebugMode) {
-          print('remove : ${object.toJson()}');
+          //print('remove : ${object.toJson()}');
         }
       }
     }
@@ -264,7 +264,7 @@ class ConfigMakerProvider extends ChangeNotifier{
       else{
         var productListResponse = await ConfigMakerRepository().getProductStock({'userId' : masterDataFromSiteConfigure['customerId']});
         if (kDebugMode) {
-          print("productListResponse : ${productListResponse.body}");
+          //print("productListResponse : ${productListResponse.body}");
         }
         Map<String, dynamic> productListJsonData = jsonDecode(productListResponse.body);
         productStock = productListJsonData['data'];
@@ -280,7 +280,7 @@ class ConfigMakerProvider extends ChangeNotifier{
       var response = await ConfigMakerRepository().getUserConfigMaker(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       if (kDebugMode) {
-        print('jsonData : $jsonData');
+        //print('jsonData : $jsonData');
       }
       Map<String, dynamic> defaultData = jsonData['data']['default'];
       Map<String, dynamic> configMakerData = jsonData['data']['configMaker'];
@@ -413,8 +413,8 @@ class ConfigMakerProvider extends ChangeNotifier{
       }
       line = (configMakerData['irrigationLine'] as List<dynamic>).map((lineObject) => IrrigationLineModel.fromJson(lineObject)).toList();
     } catch (e, stackTrace){
-      //debugPrint('Error on converting to device model :: $e');
-      //debugPrint('stackTrace on converting to device model :: $stackTrace');
+      //debug//print('Error on converting to device model :: $e');
+      //debug//print('stackTrace on converting to device model :: $stackTrace');
     }
 
     notifyListeners();
@@ -435,7 +435,7 @@ class ConfigMakerProvider extends ChangeNotifier{
       var response = await ConfigMakerRepository().productReplace(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       if (kDebugMode) {
-        print("jsonData == $jsonData");
+        //print("jsonData == $jsonData");
       }
       notifyListeners();
       if(jsonData['code'] == 200){
@@ -455,8 +455,8 @@ class ConfigMakerProvider extends ChangeNotifier{
         return 400;
       }
     } catch (e, stackTrace){
-      //debugPrint('Error on replace deviceId :: $e');
-      //debugPrint('stackTrace on replace deviceId :: $stackTrace');
+      //debug//print('Error on replace deviceId :: $e');
+      //debug//print('stackTrace on replace deviceId :: $stackTrace');
       return 400;
     }
   }
@@ -595,7 +595,7 @@ class ConfigMakerProvider extends ChangeNotifier{
 
     for(var object in listOfGeneratedObject){
       if (kDebugMode) {
-        print('generated :: ${object.toJson()}');
+        //print('generated :: ${object.toJson()}');
       }
     }
 

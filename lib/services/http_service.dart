@@ -11,7 +11,7 @@ import 'api_service.dart';
   Future<http.Response> getRequest(String endpoint, {String? type, Map<String, String>? queryParams}) async {
     final token = await PreferenceHelper.getToken();
     final uri = Uri.parse('${AppConstants.apiUrl}$endpoint').replace(queryParameters: queryParams);
-    print('uri:$uri');
+    //print('uri:$uri');
     final headers = {
       'Content-Type': 'application/json',
       'auth_token': token?.isNotEmpty == true ? token! : 'default_token',
@@ -25,8 +25,8 @@ import 'api_service.dart';
   @override
   Future<http.Response> postRequest(String endpoint, Map<String, dynamic> bodyData) async {
 
-    print('bodyData : ${jsonEncode(bodyData)}');
-    print('${AppConstants.apiUrl}$endpoint');
+    //print('bodyData : ${jsonEncode(bodyData)}');
+    //print('${AppConstants.apiUrl}$endpoint');
     final token = await PreferenceHelper.getToken();
 
     final headers = {
@@ -91,7 +91,7 @@ class HttpService implements ApiService {
       final encryptedData = EncryptionHelper.encrypt(jsonString);
       return jsonEncode({'payload': encryptedData});
     } catch (e) {
-      print('❌ Failed to encrypt request body: $e');
+      //print('❌ Failed to encrypt request body: $e');
       return jsonEncode(bodyData);
     }
   }
@@ -116,7 +116,7 @@ class HttpService implements ApiService {
       // If no payload field or not encrypted, return original response
       return jsonResponse;
     } catch (e) {
-      print('❌ Failed to decrypt/parse response: $e');
+      //print('❌ Failed to decrypt/parse response: $e');
       return responseBody;
     }
   }
@@ -138,7 +138,7 @@ class HttpService implements ApiService {
             request: response.request,
           );
         } catch (e) {
-          print('❌ Failed to process response: $e');
+          //print('❌ Failed to process response: $e');
           return response;
         }
       }
@@ -165,8 +165,8 @@ class HttpService implements ApiService {
 
   @override
   Future<http.Response> postRequest(String endpoint, Map<String, dynamic> bodyData) async {
-    //print('Original bodyData: $bodyData');
-    //print('URL: ${AppConstants.apiUrl}$endpoint');
+    ////print('Original bodyData: $bodyData');
+    ////print('URL: ${AppConstants.apiUrl}$endpoint');
 
     final token = await PreferenceHelper.getToken();
 
@@ -177,7 +177,7 @@ class HttpService implements ApiService {
 
     // Encrypt the request body
     final encryptedBody = _encryptRequestBody(bodyData);
-    //print('Encrypted body: $encryptedBody');
+    ////print('Encrypted body: $encryptedBody');
 
     try {
       http.Response response = await http.post(
@@ -189,7 +189,7 @@ class HttpService implements ApiService {
 
       return await _processResponse(response);
     } catch (e) {
-      print('Request error: $e');
+      //print('Request error: $e');
       rethrow;
     }
   }
@@ -215,7 +215,7 @@ class HttpService implements ApiService {
 
       return await _processResponse(response);
     } catch (e) {
-      print('Request error: $e');
+      //print('Request error: $e');
       rethrow;
     }
 

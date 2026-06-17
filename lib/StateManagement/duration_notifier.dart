@@ -169,8 +169,7 @@ class IncreaseDurationNotifier extends ChangeNotifier {
       if (_remainingOnTime <= 0) {
         _currentStatus = 0;
         _remainingOffTime = _offTime;
-        print('Method $_frtMethod - ON period ended, switching to OFF for $_offTime seconds');
-      }
+       }
     }
     else if (_currentStatus == 0 && _offTime > 0) {
       _remainingOffTime--;
@@ -178,8 +177,7 @@ class IncreaseDurationNotifier extends ChangeNotifier {
       if (_remainingOffTime <= 0) {
         _currentStatus = 1;
         _remainingOnTime = _onTime;
-        print('Method $_frtMethod - OFF period ended, switching to ON for $_onTime seconds');
-      }
+       }
     }
   }
 

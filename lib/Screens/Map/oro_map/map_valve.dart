@@ -78,11 +78,9 @@ class _MapScreenValveState extends State<MapScreenValve> {
         "userId": widget.customerId,
         "controllerId": widget.controllerId,
       });
-       // print('getgeography userId${widget.userId},ctrl id ${widget.controllerId}');
-      if (response.statusCode != 200) return;
+       if (response.statusCode != 200) return;
 
       final data = jsonDecode(response.body);
-      // print("_fetchData data:$data");
 
       final deviceList = data["data"]["deviceList"] ?? [];
 
@@ -151,8 +149,7 @@ class _MapScreenValveState extends State<MapScreenValve> {
       final String? data = cMData["2402"]?.toString();
 
       if (data == null || data.isEmpty) {
-        print('data is empty or null');
-        return {"status": 0, "percentage": 0};
+         return {"status": 0, "percentage": 0};
       }
 
       final List<String> values = data.split(";");
@@ -173,19 +170,15 @@ class _MapScreenValveState extends State<MapScreenValve> {
         }
       }
 
-      print('No match found for serialNumber');
-      return {"status": 0, "percentage": 0};
+       return {"status": 0, "percentage": 0};
 
     } catch (e, stacktrace) {
-      print("Error getting valve data: $e");
-      print("Stacktrace: $stacktrace");
-      return {"status": 0, "percentage": 0};
+       return {"status": 0, "percentage": 0};
     }
   }
 
   LatLng? _getInitialCenter(List deviceList) {
-    print("_getInitialCenter");
-    // 1️⃣ First Valve Object
+     // 1️⃣ First Valve Object
     for (var device in deviceList) {
       for (var obj in device["connectedObject"] ?? []) {
         if (obj["objectName"] != null &&
@@ -203,8 +196,7 @@ class _MapScreenValveState extends State<MapScreenValve> {
       for (var obj in device["connectedObject"] ?? []) {
         if (obj["lat"] != null && obj["long"] != null) {
 
-          // print("object:%:${LatLng(obj["lat"], obj["long"])}");
-          return LatLng(obj["lat"], obj["long"]);
+           return LatLng(obj["lat"], obj["long"]);
         }
       }
     }
@@ -215,7 +207,6 @@ class _MapScreenValveState extends State<MapScreenValve> {
       if (geo != null &&
           geo["lat"] != null &&
           geo["long"] != null) {
-        // print("geography:%:${LatLng(geo["lat"], geo["long"])}");
 
         return LatLng(geo["lat"], geo["long"]);
       }
@@ -316,7 +307,6 @@ class _MapScreenValveState extends State<MapScreenValve> {
   // ---------------- UI ----------------
   @override
   Widget build(BuildContext context) {
-    // print("build center:$center");
 
     return Scaffold(
       appBar: AppBar(title: const Text("Geography"),

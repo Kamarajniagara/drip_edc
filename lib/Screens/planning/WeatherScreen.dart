@@ -553,10 +553,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
 
   String? getReportType(String objectName, double sNo) {
-    print("objectNamecall$objectName");
-    print("sNo$sNo");
-    // Static reportTypes
-    const List<String> reportTypes = [
+     const List<String> reportTypes = [
       'SoilMoisture1',
       'SoilMoisture2',
       'SoilMoisture3',
@@ -599,12 +596,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
       // 25.001 → 1, 25.002 → 2
       final index = ((sNo * 1000).round() % 1000);
       final value = '$base$index';
-print("value$value");
-      return reportTypes.contains(value) ? value : "SoilMoisture1";
+       return reportTypes.contains(value) ? value : "SoilMoisture1";
     }
 
     // 3️⃣ Other sensors
-    print("value$base");
 
     return reportTypes.contains(base) ? base : "SoilMoisture1";
   }
@@ -1166,8 +1161,7 @@ print("value$value");
     );
   }
   static String degreeToDirection(String degreestr) {
-    print('degreestr$degreestr');
-    String cleanedString = degreestr.replaceAll('º', '').trim();
+     String cleanedString = degreestr.replaceAll('º', '').trim();
     double degree = double.parse(degreestr);
     if ((degree >= 337.5 && degree <= 360) || (degree >= 0.0 && degree < 22.5)) {
       return 'North';
@@ -1228,7 +1222,7 @@ print("value$value");
       if (response.statusCode == 200) {
         weatherData = json.decode(response.body);
       } else {
-        print('Request failed with status: ${response.statusCode}');
+        //print('Request failed with status: ${response.statusCode}');
       }
       DateTime nowDate = DateTime.now();
       String day = DateFormat('EEE').format(nowDate);
@@ -1240,11 +1234,11 @@ print("value$value");
         ...weekDayList.sublist(0, indexOfThu),
       ];
     } catch (e) {
-      print('Exception: $e');
+      //print('Exception: $e');
     }
   }
   void fetchDataLive() async {
-    print("getData");
+    //print("getData");
     try
     {
       final Repository repository = Repository(HttpService());
@@ -1255,9 +1249,7 @@ print("value$value");
       });
 
       final jsonData = jsonDecode(getUserDetails.body);
-      print('jsonData  fetch device  ${jsonData['data']['deviceList']}');
-      print('jsonData  fetch irrigationLine ${jsonData['data']['irrigationLine']}');
-      if (jsonData['code'] == 200) {
+       if (jsonData['code'] == 200) {
         setState(() {
           weathernewlive = WeatherData.fromJson(jsonData);
           // weatherdatairrigationline = IrrigationLine.fromJson(jsonData['data']['irrigationLine']);
@@ -1281,7 +1273,7 @@ print("value$value");
         });
       }
     } catch (e, stackTrace) {
-      print(' trace overAll getData  => ${stackTrace}');
+      //print(' trace overAll getData  => ${stackTrace}');
     }
   }
 }

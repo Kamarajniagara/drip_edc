@@ -46,7 +46,7 @@ class _TicketHomePageState extends State<TicketHomePage> {
   Future<void> fetchData() async {
     // if you don’t use this, remove it
     // var overAllPvd = Provider.of<OverAllUse>(context, listen: false);
-    // print("userId ${widget.userId} controllerId ${widget.controllerId}");
+    // //print("userId ${widget.userId} controllerId ${widget.controllerId}");
 
     final prefs = await SharedPreferences.getInstance();
     try {
@@ -56,8 +56,8 @@ class _TicketHomePageState extends State<TicketHomePage> {
         "controllerId": widget.controllerId
       });
 
-      print("userId ${widget.userId} controllerId ${widget.controllerId}");
-      // print("getUserDetails.body ${getUserDetails.body}");
+      //print("userId ${widget.userId} controllerId ${widget.controllerId}");
+      // //print("getUserDetails.body ${getUserDetails.body}");
 
       if (getUserDetails.statusCode == 200) {
         var jsonData = jsonDecode(getUserDetails.body);
@@ -69,8 +69,8 @@ class _TicketHomePageState extends State<TicketHomePage> {
         // GlobalSnackBar.show(context, "Failed to fetch", getUserDetails.statusCode);
       }
     } catch (e, stackTrace) {
-      print(' Error overAll getData => ${e.toString()}');
-      print(' trace overAll getData  => $stackTrace');
+      //print(' Error overAll getData => ${e.toString()}');
+      //print(' trace overAll getData  => $stackTrace');
     }
   }
 
@@ -82,7 +82,7 @@ class _TicketHomePageState extends State<TicketHomePage> {
       int responsibleUser,
       String estimatedDate,
       ) async {
-    print('call update');
+    //print('call update');
     otherstextctrl.clear();
 
     Map<String, Object> body = {
@@ -101,7 +101,7 @@ class _TicketHomePageState extends State<TicketHomePage> {
     final Repository repository = Repository(HttpService());
     var response = await repository.createUserServiceRequest(body);
     var jsonData = jsonDecode(response.body);
-    print('jsonData:$jsonData');
+    //print('jsonData:$jsonData');
 
     if (!mounted) return; // ✅ check before using context
 

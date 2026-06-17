@@ -6,8 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 Future<LatLng?> getLatLngFromInput(String input) async {
-  print("getLatLngFromInput call");
-  try {
+   try {
     input = input.trim();
     if (input.isEmpty) return null;
 
@@ -63,8 +62,7 @@ Future<LatLng?> getLatLngFromInput(String input) async {
     // 3️⃣ Area name → Google Geocoding API
     // final apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
     final apiKey = 'AIzaSyCVcK18rhs06E0rP7QAyOY8J_35CbZpBlw';
-    print("apiKey $apiKey");
-    final url =
+     final url =
         "https://maps.googleapis.com/maps/api/geocode/json?address=$input&key=$apiKey";
 
     final response = await http.get(Uri.parse(url));

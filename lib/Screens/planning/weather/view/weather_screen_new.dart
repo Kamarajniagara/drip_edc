@@ -334,11 +334,7 @@ class _LineTabViewState extends State<_LineTabView> {
                     children: station.sensors.map<Widget>((s) {
                       return GestureDetector(
                         onTap: (){
-                          // print('deviceID ->${station.device[selectedStationIndex].deviceId}');
-                          print('device ->${station.device.controllerId}');
-                          print('deviceID ->${station}');
-                           // print('userId ->${widget.userId} customerId ->${widget.customerId}');
-                          Navigator.push(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => SensorHourlyReportPage(

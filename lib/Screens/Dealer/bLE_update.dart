@@ -208,7 +208,7 @@ class _FirmwareBLEPageState extends State<FirmwareBLEPage> {
       });
     } catch (e) {
       setState(() => isLoading = false);
-      print('Error sending firmware: $e');
+      //print('Error sending firmware: $e');
     }
   }
 
@@ -224,7 +224,7 @@ class _FirmwareBLEPageState extends State<FirmwareBLEPage> {
         fileChecksumSize = checksum ?? '';
       }
     } catch (e) {
-      print('Error reading file: $e');
+      //print('Error reading file: $e');
     }
   }
 

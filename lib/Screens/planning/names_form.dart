@@ -54,8 +54,8 @@ class _NamesState extends State<Names> {
         });
       }
     } catch (e, stackTrace) {
-      print('Error overAll getData => ${e.toString()}');
-      print('trace overAll getData  => ${stackTrace}');
+      //print('Error overAll getData => ${e.toString()}');
+      //print('trace overAll getData  => ${stackTrace}');
     }
   }
 
@@ -225,7 +225,7 @@ class _NamesState extends State<Names> {
                         setState(() {
                           // bool nameExists = (configModel.configObject ?? []).any(
                           //         (element) => element.name == val && element != data);
-                          print(data.location);
+                          //print(data.location);
                           bool nameExists = (configModel.configObject ?? []).any(
                                   (element) =>
                               element != data &&
@@ -300,7 +300,7 @@ class _NamesState extends State<Names> {
      Map<String, dynamic> namesModelData = configModel.toJson();
 
     final Repository repository = Repository(HttpService());
-    print(namesModelData['configObject']);
+    //print(namesModelData['configObject']);
     Map<String, dynamic> body = {
       "userId": widget.customerID,
       "controllerId": widget.controllerId,
@@ -313,10 +313,10 @@ class _NamesState extends State<Names> {
       "moistureSensor": namesModelData['moistureSensor'],
       "createUser": widget.userID,
     };
-     print('body:-$body');
+     //print('body:-$body');
 
      var getUserDetails = await repository.updateUserNames(body);
-       // print('getUserDetails.body-:${getUserDetails.body}');
+       // //print('getUserDetails.body-:${getUserDetails.body}');
       final jsonDataResponsePut = json.decode(getUserDetails.body);
       GlobalSnackBar.show(context, jsonDataResponsePut['message'], jsonDataResponsePut['code']);
 

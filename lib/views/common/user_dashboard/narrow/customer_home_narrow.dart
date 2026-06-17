@@ -363,7 +363,7 @@ class CustomerHomeNarrow extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: buildScheduleRow(context, values, programName, scheduledPrograms, modelId, hasSkip),
                   ),
-                  onPop: () => debugPrint('Popover was popped!'),
+                  onPop: () {},
                   direction: PopoverDirection.top,
                   width: 350,
                   height: 150,
@@ -587,9 +587,6 @@ class CustomerHomeNarrow extends StatelessWidget {
               serverMsg: '$programName Stopped manually',
               payload: payLoadFinal);
 
-          if (result['http'] == true) debugPrint("Payload sent to Server");
-          if (result['mqtt'] == true) debugPrint("Payload sent to MQTT Box");
-          if (result['bluetooth'] == true) debugPrint("Payload sent via Bluetooth");
 
           GlobalSnackBar.show(context, 'Comment sent successfully', 200);
         }: null,
@@ -610,9 +607,6 @@ class CustomerHomeNarrow extends StatelessWidget {
               serverMsg: '$programName Stopped manually',
               payload: payLoadFinal);
 
-          if (result['http'] == true) debugPrint("Payload sent to Server");
-          if (result['mqtt'] == true) debugPrint("Payload sent to MQTT Box");
-          if (result['bluetooth'] == true) debugPrint("Payload sent via Bluetooth");
 
           GlobalSnackBar.show(context, 'Comment sent successfully', 200);
 
@@ -633,9 +627,6 @@ class CustomerHomeNarrow extends StatelessWidget {
               serverMsg: '$programName - $sequenceName skipped manually',
               payload: payLoadFinal);
 
-          if (result['http'] == true) debugPrint("Payload sent to Server");
-          if (result['mqtt'] == true) debugPrint("Payload sent to MQTT Box");
-          if (result['bluetooth'] == true) debugPrint("Payload sent via Bluetooth");
 
           Navigator.pop(context);
           GlobalSnackBar.show(context, 'Comment sent successfully', 200);
@@ -681,7 +672,7 @@ class CustomerHomeNarrow extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: buildNextScheduleRow(context, values, programName, sqName),
                     ),
-                    onPop: () => debugPrint('Popover was popped!'),
+                    onPop: () {},
                     direction: PopoverDirection.top,
                     width: 300,
                     height: 90,

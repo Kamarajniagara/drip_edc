@@ -51,7 +51,6 @@ class _ConstantBasePageState extends State<ConstantBasePage> with SingleTickerPr
   void initState() {
     // TODO: implement initState
     super.initState();
-   // print("userData : ${widget.userData}");
     constPvd = Provider.of<ConstantProvider>(context, listen: false);
     overAllPvd = Provider.of<OverAllUse>(context, listen: false);
     constantResponse = getData(widget.userData);
@@ -75,8 +74,6 @@ class _ConstantBasePageState extends State<ConstantBasePage> with SingleTickerPr
       });
       return constantJsonData['code'];
     }catch(e,stacktrace){
-      print('Error on getting constant data :: $e');
-      print('Stacktrace on getting constant data :: $stacktrace');
       rethrow;
     }
   }
@@ -242,9 +239,6 @@ class _ConstantBasePageState extends State<ConstantBasePage> with SingleTickerPr
         setState(() {
           tabController.animateTo(value);
         });
-        //("value ==> ${value}");
-        //print("constant tab length ==> ${tabController.length}");
-        //print("constant tab index ==> ${tabController.index}");
       },
     );
   }

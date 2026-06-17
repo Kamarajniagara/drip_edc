@@ -19,17 +19,17 @@ class SftpService {
 
   Future<int> connect() async {
     try {
-      // print("Environment.privateKeyPath : ${Environment.privateKeyPath}");
-      // print("Environment.sftpIpAddress : ${Environment.sftpIpAddress}");
-      // print("Environment.sftpPort : ${Environment.sftpPort}");
+      // //print("Environment.privateKeyPath : ${Environment.privateKeyPath}");
+      // //print("Environment.sftpIpAddress : ${Environment.sftpIpAddress}");
+      // //print("Environment.sftpPort : ${Environment.sftpPort}");
       final rawPem = await rootBundle.loadString(Environment.privateKeyPath);
       final pem = rawPem.replaceAll('\r\n', '\n').trim();
       // for(var line in pem.split('\n')){
-      //   print(line);
+      //   //print(line);
       // }
       final privateKey = SSHKeyPair.fromPem(pem);
       // for(var line in pem.split('\n')){
-      //   print(line);
+      //   //print(line);
       // }
       final socket = await SSHSocket.connect(
         Environment.sftpIpAddress,
@@ -44,8 +44,8 @@ class SftpService {
       return 200;
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        print('SFTP connect() error: $e');
-        print('StackTrace: $stackTrace');
+        //print('SFTP connect() error: $e');
+        //print('StackTrace: $stackTrace');
       }
       return 404;
     }
@@ -56,13 +56,13 @@ class SftpService {
       final items = await _sftpClient!.listdir(path);
       if (kDebugMode) {
         for (final item in items) {
-          //print(item.longname);
+          ////print(item.longname);
         }
       }
       return items;
     } catch (e) {
       if (kDebugMode) {
-        print('listFilesInDirectory error: $e');
+        //print('listFilesInDirectory error: $e');
       }
       rethrow;
     }
@@ -74,7 +74,7 @@ class SftpService {
   }) async
   {
     try {
-      print("remoteFilePath : $remoteFilePath");
+      //print("remoteFilePath : $remoteFilePath");
       final remoteFile = await _sftpClient!.open(
         remoteFilePath,
         mode: SftpFileOpenMode.create | SftpFileOpenMode.write | SftpFileOpenMode.truncate,
@@ -91,13 +91,13 @@ class SftpService {
       await remoteFile.write(localFile.openRead().cast()).done;
 
       if (kDebugMode) {
-        print('File uploaded successfully.');
+        //print('File uploaded successfully.');
       }
       return 200;
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        print('uploadFile() error: $e');
-        print('StackTrace: $stackTrace');
+        //print('uploadFile() error: $e');
+        //print('StackTrace: $stackTrace');
       }
       return 404;
     }
@@ -110,7 +110,7 @@ class SftpService {
   {
     try {
       // Open the remote file for reading
-      print("remoteFilePath : ${remoteFilePath}");
+      //print("remoteFilePath : ${remoteFilePath}");
       final remoteFile = await _sftpClient!.open(remoteFilePath);
       final stream = remoteFile.read(); // Stream<Uint8List>
 
@@ -133,12 +133,12 @@ class SftpService {
       // Write the complete binary file to disk
       await localFile.writeAsBytes(content);
 
-      print('✅ File downloaded to: $localPath');
-      print('📦 File size: ${content.length} bytes');
+      //print('✅ File downloaded to: $localPath');
+      //print('📦 File size: ${content.length} bytes');
       return 200;
     } catch (e, stackTrace) {
-      print('❌ Error in downloadFile(): $e');
-      print('StackTrace: $stackTrace');
+      //print('❌ Error in downloadFile(): $e');
+      //print('StackTrace: $stackTrace');
       return 404;
     }
   }
@@ -156,22 +156,22 @@ class SftpService {
       // Get local file path
       final appDocDir = await getApplicationDocumentsDirectory();
       final localPath = '${appDocDir.path}/$localFileName';
-      print('localPath---->$localPath');
+      //print('localPath---->$localPath');
       final localFile = File(localPath);
 
       // Write content to local file
       await localFile.writeAsBytes(content);
 
       if (kDebugMode) {
-        print('File downloaded successfully to $localPath');
-        print('File content: ${latin1.decode(content)}');
+        //print('File downloaded successfully to $localPath');
+        //print('File content: ${latin1.decode(content)}');
       }
       return 200;
 
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        print('downloadFile() error: $e');
-        print('StackTrace: $stackTrace');
+        //print('downloadFile() error: $e');
+        //print('StackTrace: $stackTrace');
       }
       return 404;
     }
@@ -203,7 +203,7 @@ class SftpService {
       await localFile.close();
       return 200;
     } catch (e) {
-      print('Download error: $e');
+      //print('Download error: $e');
       return 404;
     }
   }
@@ -238,7 +238,7 @@ class SftpService {
       await remoteFile.close();
       return 200;
     } catch (e) {
-      print('Upload error: $e');
+      //print('Upload error: $e');
       return 404;
     }
   }
@@ -251,7 +251,7 @@ class SftpService {
       await _sshClient?.done;
     } catch (e) {
       if (kDebugMode) {
-        print('disconnect() error: $e');
+        //print('disconnect() error: $e');
       }
     } finally {
       _sshClient = null;

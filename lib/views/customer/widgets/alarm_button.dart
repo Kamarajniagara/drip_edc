@@ -33,7 +33,7 @@ class AlarmButton extends StatelessWidget {
             bodyBuilder: (context) => AlarmListItems(alarm : alarmPayload, deviceID:deviceID,
                 customerId: customerId, controllerId: controllerId, irrigationLine: irrigationLine,
               isNarrow: isNarrow),
-            onPop: () => print('Popover was popped!'),
+            onPop: () {},
             direction: isNarrow ? PopoverDirection.bottom : PopoverDirection.left,
             width: alarmPayload[0].isNotEmpty ? isNarrow ? 400 : 600 : 150,
             height: isNarrow ? alarmPayload[0].isNotEmpty?(alarmPayload.length*80):50:

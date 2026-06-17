@@ -45,7 +45,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
   void initState() {
     // TODO: implement initState
     irrigationProgramMainProvider = Provider.of<IrrigationProgramMainProvider>(context, listen: false);
-    // print("Model id in alarm screen :: ${widget.modelId}");
+    // //print("Model id in alarm screen :: ${widget.modelId}");
     if(AppConstants.gemModelList.contains(widget.modelId)) {
       alarmList = irrigationProgramMainProvider.newAlarmList!.alarmList.where((e) => e.gemDisplay).toList();
     } else {
@@ -78,7 +78,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
                 setState(() {
                   for(var i = 0; i < alarmList.length; i++) {
                     alarmList[i].value = irrigationProgramMainProvider.newAlarmList!.defaultAlarm[i].value;
-                    print(irrigationProgramMainProvider.newAlarmList!.defaultAlarm[i].value);
+                    //print(irrigationProgramMainProvider.newAlarmList!.defaultAlarm[i].value);
                    /* final newIndex = irrigationProgramMainProvider.newAlarmList!.alarmList.indexWhere((e) => e.sNo == alarmList[i].sNo);
                     irrigationProgramMainProvider.newAlarmList!.alarmList[newIndex].value = irrigationProgramMainProvider.newAlarmList!.defaultAlarm[i].value;*/
                   }

@@ -8,9 +8,7 @@ class WeatherStation {
   });
 
   factory WeatherStation.fromString(String data) {
-    //print('data: $data');
     final parts = data.split(',');
-    //print('parts: $parts');
     final deviceId = int.parse(parts[0]); // First index is device ID
     final sensors = <Sensor>[];
 
@@ -27,7 +25,6 @@ class WeatherStation {
           errorStatus: errorStatus,
         ));
       } catch (e) {
-        print('Error parsing sensor at index $i: $e');
         break;
       }
     }

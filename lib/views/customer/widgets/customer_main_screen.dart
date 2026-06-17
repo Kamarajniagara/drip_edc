@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
- import '../../../Screens/Dealer/sevicecustomer.dart';
+import '../../../Screens/Dealer/sevicecustomer.dart';
 import '../../../Screens/Logs/irrigation_and_pump_log.dart';
+import '../../../Screens/planning/weather/view/weather_Gsm.dart';
 import '../../../Screens/planning/weather/view/weather_screen_new.dart';
 import '../../../layouts/layout_selector.dart';
+import '../../../models/customer/site_model.dart';
 import '../../../modules/PumpController/view/pump_controller_home.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/enums.dart';
@@ -20,16 +22,19 @@ Widget buildCustomerMainScreen({required int index, required UserRole role, requ
 
   final isGem = [...AppConstants.gemModelList].contains(cMaster.modelId);
   final isNova = [...AppConstants.ecoGemModelList].contains(cMaster.modelId);
+  final isGsmWeather = [...AppConstants.weatherModelList].contains(cMaster.modelId);
+
 
   switch (index) {
     case 0:
-      return (isGem || isNova) ?
-      const DashboardLayoutSelector(userRole: UserRole.customer) :
+      return (isGem || isNova ) ?
+      const DashboardLayoutSelector(userRole: UserRole.customer) : isGsmWeather ?
+      WeatherGsm(customerId: cSite.customerId, controllerId: cMaster.controllerId, deviceID: cMaster.deviceId,jsondata: dashboardToWeatherFormat(cMaster)) :
       vm.isChanged ? PumpControllerHome(
         userId: userId,
         customerId: cSite.customerId,
         masterData: cMaster,
-      ) :
+      )  :
       const Scaffold(
         body: Center(
           child: Column(
@@ -74,7 +79,7 @@ Widget buildCustomerMainScreen({required int index, required UserRole role, requ
         customerId: cSite.customerId,
         masterController: cMaster,
       ) :
-       SiteConfig(
+      SiteConfig(
         userId: userId,
         customerId: cSite.customerId,
         customerName: cSite.customerName,
@@ -104,7 +109,7 @@ Widget buildCustomerMainScreen({required int index, required UserRole role, requ
     case 7:
 
       return WeatherScreenNew(customerId:  cSite.customerId,
-        controllerId: cMaster.controllerId, deviceID: cMaster.deviceId, isNarrow: false);
+          controllerId: cMaster.controllerId, deviceID: cMaster.deviceId, isNarrow: false);
 
 
     default:
@@ -114,4 +119,25 @@ Widget buildCustomerMainScreen({required int index, required UserRole role, requ
         ),
       );
   }
+}
+
+Map<String, dynamic> dashboardToWeatherFormat(
+    MasterControllerModel dashboard) {
+  final deviceList = <Map<String, dynamic>>[];
+
+  final configList =
+  dashboard.configObjects.map((e) => e.toJson()).toList();
+
+  deviceList.add({
+    "controllerId": dashboard.controllerId,
+    "deviceId": dashboard.deviceId,
+    "deviceName": dashboard.deviceName,
+    "serialNumber": 1,
+  });
+
+  return {
+    "weatherLive": dashboard.live?.toJson(),
+    "deviceList": deviceList,
+    "configObject": configList,
+  };
 }

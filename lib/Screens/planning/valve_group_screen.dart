@@ -53,8 +53,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
   }
 
   Future<void> fetchData() async {
-    print("fetch data Call");
-    var overAllPvd = Provider.of<OverAllUse>(context, listen: false);
+     var overAllPvd = Provider.of<OverAllUse>(context, listen: false);
 
     Map<String, Object> body = {
       "userId": widget.customerId,
@@ -73,8 +72,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
   }
 
   Future<void> createValveGroup() async {
-    print("createvalvegroup call");
-    final Repository repository = Repository(HttpService());
+     final Repository repository = Repository(HttpService());
     Map<String, dynamic> body = {
       "userId": widget.customerId,
       "controllerId": widget.controllerId,

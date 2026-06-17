@@ -57,7 +57,6 @@ class MyFunction {
       }
       return '$parsedValue ${unitMap['value']}';
     } catch (e) {
-      print('Error: $e');
       return 'Error: $e';
     }
   }
@@ -137,7 +136,6 @@ class MyFunction {
       if (unitMap == null) return '';
       return unitMap['value'];
     } catch (e) {
-      print('Error: $e');
       return 'Error: $e';
     }
   }

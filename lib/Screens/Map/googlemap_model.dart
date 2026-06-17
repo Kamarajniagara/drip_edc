@@ -201,7 +201,7 @@ int getValueOfStatus(String serialNumber, Map<String, dynamic>? liveMessage) {
     }
     return 0;
   } catch (e) {
-    print('Error parsing status for $serialNumber: $e');
+    print('Error parsing status for  ');
     return 0;
   }
 }
@@ -223,7 +223,7 @@ int getValuepercentage(String serialNumber, Map<String, dynamic>? liveMessage) {
     }
     return 0;
   } catch (e) {
-    print('Error parsing status for $serialNumber: $e');
+    print('Error parsing status for ');
     return 0;
   }
 }

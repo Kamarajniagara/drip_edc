@@ -185,10 +185,8 @@ class _ControllerLogState extends State<ControllerLog> with SingleTickerProvider
     final String dateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     mqttPayloadProvider = Provider.of<MqttPayloadProvider>(context, listen: false);
-    print(' mqttPayloadProvider.traceLog----->${ mqttPayloadProvider.traceLog}');
-   List<String> traceData =  mqttPayloadProvider.traceLog;
-   print('traceData----->$traceData');
-    SftpService sftpService = SftpService();
+    List<String> traceData =  mqttPayloadProvider.traceLog;
+     SftpService sftpService = SftpService();
     int connectResponse =  await sftpService.connect();
     if(connectResponse == 200){
       await Future.delayed(const Duration(seconds: 1));
@@ -201,11 +199,9 @@ class _ControllerLogState extends State<ControllerLog> with SingleTickerProvider
       int uploadResponse = await sftpService.uploadFile(localFileName: localFileNameForTrace, remoteFilePath: '/home/ubuntu/oro2024/OroGem/OroGemLogs/${widget.deviceID}_${type}_${dateString}.txt');
       if(uploadResponse == 200){
         _showSnackBar("/home/ubuntu/oro2024/OroGem/OroGemLogs/${widget.deviceID}_${type}_${dateString}.txt \n FTP upload success'...");
-        print('upload success');
-      }else{
+       }else{
         _showSnackBar("FTP upload failed...");
-        print('upload failed');
-      }
+       }
       sftpService.disconnect();
     }
 
