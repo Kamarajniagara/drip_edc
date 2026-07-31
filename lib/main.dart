@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
+import 'package:screen_protector/screen_protector.dart';
+import 'package:free_rasp/free_rasp.dart';
 import 'package:oro_drip_irrigation/modules/PumpController/state_management/pump_controller_provider.dart';
 import 'package:oro_drip_irrigation/modules/bluetooth_low_energy/state_management/ble_service.dart';
 import 'package:oro_drip_irrigation/providers/button_loading_provider.dart';
@@ -24,6 +27,7 @@ import 'StateManagement/search_provider.dart';
 import 'app/app.dart';
 import 'StateManagement/customer_provider.dart';
 import 'firebase_options.dart';
+import 'flavors.dart';
 import 'modules/IrrigationProgram/state_management/irrigation_program_provider.dart';
 import 'modules/Preferences/state_management/preference_provider.dart';
 import 'modules/SystemDefinitions/state_management/system_definition_provider.dart';
@@ -68,6 +72,49 @@ Future<void> requestAppPermissions() async {
   }
 }
 
+Future<void> initSecurityChecks() async {
+  if (kIsWeb) return;
+
+  // Jailbreak Detection
+  bool jailbroken = await FlutterJailbreakDetection.jailbroken;
+  if (jailbroken) {
+    // Handle jailbroken device (e.g., exit app or show warning)
+    if (Platform.isIOS) {
+       exit(0);
+    }
+  }
+
+  // Screen Protection
+  await ScreenProtector.preventScreenshotOn();
+  await ScreenProtector.protectDataLeakageWithBlur();
+
+  // RASP Implementation (Talsec/Free RASP)
+  final config = TalsecConfig(
+    androidConfig: AndroidConfig(
+      packageName: 'com.niagaraautomations.oroDripirrigation', // Update as per flavor if needed
+      signingCertHashes: ['YOUR_SIGNING_CERT_HASH'],
+    ),
+    iosConfig: IOSConfig(
+      bundleIds: ['com.niagaraautomations.oroDripirrigation'],
+      teamId: 'YOUR_TEAM_ID',
+    ),
+    watcherMail: 'security@niagaraautomation.com',
+  );
+
+  final callback = TalsecCallback(
+    onControlFlowTamper: () => exit(0),
+    onDebugger: () => exit(0),
+    onEmulator: () => exit(0),
+    onJailbreak: () => exit(0),
+    onDeviceBindingTamper: () => exit(0),
+    onHook: () => exit(0),
+    onUntrustedInstallationSource: () => exit(0),
+  );
+
+  Talsec.instance.attachCallback(callback);
+  await Talsec.instance.start(config);
+}
+
 FutureOr<void> main() async {
 
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -77,8 +124,10 @@ FutureOr<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  await initSecurityChecks();
+
   tz.initializeTimeZones();
-  // F.appFlavor = Flavor.oroProduction;
+  F.appFlavor = Flavor.smartComm;
   await NetworkUtils.initialize();
   // await dotenv.load(fileName: ".env.apikey");
 

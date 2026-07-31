@@ -512,6 +512,7 @@ void showPasswordDialog(BuildContext context, correctPassword, userId,
         content: TextField(
           controller: passwordController,
           obscureText: true,
+          enableInteractiveSelection: false, // Security Fix: Disable copy/paste
           decoration: const InputDecoration(
             labelText: 'Password',
             border: OutlineInputBorder(),

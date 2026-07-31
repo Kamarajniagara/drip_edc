@@ -456,6 +456,7 @@ class _ConfigWebViewState extends State<ConfigWebView> {
                                               return null;
                                             },
                                             obscureText: true,
+                                            enableInteractiveSelection: false, // Security Fix: Disable copy/paste
                                             decoration: InputDecoration(
                                               contentPadding: const EdgeInsets.symmetric(vertical: 0),
                                               hintText: 'Password',

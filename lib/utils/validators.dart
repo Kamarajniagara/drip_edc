@@ -36,6 +36,7 @@ class Validators {
           content: TextField(
             controller: controller,
             obscureText: true,
+            enableInteractiveSelection: false, // Security Fix: Disable copy/paste
             decoration: const InputDecoration(
               labelText: 'Password',
               border: OutlineInputBorder(),

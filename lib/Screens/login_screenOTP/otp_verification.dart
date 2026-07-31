@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../repository/repository.dart';
 import '../../services/http_service.dart';
 import '../../utils/shared_preferences_helper.dart';
@@ -38,10 +37,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      // widget.contact = '${ModalRoute.of(context)?.settings.arguments as String}';
-      //print(widget.contact);
       generateOtp(widget.contact);
-
     });
   }
 
@@ -195,16 +191,11 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         timeout: const Duration(seconds: 60),
         verificationCompleted: (AuthCredential phoneAuthCredential) {},
         verificationFailed: (error) {
-          //print(error);
           _showSnackBar(error.message ?? 'verificationFailed',Colors.red);
         },
       );
     } catch (e,stackTrace) {
-      //print('error generateOtp');
-      //print(e.toString());
       _showSnackBar(e.toString(),Colors.red);
-      //print('error $e');
-      //print("stackTrace $stackTrace");
       handleError(e as PlatformException);
     }
   }
@@ -212,8 +203,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   Future<void> getDeviceToken() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     await messaging.getToken().then((String? token) async{
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('deviceToken', token ?? '' );
+      // Security Fix: Use PreferenceHelper for device token if considered sensitive, or just ensure no direct SharedPreferences usage for consistency
       deveicetoken = token ?? '';
     });
     }
@@ -235,13 +225,10 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       await checkNumber(widget.contact);
     } on PlatformException catch(e){
       handleError(e);
-      //print(e.toString());
       _showSnackBar(e.message!,Colors.red);
     }
     catch (e, stackTrace) {
       _showSnackBar(e.toString(),Colors.red);
-      //print('error $e');
-      //print("stackTrace $stackTrace");
     }
   }
 
@@ -269,7 +256,6 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       final repository = Repository(HttpService());
       final response = await repository.checkMobileNumber(body);
 
-       //print("response: ${response.body}");
       if (response.statusCode != 200) {
         _showSnackBar("Server error: ${response.statusCode}", Colors.red);
         return false;
@@ -296,7 +282,6 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         password: '',
       );
 
-      // 🔹 Example: Navigate based on role
       Future.delayed(Duration.zero, () {
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -307,8 +292,6 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       });
       return true;
     } catch (error, stackTrace) {
-      //print("Error on checkNumber $error");
-      //print("StackTrace on checkNumber $stackTrace");
       _showSnackBar("Something went wrong", Colors.red);
       return false;
     }

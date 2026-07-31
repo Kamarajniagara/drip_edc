@@ -1,5 +1,5 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class PreferenceHelper {
   static const String _authTokenKey = 'auth_token';
@@ -13,6 +13,8 @@ class PreferenceHelper {
   static const String _confPermissionKey = 'permissionDenied';
   static const String _passwordKey = 'password';
 
+  static const _storage = FlutterSecureStorage();
+
   static Future<void> saveUserDetails({
     required String token,
     required int userId,
@@ -25,20 +27,29 @@ class PreferenceHelper {
     required String password,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_authTokenKey, token);
+    
+    // Non-sensitive data in SharedPreferences
     await prefs.setInt(_userIdKey, userId);
     await prefs.setString(_userNameKey, userName);
     await prefs.setString(_roleKey, role);
     await prefs.setString(_countryCodeKey, countryCode);
-    await prefs.setString(_mobileNumberKey, mobileNumber);
-    await prefs.setString(_emailKey, email);
     await prefs.setBool(_confPermissionKey, configPermission);
-    await prefs.setString(_passwordKey, password);
+
+    // Sensitive data in Secure Storage
+    await _storage.write(key: _authTokenKey, value: token);
+    await _storage.write(key: _mobileNumberKey, value: mobileNumber);
+    await _storage.write(key: _emailKey, value: email);
+    await _storage.write(key: _passwordKey, value: password);
+    
+    // Remove sensitive data from SharedPreferences if it was there before (migration)
+    await prefs.remove(_authTokenKey);
+    await prefs.remove(_mobileNumberKey);
+    await prefs.remove(_emailKey);
+    await prefs.remove(_passwordKey);
   }
 
   static Future<String?> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_authTokenKey);
+    return await _storage.read(key: _authTokenKey);
   }
 
   static Future<int?> getUserId() async {
@@ -46,8 +57,7 @@ class PreferenceHelper {
     return prefs.getInt(_userIdKey);
   }
 
-
-  static Future<String?> getUserRole() async { // admin,
+  static Future<String?> getUserRole() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_roleKey);
   }
@@ -63,18 +73,17 @@ class PreferenceHelper {
   }
 
   static Future<String?> getMobileNumber() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_mobileNumberKey);
+    return await _storage.read(key: _mobileNumberKey);
   }
 
   static Future<String?> getEmail() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_emailKey);
+    return await _storage.read(key: _emailKey);
   }
 
   static Future<void> clearAll() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    await _storage.deleteAll();
   }
 
   static Future<String?> getDeviceToken() async {
@@ -88,8 +97,6 @@ class PreferenceHelper {
   }
 
   static Future<String?> getUserPassword() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_passwordKey);
+    return await _storage.read(key: _passwordKey);
   }
-
 }

@@ -186,6 +186,7 @@ class SentAndReceived extends StatelessWidget {
                 TextField(
                   controller: viewModel.passwordController,
                   obscureText: true,
+                  enableInteractiveSelection: false, // Security Fix: Disable copy/paste
                   decoration: const InputDecoration(
                     labelText: 'Password',
                     border: OutlineInputBorder(),

@@ -49,6 +49,10 @@ dependencies:
   widget_to_marker: ^1.0.6
   google_maps_flutter: ^2.12.1
   shared_preferences: ^2.5.3
+  flutter_secure_storage: ^9.2.4
+  flutter_jailbreak_detection: ^1.1.1
+  screen_protector: ^1.1.0
+  free_rasp: ^1.2.1
   connectivity_plus: ^6.1.4
   webview_flutter: ^4.11.0
   intl_phone_field: ^3.2.0

@@ -13,6 +13,7 @@ class PasswordInputField extends StatelessWidget {
     return TextField(
       controller: viewModel.passwordController,
       obscureText: viewModel.isObscure,
+      enableInteractiveSelection: false, // Security Fix: Disable copy/paste
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,

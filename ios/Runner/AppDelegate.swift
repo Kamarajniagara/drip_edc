@@ -36,12 +36,23 @@ import FirebaseMessaging
   override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     Messaging.messaging().apnsToken = deviceToken // Set APNs token for FCM
       print("apnsToken device token is \(deviceToken)")
-//    let firebaseAuth = Auth.auth()
-//    firebaseAuth.setAPNSToken(deviceToken, type: AuthAPNSTokenType.unknown)
   }
  
   override func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
     Messaging.messaging().appDidReceiveMessage(userInfo) // Handle FCM notifications
     completionHandler(.newData)
+  }
+
+  // Security Fix: Prevent sensitive data from appearing in the app switcher snapshot
+  override func applicationWillResignActive(_ application: UIApplication) {
+    let blurEffect = UIBlurEffect(style: .extraLight)
+    let blurEffectView = UIVisualEffectView(effect: blurEffect)
+    blurEffectView.frame = window!.frame
+    blurEffectView.tag = 221122
+    self.window?.addSubview(blurEffectView)
+  }
+
+  override func applicationDidBecomeActive(_ application: UIApplication) {
+    self.window?.viewWithTag(221122)?.removeFromSuperview()
   }
 }

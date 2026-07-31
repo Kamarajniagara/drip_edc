@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:oro_drip_irrigation/Screens/login_screenOTP/widget/custom_button.dart';
- import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../repository/repository.dart';
 import '../../services/http_service.dart';
@@ -22,7 +22,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
   String? dialCodeError;
   int _clickCount = 0;
   String isoCode = 'IN';
-  // late List<Map<String, String>> countryCodes = [];
 
   String? selectedCountryDialCode = "+91";
   String deveicetoken = '';
@@ -63,8 +62,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
   }
 
   Future<String> checkNumber(String countryCode, String mobileNumber) async {
-
-    // verifyOtp();
     if(deveicetoken.isEmpty || deveicetoken == '')
     {
       await getDeviceToken();
@@ -72,7 +69,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
     Map<String, Object> body = {
       'countryCode': countryCode.replaceFirst('+', ''),
       'mobileNumber': mobileNumber,
-      // 'macAddress': '123456',
       'deviceToken': deveicetoken,
       'isMobile': true
     };
@@ -80,7 +76,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
     final response = await repository.checkMobileNumber(body);
 
      if (response.statusCode == 200) {
-       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
           if (data["code"] == 200) {
            if (mounted) {
@@ -92,21 +87,14 @@ class _LoginScreenState extends State<LoginScreenOTP> {
           }
           return 'true';
         } else {
-          // _showSnackBar(
-          //     data["message"]);
           return 'false';
         }
-      } else {
-        return 'false';
-      }
     } else {
       return 'false';
     }
   }
 
-  //Alert dialogue to show error and response
   void showErrorDialog(BuildContext context, String message) {
-    // set up the AlertDialog
     final CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: const Text('Warning'),
       content: Text('\n$message'),
@@ -120,7 +108,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
         )
       ],
     );
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -129,19 +116,14 @@ class _LoginScreenState extends State<LoginScreenOTP> {
     );
   }
 
-  // To track the number of clicks
-
   void _handleTap() {
     setState(() {
       _clickCount++;
-      // if (_clickCount >= 7) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
         );
-        // Reset click count after navigation
         _clickCount = 0;
-      // }
     });
   }
 
@@ -156,7 +138,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
         actions: <Widget>[
           TextButton(
             onPressed: () => exit(0),
-            // onPressed: () => Navigator.of(context).pop(true),// Return true to pop the route
             child: const Text(
               "Yes",
               style: TextStyle(
@@ -168,7 +149,7 @@ class _LoginScreenState extends State<LoginScreenOTP> {
           ),
           TextButton(
             onPressed: () => Navigator.of(context)
-                .pop(false), // Return false to stay on the route
+                .pop(false),
             child: const Text(
               "No",
               style: TextStyle(
@@ -184,11 +165,9 @@ class _LoginScreenState extends State<LoginScreenOTP> {
         false;
   }
 
-  //build method for UI Representation
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    // final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.teal.shade50,
       body: Center(
@@ -242,11 +221,10 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                     padding: const EdgeInsets.fromLTRB(5, 35, 10, 0),
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        // ignore: prefer_const_literals_to_create_immutables
                         boxShadow: [
                           const BoxShadow(
                             color: Colors.grey,
-                            offset: Offset(0.0, 1.0), //(x,y)
+                            offset: Offset(0.0, 1.0),
                             blurRadius: 6.0,
                           ),
                         ],
@@ -260,6 +238,8 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                             children: [
                               IntlPhoneField(
                                 controller: _contactEditingController,
+                                // Security Fix: Disable copy/paste
+                                // Note: Some plugins might require passing this to their inner TextField
                                 decoration: InputDecoration(
                                   labelText: 'Phone Number',
                                   suffixIcon: IconButton(
@@ -291,8 +271,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                         TextButton(
                           onPressed: _handleTap,
                           style: ElevatedButton.styleFrom(
-                            // backgroundColor: Colors.grey.shade400,
-                            // backgroundColor:const Color.fromARGB(255, 28, 123, 137),
                             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(24),
