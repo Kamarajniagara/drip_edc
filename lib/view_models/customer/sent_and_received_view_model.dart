@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/customer/sent_and_received_model.dart';
 import '../../repository/repository.dart';
-import '../../utils/shared_preferences_helper.dart';
+import '../../utils/secure_storage_helper.dart';
 
 class SentAndReceivedViewModel extends ChangeNotifier {
   final Repository repository;
@@ -53,7 +53,7 @@ class SentAndReceivedViewModel extends ChangeNotifier {
 
   Future<void> getSentAndReceivedData(String date) async {
     setLoading(true);
-    String? userRole = await PreferenceHelper.getUserRole();
+    String? userRole = await SecureStorageHelper.getUserRole();
     if (userRole != 'customer') {
       hasPayloadViewPermission = true;
     }

@@ -3,7 +3,7 @@ import '../StateManagement/customer_provider.dart';
 import '../repository/repository.dart';
 import '../utils/constants.dart';
 import '../utils/network_utils.dart';
-import '../utils/shared_preferences_helper.dart';
+import '../utils/secure_storage_helper.dart';
 import 'bluetooth/bluetooth_ble_service.dart';
 import 'bluetooth/bluetooth_classic_service.dart';
 import 'http_service.dart';
@@ -137,7 +137,7 @@ class CommunicationService {
       throw Exception('Invalid JSON in payload: $e');
     }
 
-    int? userId = await PreferenceHelper.getUserId();
+    int? userId = await SecureStorageHelper.getUserId();
 
 
     final body = {

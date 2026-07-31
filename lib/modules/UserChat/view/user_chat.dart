@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:oro_drip_irrigation/utils/shared_preferences_helper.dart';
+import 'package:oro_drip_irrigation/utils/secure_storage_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../services/http_service.dart';
@@ -50,12 +50,11 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
     try {
       final getUserDealerDetails = await repository.getUserDealerDetails(userData);
-      final userRole = await PreferenceHelper.getUserRole();
+      final userRole = await SecureStorageHelper.getUserRole();
       if (getUserDealerDetails.statusCode == 200) {
         setState(() {
           final response = jsonDecode(getUserDealerDetails.body);
           if (response['code'] == 200) {
-            // print("userRole ::: ${userRole.runtimeType}");
             isDealer = userRole == '2' || userRole == '1';
             dealerId = response['data']['userId'];
             dealerName = response['data']['userName'];
@@ -101,7 +100,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
           }
         });
       }
-    } catch (error, stackTrace) {
+    } catch (error) {
       // print("Error in the user chat: $error");
       // print("Stack trace in user chat: $stackTrace");
     }
@@ -125,7 +124,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
           }
         });
       }
-    } catch (error, stackTrace) {
+    } catch (error) {
       // print("Error in the user chat: $error");
       // print("Stack trace in user chat: $stackTrace");
     }

@@ -7,6 +7,7 @@ import 'package:oro_drip_irrigation/modules/bluetooth_low_energy/state_managemen
 import 'package:oro_drip_irrigation/providers/button_loading_provider.dart';
 import 'package:oro_drip_irrigation/providers/user_provider.dart';
 import 'package:oro_drip_irrigation/repository/repository.dart';
+import 'package:oro_drip_irrigation/security/device_security.dart';
 import 'package:oro_drip_irrigation/services/bluetooth/bluetooth_ble_service.dart';
 import 'package:oro_drip_irrigation/services/bluetooth/bluetooth_classic_service.dart';
 import 'package:oro_drip_irrigation/services/communication_service.dart';
@@ -31,6 +32,7 @@ import 'modules/config_maker/state_management/config_maker_provider.dart';
 import 'StateManagement/mqtt_payload_provider.dart';
 import 'StateManagement/overall_use.dart';
 import 'modules/constant/state_management/constant_provider.dart';
+import 'package:safe_device/safe_device.dart';
 
 
 // Initialize local notifications plugin
@@ -71,11 +73,11 @@ Future<void> requestAppPermissions() async {
 FutureOr<void> main() async {
 
   FlutterError.onError = (FlutterErrorDetails details) {
-    print('Flutter Error: ${details.exception}');
     // Don't crash, just log
   };
 
   WidgetsFlutterBinding.ensureInitialized();
+  DeviceSecurity.isRooted = await SafeDevice.isJailBroken;
 
   tz.initializeTimeZones();
   // F.appFlavor = Flavor.oroProduction;

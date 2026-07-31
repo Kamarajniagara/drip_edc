@@ -8,7 +8,7 @@ import '../providers/user_provider.dart';
 import '../repository/repository.dart';
 import '../utils/auth_pref_checker.dart';
 import '../utils/enums.dart';
-import '../utils/shared_preferences_helper.dart';
+import '../utils/secure_storage_helper.dart';
 import 'common/login/login_screen.dart';
 
 class ScreenController extends StatelessWidget {
@@ -35,12 +35,12 @@ class ScreenController extends StatelessWidget {
         if (response.statusCode == 200 && data['code'] == 200) {
           return true;
         }else{
-          await PreferenceHelper.clearAll();
+          await SecureStorageHelper.clearAll();
           return false;
         }
       } catch (e) {
         //debugPrint('Validation skipped: $e');
-        await PreferenceHelper.clearAll();
+        await SecureStorageHelper.clearAll();
         return false;
       }
     }

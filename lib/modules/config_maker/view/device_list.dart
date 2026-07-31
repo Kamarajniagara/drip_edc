@@ -9,7 +9,7 @@ import '../../../Constants/dialog_boxes.dart';
 import '../../../Constants/properties.dart';
 import '../../../services/mqtt_service.dart';
 import '../../../utils/environment.dart';
-import '../../../utils/shared_preferences_helper.dart';
+import '../../../utils/secure_storage_helper.dart';
 import '../model/device_model.dart';
 import '../repository/config_maker_repository.dart';
 import '../state_management/config_maker_provider.dart';
@@ -50,7 +50,7 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   void getUserRole() async {
-    String? role = await PreferenceHelper.getUserRole();
+    String? role = await SecureStorageHelper.getUserRole();
     setState(() {
       userRole = role!;
     });

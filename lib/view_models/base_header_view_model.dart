@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../repository/repository.dart';
 import '../utils/enums.dart';
 import '../utils/routes.dart';
-import '../utils/shared_preferences_helper.dart';
+import '../utils/secure_storage_helper.dart';
 
 class BaseHeaderViewModel extends ChangeNotifier {
   bool _isDisposed = false;
@@ -86,7 +86,7 @@ class BaseHeaderViewModel extends ChangeNotifier {
   }
 
   Future<void> logout(BuildContext context) async {
-    await PreferenceHelper.clearAll();
+    await SecureStorageHelper.clearAll();
 
     if (!context.mounted) return;
 

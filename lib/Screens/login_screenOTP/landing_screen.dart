@@ -7,7 +7,7 @@ import 'package:lottie/lottie.dart';
  import '../../repository/repository.dart';
 import '../../services/http_service.dart';
 import '../../utils/enums.dart';
-import '../../utils/shared_preferences_helper.dart';
+import '../../utils/secure_storage_helper.dart';
 import '../../views/common/login/login_screen.dart';
 import 'login_screenotp.dart';
 class LandingScreen extends StatefulWidget {
@@ -23,7 +23,6 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkAuthentication();
   }
@@ -99,13 +98,8 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
 
   Future<void> checkAuthentication() async {
     try {
-      final roleString = await PreferenceHelper.getUserRole();
-      final int? userId = await PreferenceHelper.getUserId(); // already int
-      final userName = await PreferenceHelper.getUserName();
-      final countryCode = await PreferenceHelper.getCountryCode();
-      final deviceToken = await PreferenceHelper.getDeviceToken();
-      final email = await PreferenceHelper.getEmail();
-      final role = getRoleFromString(roleString);
+      final int? userId = await SecureStorageHelper.getUserId();
+      final deviceToken = await SecureStorageHelper.getDeviceToken();
 
       // If no userId saved → go to login immediately
       if (userId == null || userId == 0) {
@@ -120,9 +114,7 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
 
       final repository = Repository(HttpService());
       final response = await repository.userVerifyWithDeviceToken(data);
-
       final result = jsonDecode(response.body);
-
       final success = response.statusCode == 200 && result['code'] == 200;
 
       setState(() {
@@ -130,30 +122,6 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
         _isLoading = false;
       });
 
-      // if (success) {
-      //   // Navigate based on role
-      //   switch (role) {
-      //     case UserRole.dealer:
-      //       _navigateTo(DealerDashboard(
-      //         userName: userName ?? "",
-      //         countryCode: countryCode ?? "",
-      //         mobileNo: "", // fetch from prefs if you have it
-      //         userId: userId,
-      //         emailId: email ?? "",
-      //       ));
-      //       break;
-      //     case UserRole.subUser:
-      //       _navigateTo(HomeScreen(userId: userId, fromDealer: false));
-      //       break;
-      //     case UserRole.customer:
-      //       _navigateTo(HomeScreen(userId: userId, fromDealer: false));
-      //       break;
-      //     default:
-      //       _navigateTo(const LoginScreen());
-      //   }
-      // } else {
-      //   _navigateTo(const LoginScreen());
-      // }
       _navigateTo(const LoginScreen());
     } catch (e, stackTrace) {
       print("Error in checkAuthentication: $e");
@@ -174,5 +142,4 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
       ),
     );
   }
-
 }

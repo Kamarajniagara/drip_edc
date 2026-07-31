@@ -6,7 +6,6 @@ class Environment {
   static Map<String, Map<String, dynamic>> config = <String, Map<String, dynamic>>{
     'oroDevelopment' : {
       'apiUrl': 'http://192.168.68.141:5000/api/v1',
-      'apiKey': 'dev-api-key',
       'mqttWebUrl': 'ws://192.168.68.141',
       'mqttMobileUrl': '192.168.68.141',
       'publishTopic': 'AppToFirmware',
@@ -17,7 +16,6 @@ class Environment {
       "mqttPassword" : '',
     },
     'smartComm' : {
-      //'apiUrl': 'http://20.193.232.190:9000/api/v1',
       'apiUrl': 'https://smartcomm-wms.com:9000/api/v1',
       '1': 'prod-api-key',
       'mqttWebUrl': 'wss://smartcomm-wms.com:9443/mqtt',
@@ -34,13 +32,10 @@ class Environment {
     },
     'oroProduction': {
       'apiUrl': 'http://13.203.84.47:5000/api/v1',
-      'apiKey': 'prod-api-key',
       'mqttWebUrl': 'ws://13.235.254.21/mqtt',
-      //'mqttWebUrl': 'wss://irrigationcare.niagaraautomation.com/mqtt',
       'mqttMobileUrl': '13.235.254.21',
       'publishTopic': 'AppToFirmware',
       'subscribeTopic': 'FirmwareToApp',
-      //'mqttWebPort': 9443,
       'mqttWebPort': 8083,
       'mqttMobilePort': 1883,
       "mqttUserName" : 'mqttuser',
@@ -51,7 +46,6 @@ class Environment {
     },
     'agritel': {
       'apiUrl': 'http://13.235.254.21:8000/api/v1',
-      'apiKey': 'dev-api-key',
       'mqttWebUrl': 'ws://13.235.254.21/mqtt',
       'mqttMobileUrl': '13.235.254.21',
       'publishTopic': 'AppToFirmware',
