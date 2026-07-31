@@ -1,14 +1,13 @@
-import 'package:oro_drip_irrigation/utils/shared_preferences_helper.dart';
-
+import 'package:oro_drip_irrigation/utils/secure_storage_helper.dart';
 import '../models/user_model.dart';
 import 'enums.dart';
 
 class AuthPrefChecker {
   static Future<UserModel?> getLoggedInUser() async {
-    final token = await PreferenceHelper.getToken();
-    final mobile = await PreferenceHelper.getMobileNumber();
-    final userId = await PreferenceHelper.getUserId();
-    final roleString = await PreferenceHelper.getUserRole();
+    final token = await SecureStorageHelper.getToken();
+    final mobile = await SecureStorageHelper.getMobileNumber();
+    final userId = await SecureStorageHelper.getUserId();
+    final roleString = await SecureStorageHelper.getUserRole();
 
     if (token == null || token.isEmpty) return null;
     if (mobile == null || mobile.isEmpty) return null;
@@ -18,14 +17,14 @@ class AuthPrefChecker {
     return UserModel(
       token: token,
       id: userId,
-      name: await PreferenceHelper.getUserName() ?? '',
+      name: await SecureStorageHelper.getUserName() ?? '',
       role: getRoleFromString(roleString),
-      countryCode: await PreferenceHelper.getCountryCode() ?? '',
+      countryCode: await SecureStorageHelper.getCountryCode() ?? '',
       mobileNo: mobile,
-      email: await PreferenceHelper.getEmail() ?? '',
+      email: await SecureStorageHelper.getEmail() ?? '',
       configPermission:
-      await PreferenceHelper.getConfigPermission() ?? false,
-      password: await PreferenceHelper.getUserPassword() ?? '',
+      await SecureStorageHelper.getConfigPermission() ?? false,
+      password: await SecureStorageHelper.getUserPassword() ?? '',
     );
   }
 

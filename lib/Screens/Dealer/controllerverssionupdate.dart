@@ -12,7 +12,7 @@ import '../../StateManagement/mqtt_payload_provider.dart';
 import '../../repository/repository.dart';
 import '../../services/http_service.dart';
 import '../../services/mqtt_service.dart';
-import '../../utils/shared_preferences_helper.dart';
+import '../../utils/secure_storage_helper.dart';
 import 'configureMqttTopic.dart';
 import 'controllerlogfile.dart';
 import 'frequencyLoRaPage.dart';
@@ -178,7 +178,7 @@ class _ResetVerssionState extends State<ResetVerssion> {
   }
 
   Future<String?> checkrole() async {
-    String? role = await PreferenceHelper.getUserRole();
+    String? role = await SecureStorageHelper.getUserRole();
     return role;
   }
 

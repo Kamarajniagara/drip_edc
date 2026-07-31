@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../repository/repository.dart';
-import '../utils/shared_preferences_helper.dart';
+import '../utils/secure_storage_helper.dart';
 
 class LoginViewModel extends ChangeNotifier {
 
@@ -39,12 +38,13 @@ class LoginViewModel extends ChangeNotifier {
     if(!kIsWeb) {
       FirebaseMessaging messaging = FirebaseMessaging.instance;
       await messaging.getToken().then((String? token) async{
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('deviceToken', token ?? '' );
+        if (token != null) {
+          await SecureStorageHelper.saveDeviceToken(token);
+        }
       });
     }
 
-    final token = await PreferenceHelper.getDeviceToken();
+    final token = await SecureStorageHelper.getDeviceToken();
 
     isLoading = true;
     errorMessage = "";
@@ -84,7 +84,8 @@ class LoginViewModel extends ChangeNotifier {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 && data['code'] == 200) {
         final userData = data['data']['user'];
-        await PreferenceHelper.saveUserDetails(
+
+        await SecureStorageHelper.saveUserDetails(
           token: userData['accessToken'],
           userId: userData['userId'],
           userName: userData['userName'],
@@ -95,6 +96,7 @@ class LoginViewModel extends ChangeNotifier {
           email: userData['email'],
           configPermission: userData['havePermissionToAccess'] ?? false,
          );
+
         onLoginSuccess(data['message']);
       } else {
         isLoading = false;

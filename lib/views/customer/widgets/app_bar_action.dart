@@ -19,7 +19,7 @@ import '../../../utils/constants.dart';
 import '../../../utils/enums.dart';
 import '../../../utils/helpers/screen_helper.dart';
 import '../../../utils/routes.dart';
-import '../../../utils/shared_preferences_helper.dart';
+import '../../../utils/secure_storage_helper.dart';
 import '../../../view_models/customer/customer_screen_controller_view_model.dart';
 import '../../common/user_profile/user_profile.dart';
 import '../help_support.dart';
@@ -354,7 +354,7 @@ Widget _buildAccountMenu(
                 const SizedBox(height: 8),
                 TextButton(
                   onPressed: () async {
-                    await PreferenceHelper.clearAll();
+                    await SecureStorageHelper.clearAll();
                     const route = kIsWeb ? Routes.login : Routes.loginOtp;
                     Navigator.pushNamedAndRemoveUntil(
                       context,

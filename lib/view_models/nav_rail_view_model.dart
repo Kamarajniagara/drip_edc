@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../repository/repository.dart';
 import '../utils/enums.dart';
 import '../utils/routes.dart';
-import '../utils/shared_preferences_helper.dart';
+import '../utils/secure_storage_helper.dart';
 
 class NavRailViewModel extends ChangeNotifier {
 
@@ -55,7 +55,7 @@ class NavRailViewModel extends ChangeNotifier {
   }
 
   Future<void> logout(context) async {
-    await PreferenceHelper.clearAll();
+    await SecureStorageHelper.clearAll();
     const route = kIsWeb ? Routes.login : Routes.loginOtp;
     Navigator.pushNamedAndRemoveUntil(context, route, (route) => false,);
     // Navigator.pushNamedAndRemoveUntil(context, Routes.login, (route) => false,);

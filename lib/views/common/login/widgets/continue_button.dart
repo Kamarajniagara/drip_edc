@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../security/device_security.dart';
 import '../../../../view_models/login_view_model.dart';
 
 class ContinueButton extends StatelessWidget {
@@ -10,6 +11,14 @@ class ContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<LoginViewModel>(context);
+
+    if (DeviceSecurity.isRooted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login is disabled on rooted devices.')),
+      );
+      return const SizedBox();
+    }
+
     return SizedBox(
       width: 200,
       height: 45.0,

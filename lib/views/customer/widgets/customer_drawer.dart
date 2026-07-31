@@ -5,7 +5,7 @@ import '../../../Screens/Dealer/sevicecustomer.dart';
 import '../../../flavors.dart';
 import '../../../modules/UserChat/view/user_chat.dart';
 import '../../../utils/routes.dart';
-import '../../../utils/shared_preferences_helper.dart';
+import '../../../utils/secure_storage_helper.dart';
 import '../../../view_models/customer/customer_screen_controller_view_model.dart';
 import '../../common/user_profile/user_profile.dart';
 import '../app_info.dart';
@@ -181,7 +181,7 @@ class CustomerDrawer extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
       child: TextButton.icon(
           onPressed: () async {
-            await PreferenceHelper.clearAll();
+            await SecureStorageHelper.clearAll();
 
             if (!context.mounted) return;
 

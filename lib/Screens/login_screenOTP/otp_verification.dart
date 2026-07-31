@@ -11,14 +11,14 @@ import 'package:otp_pin_field/otp_pin_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../repository/repository.dart';
 import '../../services/http_service.dart';
-import '../../utils/shared_preferences_helper.dart';
+import '../../utils/secure_storage_helper.dart';
 
 
 // ignore: must_be_immutable
 class OtpVerifyScreen extends StatefulWidget {
   String contact;
 
-  OtpVerifyScreen({required this.contact});
+  OtpVerifyScreen({super.key, required this.contact});
 
   @override
   _OtpVerifyScreenState createState() => _OtpVerifyScreenState();
@@ -285,7 +285,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
 
       final userData = data['data']['user'];
 
-      await PreferenceHelper.saveUserDetails(
+      await SecureStorageHelper.saveUserDetails(
         token: userData['accessToken'],
         userId: userData['userId'],
         userName: userData['userName'],

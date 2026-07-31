@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../view_models/login_view_model.dart';
 
+
 class PasswordInputField extends StatelessWidget {
   const PasswordInputField({super.key, required this.isWeb});
   final bool isWeb;
@@ -13,12 +14,18 @@ class PasswordInputField extends StatelessWidget {
     return TextField(
       controller: viewModel.passwordController,
       obscureText: viewModel.isObscure,
+      // Disables selection handles + long-press "Select All" popup
+      enableInteractiveSelection: false,
+      // Removes the copy/cut/paste/select-all context menu entirely
+      contextMenuBuilder: (context, editableTextState) {
+        return const SizedBox.shrink();
+      },
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        border: isWeb? const OutlineInputBorder() : null,
-        icon: Icon(Icons.lock_outline, color:  isWeb ? Colors.black:Colors.white),
+        border: isWeb ? const OutlineInputBorder() : null,
+        icon: Icon(Icons.lock_outline, color: isWeb ? Colors.black : Colors.white),
         labelText: 'Password',
         labelStyle: const TextStyle(color: Colors.black),
         suffixIcon: IconButton(
@@ -29,5 +36,4 @@ class PasswordInputField extends StatelessWidget {
       style: const TextStyle(color: Colors.black),
     );
   }
-
 }

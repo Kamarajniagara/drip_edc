@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:oro_drip_irrigation/utils/shared_preferences_helper.dart';
+import 'package:oro_drip_irrigation/utils/secure_storage_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../services/http_service.dart';
@@ -50,7 +50,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
     try {
       final getUserDealerDetails = await repository.getUserDealerDetails(userData);
-      final userRole = await PreferenceHelper.getUserRole();
+      final userRole = await SecureStorageHelper.getUserRole();
       if (getUserDealerDetails.statusCode == 200) {
         setState(() {
           final response = jsonDecode(getUserDealerDetails.body);
@@ -65,6 +65,8 @@ class _UserChatScreenState extends State<UserChatScreen> {
         });
       }
     } catch (error, stackTrace) {
+      // print("Error in the user chat: $error");
+      // print("Stack trace in user chat: $stackTrace");
     }
   }
 
@@ -74,6 +76,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
       "toUserId": isDealer ? widget.userId : dealerId,
     };
 
+    // print("userdata in the chat :: $userData");
     try {
       final getUserChat = await repository.getUserChat(userData);
       if (getUserChat.statusCode == 200) {
@@ -87,15 +90,19 @@ class _UserChatScreenState extends State<UserChatScreen> {
                 chatIds.add(element['chatId']);
               }
             });
+            // print("getUserChat");
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             });
+            // print("chatIds ==> $chatIds");
           } else {
             errorMessage = response['message'];
           }
         });
       }
-    } catch (error, stackTrace) {
+    } catch (error) {
+      // print("Error in the user chat: $error");
+      // print("Stack trace in user chat: $stackTrace");
     }
   }
 
@@ -111,12 +118,15 @@ class _UserChatScreenState extends State<UserChatScreen> {
         setState(() {
           final response = jsonDecode(updateUserChatReadStatus.body);
           if (response['code'] == 200) {
+            // print("updateUserChatReadStatus");
           } else {
             errorMessage = response['message'];
           }
         });
       }
-    } catch (error, stackTrace) {
+    } catch (error) {
+      // print("Error in the user chat: $error");
+      // print("Stack trace in user chat: $stackTrace");
     }
   }
 
@@ -128,6 +138,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
       "time": DateFormat("HH:mm:ss").format(time),
       "message": _messageController.text,
     };
+// print('userData:$userData');
 
     try {
       final createUserChat = await repository.createUserChat(userData);
@@ -142,6 +153,8 @@ class _UserChatScreenState extends State<UserChatScreen> {
         }
       });
     } catch (error, stackTrace) {
+      // print("Error in the user chat: $error");
+      // print("Stack trace in user chat: $stackTrace");
     }
   }
 
@@ -176,6 +189,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
                 } else {
                   throw 'Could not launch $call';
                 }
+                // launchDialer(phoneNumber);
               },
               icon: const Icon(Icons.call, color: Colors.white)
           )
@@ -284,6 +298,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
                       icon: const Icon(Icons.send),
                       onPressed: () async{
                         _sendMessage();
+                        // print(messages);
                       },
                     ),
                   ],

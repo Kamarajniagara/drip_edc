@@ -175,7 +175,7 @@ class _ScheduleViewScreenState extends State<ScheduleViewScreen> {
             const BackButton(),
             if(isLargeScreen)
               Image(
-                image: F.appFlavor!.name.contains('oro')?const AssetImage("assets/png/oro_logo_white.png"):
+                image: F.appFlavor!.name.contains('oro') ? const AssetImage("assets/png/oro_logo_white.png"):
                 const AssetImage("assets/png/company_logo.png"),
                 width: 110,
                 fit: BoxFit.fitWidth,

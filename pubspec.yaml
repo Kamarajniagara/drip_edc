@@ -48,7 +48,6 @@ dependencies:
   label_marker: ^1.0.1
   widget_to_marker: ^1.0.6
   google_maps_flutter: ^2.12.1
-  shared_preferences: ^2.5.3
   connectivity_plus: ^6.1.4
   webview_flutter: ^4.11.0
   intl_phone_field: ^3.2.0
@@ -82,9 +81,11 @@ dependencies:
   new_version_plus: ^0.1.0
   skeletonizer: ^2.1.1
   reorderable_grid_view: ^2.2.8
-
   encrypt: ^5.0.3
   pointycastle: ^3.9.1
+  flutter_secure_storage: ^9.2.2
+  safe_device: ^1.1.5
+  screen_protector: ^1.4.2
 
 #  audioplayers: ^6.5.0
 #  record: ^6.0.0
