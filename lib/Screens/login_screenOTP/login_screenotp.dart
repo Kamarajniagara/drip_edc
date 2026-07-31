@@ -1,28 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:oro_drip_irrigation/Screens/login_screenOTP/widget/custom_button.dart';
- import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../repository/repository.dart';
 import '../../services/http_service.dart';
+import '../../utils/secure_storage_helper.dart';
 import '../../views/common/login/login_screen.dart';
 import 'otp_verification.dart';
 
 class LoginScreenOTP extends StatefulWidget {
+  const LoginScreenOTP({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreenOTP> {
   bool isManualDialCodeEntry = false;
-  TextEditingController _contactEditingController = TextEditingController();
+  final TextEditingController _contactEditingController = TextEditingController();
   String? dialCodeError;
   int _clickCount = 0;
   String isoCode = 'IN';
-  // late List<Map<String, String>> countryCodes = [];
 
   String? selectedCountryDialCode = "+91";
   String deveicetoken = '';
@@ -30,74 +34,111 @@ class _LoginScreenState extends State<LoginScreenOTP> {
   @override
   void initState() {
     super.initState();
-   }
+    getDeviceToken();
+    // Security Fix: Clear clipboard on entry to prevent data leakage from other apps
+    Clipboard.setData(const ClipboardData(text: ''));
+  }
+
+  @override
+  void dispose() {
+    _contactEditingController.dispose();
+    // Security Fix: Clear clipboard on exit
+    Clipboard.setData(const ClipboardData(text: ''));
+    super.dispose();
+  }
 
   Future<void> clickOnLogin(BuildContext context) async {
-    await getDeviceToken();
+    if (deveicetoken.isEmpty) {
+      await getDeviceToken();
+    }
 
     if (_contactEditingController.text.isEmpty) {
       showErrorDialog(context, 'Register number can\'t be empty.');
     } else {
-      String checkval = await checkNumber(selectedCountryDialCode!, '${_contactEditingController.text}');
+      String checkval = await checkNumber(selectedCountryDialCode!, _contactEditingController.text);
       if (checkval == 'true') {
-
-        final responseMessage = await Navigator.push(context, MaterialPageRoute(builder: (context) => OtpVerifyScreen(contact: "$selectedCountryDialCode ${_contactEditingController.text}",)));
+        final responseMessage = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpVerifyScreen(
+              contact: "$selectedCountryDialCode ${_contactEditingController.text}",
+            ),
+          ),
+        );
         if (responseMessage != null) {
           showErrorDialog(context, responseMessage as String);
         }
       } else {
         _contactEditingController.text = '';
-        showErrorDialog(context,
-            'This is Not Register Number \n Enter Register Correct Number');
+        showErrorDialog(context, 'This is Not Register Number \n Enter Register Correct Number');
       }
     }
   }
 
   Future<void> getDeviceToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('deviceToken') ?? '';
+    // 1. Try to get the token from Secure Storage (Keychain)
+    String? token = await SecureStorageHelper.getDeviceToken();
+    
+    // 2. Migration logic: Purge legacy token from insecure storage (SharedPreferences)
+    try {
+      final legacyPrefs = await SharedPreferences.getInstance();
+      if (legacyPrefs.containsKey('deviceToken')) {
+        final legacyToken = legacyPrefs.getString('deviceToken');
+        if ((token == null || token.isEmpty) && legacyToken != null) {
+          // Migrate to secure storage
+          await SecureStorageHelper.saveDeviceToken(legacyToken);
+          token = legacyToken;
+        }
+        // Securely remove from plaintext storage to close Finding #1
+        await legacyPrefs.remove('deviceToken');
+      }
+    } catch (e) {
+      // SharedPreferences error, ignore and move on
+    }
 
-    setState(() {
-      deveicetoken = token;
-    });
+    // 3. If token is still missing, fetch it from FirebaseMessaging
+    if (token == null || token.isEmpty) {
+      try {
+        token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          await SecureStorageHelper.saveDeviceToken(token);
+        }
+      } catch (e) {
+        // FCM error
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        deveicetoken = token ?? '';
+      });
+    }
   }
 
   Future<String> checkNumber(String countryCode, String mobileNumber) async {
-
-    // verifyOtp();
-    if(deveicetoken.isEmpty || deveicetoken == '')
-    {
+    if (deveicetoken.isEmpty) {
       await getDeviceToken();
     }
     Map<String, Object> body = {
       'countryCode': countryCode.replaceFirst('+', ''),
       'mobileNumber': mobileNumber,
-      // 'macAddress': '123456',
       'deviceToken': deveicetoken,
       'isMobile': true
     };
-     final repository = Repository(HttpService());
+    final repository = Repository(HttpService());
     final response = await repository.checkMobileNumber(body);
 
-     if (response.statusCode == 200) {
-       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-          if (data["code"] == 200) {
-
-
-          if (mounted) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/dashboard',
-                  (Route<dynamic> route) => false,
-            );
-          }
-          return 'true';
-        } else {
-          // _showSnackBar(
-          //     data["message"]);
-          return 'false';
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (data["code"] == 200) {
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/dashboard',
+            (Route<dynamic> route) => false,
+          );
         }
+        return 'true';
       } else {
         return 'false';
       }
@@ -106,9 +147,7 @@ class _LoginScreenState extends State<LoginScreenOTP> {
     }
   }
 
-  //Alert dialogue to show error and response
   void showErrorDialog(BuildContext context, String message) {
-    // set up the AlertDialog
     final CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: const Text('Warning'),
       content: Text('\n$message'),
@@ -122,7 +161,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
         )
       ],
     );
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -131,66 +169,20 @@ class _LoginScreenState extends State<LoginScreenOTP> {
     );
   }
 
-  // To track the number of clicks
-
   void _handleTap() {
     setState(() {
       _clickCount++;
-      // if (_clickCount >= 7) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-        );
-        // Reset click count after navigation
-        _clickCount = 0;
-      // }
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+      _clickCount = 0;
     });
   }
 
-
-  Future<bool> _onWillPop(BuildContext context) async {
-    return await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text("Exit"),
-        content: Text("Do you want to exit?"),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => exit(0),
-            // onPressed: () => Navigator.of(context).pop(true),// Return true to pop the route
-            child: const Text(
-              "Yes",
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context)
-                .pop(false), // Return false to stay on the route
-            child: const Text(
-              "No",
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ) ??
-        false;
-  }
-
-  //build method for UI Representation
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    // final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.teal.shade50,
       body: Center(
@@ -224,7 +216,7 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                   SizedBox(
                     height: screenHeight * 0.02,
                   ),
-                  Container(
+                  const SizedBox(
                     height: 40,
                     width: 50,
                   ),
@@ -244,11 +236,10 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                     padding: const EdgeInsets.fromLTRB(5, 35, 10, 0),
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        boxShadow: [
-                          const BoxShadow(
+                        boxShadow: const [
+                          BoxShadow(
                             color: Colors.grey,
-                            offset: Offset(0.0, 1.0), //(x,y)
+                            offset: Offset(0.0, 1.0),
                             blurRadius: 6.0,
                           ),
                         ],
@@ -258,7 +249,7 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                         SizedBox(
                           width: 450,
                           height: 77,
-                          child:    Column(
+                          child: Column(
                             children: [
                               IntlPhoneField(
                                 controller: _contactEditingController,
@@ -281,20 +272,17 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                               ),
                             ],
                           ),
-
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         CustomButton(clickOnLogin),
-                         const Text(
+                        const Text(
                           'or',
-                         ),
+                        ),
                         TextButton(
                           onPressed: _handleTap,
                           style: ElevatedButton.styleFrom(
-                            // backgroundColor: Colors.grey.shade400,
-                            // backgroundColor:const Color.fromARGB(255, 28, 123, 137),
                             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(24),
@@ -305,23 +293,12 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                             style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 28, 123, 137)),
                           ),
                         )
-
                       ],
                     ),
                   ),
-
                 ]),
           ),
         ),
-      ),
-    );
-  }
-
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 3),
       ),
     );
   }

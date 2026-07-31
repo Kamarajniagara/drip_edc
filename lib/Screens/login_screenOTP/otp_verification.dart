@@ -38,10 +38,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      // widget.contact = '${ModalRoute.of(context)?.settings.arguments as String}';
-      //print(widget.contact);
       generateOtp(widget.contact);
-
     });
   }
 
@@ -120,9 +117,8 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        boxShadow: [
-                          const BoxShadow(
+                        boxShadow: const [
+                          BoxShadow(
                             color: Colors.grey,
                             offset: Offset(0.0, 1.0), //(x,y)
                             blurRadius: 6.0,
@@ -182,8 +178,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
   }
 
    Future<void> generateOtp(String contact) async {
-    //print("generateOtp called");
-    final PhoneCodeSent smsOTPSent = (verId, forceResendingToken) {
+     final PhoneCodeSent smsOTPSent = (verId, forceResendingToken) {
       verificationId = verId;
     };
     try {
@@ -196,28 +191,37 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
         timeout: const Duration(seconds: 60),
         verificationCompleted: (AuthCredential phoneAuthCredential) {},
         verificationFailed: (error) {
-          //print(error);
           _showSnackBar(error.message ?? 'verificationFailed',Colors.red);
         },
       );
     } catch (e,stackTrace) {
-      //print('error generateOtp');
-      //print(e.toString());
       _showSnackBar(e.toString(),Colors.red);
-      //print('error $e');
-      //print("stackTrace $stackTrace");
       handleError(e as PlatformException);
     }
   }
 
   Future<void> getDeviceToken() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-    await messaging.getToken().then((String? token) async{
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('deviceToken', token ?? '' );
-      deveicetoken = token ?? '';
-    });
+    try {
+      String? token = await messaging.getToken();
+      if (token != null) {
+        // Security Fix: Store device token in Secure Storage instead of SharedPreferences
+        await SecureStorageHelper.saveDeviceToken(token);
+        
+        // Migration: Remove from insecure storage if it exists
+        final prefs = await SharedPreferences.getInstance();
+        if (prefs.containsKey('deviceToken')) {
+          await prefs.remove('deviceToken');
+        }
+        
+        setState(() {
+          deveicetoken = token;
+        });
+      }
+    } catch (e) {
+      // Handle error
     }
+  }
 
 
    Future<void> verifyOtp() async {
@@ -236,13 +240,10 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       await checkNumber(widget.contact);
     } on PlatformException catch(e){
       handleError(e);
-      //print(e.toString());
       _showSnackBar(e.message!,Colors.red);
     }
     catch (e, stackTrace) {
       _showSnackBar(e.toString(),Colors.red);
-      //print('error $e');
-      //print("stackTrace $stackTrace");
     }
   }
 
@@ -270,7 +271,6 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       final repository = Repository(HttpService());
       final response = await repository.checkMobileNumber(body);
 
-       //print("response: ${response.body}");
       if (response.statusCode != 200) {
         _showSnackBar("Server error: ${response.statusCode}", Colors.red);
         return false;
@@ -285,6 +285,7 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
 
       final userData = data['data']['user'];
 
+      // This method already uses SecureStorageHelper to save to Keychain
       await SecureStorageHelper.saveUserDetails(
         token: userData['accessToken'],
         userId: userData['userId'],
@@ -308,8 +309,6 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
       });
       return true;
     } catch (error, stackTrace) {
-      //print("Error on checkNumber $error");
-      //print("StackTrace on checkNumber $stackTrace");
       _showSnackBar("Something went wrong", Colors.red);
       return false;
     }

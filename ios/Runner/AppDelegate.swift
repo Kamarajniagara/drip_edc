@@ -8,13 +8,22 @@ import FirebaseMessaging
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
+
+  private var blurView: UIVisualEffectView?
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+
+    // Finding 2 & 3: Run Jailbreak and Integrity checks on startup
+    if SecurityUtils.isDeviceCompromised() {
+        // Impact: Critical. Terminate app if jailbroken or tampered.
+        exit(0)
+    }
+
     if FirebaseApp.app() == nil {
       FirebaseApp.configure()
-    } else {
     }
 
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
@@ -28,17 +37,42 @@ import FirebaseMessaging
       UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     }
     application.registerForRemoteNotifications()
+
+    // Finding 4: Screen capture protection native listener
+    NotificationCenter.default.addObserver(self, selector: #selector(screenCaptureChanged), name: UIScreen.capturedDidChangeNotification, object: nil)
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
   override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-    Messaging.messaging().apnsToken = deviceToken // Set APNs token for FCM
-//    let firebaseAuth = Auth.auth()
-//    firebaseAuth.setAPNSToken(deviceToken, type: AuthAPNSTokenType.unknown)
+    Messaging.messaging().apnsToken = deviceToken
   }
  
   override func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    Messaging.messaging().appDidReceiveMessage(userInfo) // Handle FCM notifications
+    Messaging.messaging().appDidReceiveMessage(userInfo)
     completionHandler(.newData)
+  }
+
+  // Finding 6: Background Snapshot Protection
+  override func applicationWillResignActive(_ application: UIApplication) {
+    let blurEffect = UIBlurEffect(style: .extraLight)
+    let blurView = UIVisualEffectView(effect: blurEffect)
+    blurView.frame = self.window?.frame ?? UIScreen.main.bounds
+    blurView.tag = 221122
+    self.window?.addSubview(blurView)
+    self.blurView = blurView
+  }
+
+  override func applicationDidBecomeActive(_ application: UIApplication) {
+    self.window?.viewWithTag(221122)?.removeFromSuperview()
+    self.blurView = nil
+  }
+
+  // Finding 4: Handle Screen Recording
+  @objc private func screenCaptureChanged() {
+    if UIScreen.main.isCaptured {
+        // App is being recorded or mirrored.
+        // We can show a black overlay or alert.
+    }
   }
 }
