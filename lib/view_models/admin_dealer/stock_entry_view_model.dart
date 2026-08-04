@@ -215,8 +215,7 @@ class StockEntryViewModel extends SafeChangeNotifier {
     try {
       var response = await repository.checkProduct({"deviceId": imei});
       if (isDisposed) return;
-      var data = jsonDecode(response.body);
-      if (data['code'] == 404) {
+       if (response.statusCode == 404) {
         addProductToList();
       } else {
         errorMsg = "The product ID already exists!";

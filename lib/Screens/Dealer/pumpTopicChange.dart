@@ -233,14 +233,12 @@ class _PumpTopicChangePageState extends State<PumpTopicChangePage> {
 
     final Repository repository = Repository(HttpService());
      var response = await repository.sendManualOperationToServer(body);
+     var data = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      if (data["code"] == 200) {
+      _showSnackBar(data["message"]);
+    } else {
         _showSnackBar(data["message"]);
-      } else {
-        _showSnackBar(data["message"]);
-      }
     }
     //print('topic:------> ${topic == 'topic' ? payLoadFinaltopic : topic == 'ip' ? payLoadFinalip : topic == 'reset' ? payLoadReset : payLoadview}');
 

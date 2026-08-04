@@ -41,11 +41,8 @@ class NavRailViewModel extends ChangeNotifier {
       var response = await repository.fetchAllCategoriesAndModels(body);
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
-        if (responseBody["code"] == 200) {
-          jsonDataMap = responseBody;
-        } else {
-          //debugPrint("API Error: ${responseBody['message']}");
-        }
+           jsonDataMap = responseBody;
+
       }
     } catch (error) {
       //debugPrint("Error: $error");

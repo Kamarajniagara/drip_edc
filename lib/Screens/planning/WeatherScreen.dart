@@ -1221,8 +1221,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
           'https://api.sunrisesunset.io/json?lat=11.0168&lng=77.9558'));
       if (response.statusCode == 200) {
         weatherData = json.decode(response.body);
-      } else {
-        //print('Request failed with status: ${response.statusCode}');
       }
       DateTime nowDate = DateTime.now();
       String day = DateFormat('EEE').format(nowDate);
@@ -1249,7 +1247,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       });
 
       final jsonData = jsonDecode(getUserDetails.body);
-       if (jsonData['code'] == 200) {
+       if (getUserDetails.statusCode == 200) {
         setState(() {
           weathernewlive = WeatherData.fromJson(jsonData);
           // weatherdatairrigationline = IrrigationLine.fromJson(jsonData['data']['irrigationLine']);

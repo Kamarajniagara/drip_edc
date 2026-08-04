@@ -31,6 +31,7 @@ class ScreenController extends StatelessWidget {
           'userId': user.id,
           'password': user.password,
         });
+        final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
           return true;
         }else{

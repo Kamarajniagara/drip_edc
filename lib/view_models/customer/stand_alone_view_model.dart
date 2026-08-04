@@ -57,43 +57,44 @@ class StandAloneViewModel extends ChangeNotifier {
       final response = await repository.fetchCustomerProgramList(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        List<dynamic> programsJson = jsonData['data'];
-        programList = [...programsJson.map((programJson) => ProgramModel.fromJson(programJson))];
+           List<dynamic> programsJson = jsonData['data'];
+          programList = [...programsJson.map((programJson) => ProgramModel.fromJson(programJson))];
 
-        if(![...AppConstants.ecoGemModelList].contains(masterData.modelId)){
-          ProgramModel defaultProgram = ProgramModel(
-            programId: 0,
-            serialNumber: 0,
-            programName: 'Default',
-            defaultProgramName: '',
-            programType: '',
-            priority: '',
-            startDate: '',
-            startTime: '',
-            sequenceCount: 0,
-            scheduleType: '',
-            firstSequence: '',
-            duration: '',
-            programCategory: '',
-          );
+          if(![...AppConstants.ecoGemModelList].contains(masterData.modelId)){
+            ProgramModel defaultProgram = ProgramModel(
+              programId: 0,
+              serialNumber: 0,
+              programName: 'Default',
+              defaultProgramName: '',
+              programType: '',
+              priority: '',
+              startDate: '',
+              startTime: '',
+              sequenceCount: 0,
+              scheduleType: '',
+              firstSequence: '',
+              duration: '',
+              programCategory: '',
+            );
 
-          bool programWithNameExists = false;
-          for (ProgramModel program in programList) {
-            if (program.programName == 'Default') {
-              programWithNameExists = true;
-              break;
+            bool programWithNameExists = false;
+            for (ProgramModel program in programList) {
+              if (program.programName == 'Default') {
+                programWithNameExists = true;
+                break;
+              }
+            }
+
+            if (!programWithNameExists) {
+              programList.insert(0, defaultProgram);
+            } else {
+              //debugPrint('Program with name \'Default\' already exists in widget.programList.');
             }
           }
 
-          if (!programWithNameExists) {
-            programList.insert(0, defaultProgram);
-          } else {
-            //debugPrint('Program with name \'Default\' already exists in widget.programList.');
-          }
+          getExitManualOperation();
         }
 
-        getExitManualOperation();
-      }
     } catch (error) {
       //debugPrint('Error fetching country list: $error');
     } finally {

@@ -496,14 +496,14 @@ class _ResetVerssionState extends State<ResetVerssion> {
 
     final Repository repository = Repository(HttpService());
     var response = await repository.sendManualOperationToServer(body);
-
+    var data = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      if (data["code"] == 200) {
+
+      _showSnackBar(data["message"]);
+    }
+    else {
         _showSnackBar(data["message"]);
-      } else {
-        _showSnackBar(data["message"]);
-      }
+
     }
   }
 
@@ -626,14 +626,13 @@ class _ResetVerssionState extends State<ResetVerssion> {
 
     final Repository repository = Repository(HttpService());
     var response = await repository.updateUserDeviceFirmwareDetails(body);
+    var data = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      if (data["code"] == 200) {
-        _showSnackBar(data["message"]);
+         _showSnackBar(data["message"]);
       } else {
         _showSnackBar(data["message"]);
-      }
+
     }
 
     MqttService().topicToPublishAndItsMessage(jsonEncode(payLoadFinal), '${Environment.mqttPublishTopic}/${mergedList[selectindex ?? 0]["deviceId"]}');

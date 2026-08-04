@@ -51,18 +51,22 @@ class _UserChatScreenState extends State<UserChatScreen> {
     try {
       final getUserDealerDetails = await repository.getUserDealerDetails(userData);
       final userRole = await SecureStorageHelper.getUserRole();
+      final response = jsonDecode(getUserDealerDetails.body);
+
       if (getUserDealerDetails.statusCode == 200) {
         setState(() {
-          final response = jsonDecode(getUserDealerDetails.body);
-          if (response['code'] == 200) {
-            isDealer = userRole == '2' || userRole == '1';
+             isDealer = userRole == '2' || userRole == '1';
             dealerId = response['data']['userId'];
             dealerName = response['data']['userName'];
             phoneNumber = response['data']['mobileNumber'] ?? "1234567890";
-          } else {
-            errorMessage = response['message'];
-          }
+
         });
+      }
+      else {
+        setState(() {
+          errorMessage = response['message'];
+        });
+
       }
     } catch (error, stackTrace) {
       // print("Error in the user chat: $error");
@@ -79,25 +83,27 @@ class _UserChatScreenState extends State<UserChatScreen> {
     // print("userdata in the chat :: $userData");
     try {
       final getUserChat = await repository.getUserChat(userData);
+      final response = jsonDecode(getUserChat.body);
+
       if (getUserChat.statusCode == 200) {
         chatIds.clear();
         setState(() {
-          final response = jsonDecode(getUserChat.body);
-          if (response['code'] == 200) {
-            messages = response['data'];
+             messages = response['data'];
             messages.forEach((element) {
               if(((isDealer ? dealerId : widget.userId) == element['toUserId']) && element['readStatus'] == "0") {
                 chatIds.add(element['chatId']);
               }
             });
-            // print("getUserChat");
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+             WidgetsBinding.instance.addPostFrameCallback((_) {
               _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
             });
-            // print("chatIds ==> $chatIds");
-          } else {
-            errorMessage = response['message'];
-          }
+
+        });
+      }
+      else {
+        setState(() {
+          errorMessage = response['message'];
+
         });
       }
     } catch (error) {
@@ -114,16 +120,14 @@ class _UserChatScreenState extends State<UserChatScreen> {
     };
     try {
       final updateUserChatReadStatus = await repository.updateUserChatReadStatus(userData);
-      if (updateUserChatReadStatus.statusCode == 200) {
-        setState(() {
-          final response = jsonDecode(updateUserChatReadStatus.body);
-          if (response['code'] == 200) {
-            // print("updateUserChatReadStatus");
-          } else {
-            errorMessage = response['message'];
-          }
-        });
-      }
+      final response = jsonDecode(updateUserChatReadStatus.body);
+       setState(() {
+        if (updateUserChatReadStatus.statusCode == 200) {
+          // print("updateUserChatReadStatus");
+        } else {
+          errorMessage = response['message'];
+        }
+      });
     } catch (error) {
       // print("Error in the user chat: $error");
       // print("Stack trace in user chat: $stackTrace");

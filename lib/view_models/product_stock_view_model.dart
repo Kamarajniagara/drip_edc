@@ -24,8 +24,9 @@ class ProductStockViewModel extends SafeChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final list = data["data"] as List<dynamic>;
-        productStockList = list.map((e) => StockModel.fromJson(e)).toList();
+           final list = data["data"] as List<dynamic>;
+          productStockList = list.map((e) => StockModel.fromJson(e)).toList();
+
       }
     } catch (e, st) {
       //debugPrint('Stock fetch error: $e\n$st');

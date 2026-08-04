@@ -40,7 +40,7 @@ class _NamesState extends State<Names> {
       });
 
       final jsonData = jsonDecode(getUserDetails.body);
-      if (jsonData['code'] == 200) {
+      if (getUserDetails.statusCode == 200) {
         setState(() {
           configModel = NamesConfigModel.fromJson(jsonData['data']);
           uniqueObjectNames = (configModel.configObject ?? [])
@@ -53,6 +53,10 @@ class _NamesState extends State<Names> {
               .toList();
         });
       }
+      else
+        {
+
+        }
     } catch (e, stackTrace) {
       //print('Error overAll getData => ${e.toString()}');
       //print('trace overAll getData  => ${stackTrace}');

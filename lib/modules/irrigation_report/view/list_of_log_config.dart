@@ -50,7 +50,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
       var response = await IrrigationRepository().createUserLogConfig(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       //debugPrint("jsonData => ${jsonData}");
-      if(jsonData['code'] == 200){
+      if(response.statusCode == 200){
         getUserLogConfig();
       }
 
@@ -72,7 +72,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
       };
       var response = await IrrigationRepository().updateUserLogConfig(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
-      if(jsonData['code'] == 200){
+      if(response.statusCode == 200){
         getUserLogConfig();
       }
     }catch(e){
@@ -93,14 +93,14 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
       var configResponse = await IrrigationRepository().getUserNames(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       Map<String, dynamic> configJsonData = jsonDecode(configResponse.body);
-      if(configJsonData['code'] == 200){
+      if(response.statusCode == 200){
         if(names.isEmpty){
           setState(() {
             names = configJsonData['data']['configObject'];
           });
         }
       }
-      if(jsonData['code'] == 200){
+      if(response.statusCode == 200){
         setState(() {
           serverData = jsonData['data'];
         });
@@ -134,7 +134,7 @@ class _ListOfLogConfigState extends State<ListOfLogConfig> {
       var response = await IrrigationRepository().deleteUserLogConfig(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
       //print('delete response =>${jsonData}');
-      if(jsonData['code'] == 200){
+      if(response.statusCode == 200){
         getUserLogConfig();
       }
     }catch(e){

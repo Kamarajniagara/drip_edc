@@ -438,11 +438,12 @@ class ConfigMakerProvider extends ChangeNotifier{
         //print("jsonData == $jsonData");
       }
       notifyListeners();
-      if(jsonData['code'] == 200){
+      if(response.statusCode == 200){
         if(masterOrNode == 1){
           masterData = Map<String, dynamic>.from(masterData);
           masterData['deviceId'] = newDevice['deviceId'];
-        }else{
+        }
+        else{
           for(var device in listOfDeviceModel){
             if(device.controllerId == oldDevice["controllerId"]){
               device.deviceId = newDevice["deviceId"];

@@ -129,19 +129,14 @@ class _LoginScreenState extends State<LoginScreenOTP> {
     final response = await repository.checkMobileNumber(body);
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      if (data["code"] == 200) {
-        if (mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/dashboard',
-            (Route<dynamic> route) => false,
-          );
-        }
-        return 'true';
-      } else {
-        return 'false';
-      }
+       if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/dashboard',
+              (Route<dynamic> route) => false,
+        );
+       }
+       return 'true';
     } else {
       return 'false';
     }

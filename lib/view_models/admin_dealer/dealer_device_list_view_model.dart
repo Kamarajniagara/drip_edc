@@ -63,13 +63,14 @@ class DealerDeviceListViewModel extends ChangeNotifier {
       var response = await repository.fetchDeviceList(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
+           totalProduct = jsonData["data"]["totalProduct"] ?? 0;
+          List<DeviceListModel> newDevices = (jsonData["data"]["product"] as List)
+              .map((item) => DeviceListModel.fromJson(item))
+              .toList();
+          dealerDeviceList.addAll(newDevices);
 
-        totalProduct = jsonData["data"]["totalProduct"] ?? 0;
-        List<DeviceListModel> newDevices = (jsonData["data"]["product"] as List)
-            .map((item) => DeviceListModel.fromJson(item))
-            .toList();
-        dealerDeviceList.addAll(newDevices);
-
+      } else {
+        //debugPrint("HTTP Error: ${response.statusCode}");
       }
     } catch (error, stackTrace) {
       //debugPrint("Error fetching device list: $error");
@@ -128,15 +129,23 @@ class DealerDeviceListViewModel extends ChangeNotifier {
       //print(fromAdminPage);
 
       try {
+
         Response response;
+
         if(fromAdminPage){
           response = await repository.addProductToDealer(body);
         }else{
           response = await repository.addProductToSubDealer(body);
         }
         if (response.statusCode == 200) {
-          dealerDeviceList.insertAll(0, newDevices);
-        }
+          //print(response.body);
+          final Map<String, dynamic> jsonData = jsonDecode(response.body);
+             dealerDeviceList.insertAll(0, newDevices);
+           /* onDeviceListAdded({
+              "status" :'success',
+              "products": selectedProductList,
+            });*/
+         }
       } catch (error, stackTrace) {
         //debugPrint('Error fetching Product stock: $error');
         //debugPrint(stackTrace.toString());

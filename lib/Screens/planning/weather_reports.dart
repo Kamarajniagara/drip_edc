@@ -79,7 +79,7 @@ class _ReportPageState extends State<ReportPage> {
       });
 
       final jsonData = jsonDecode(getUserDetails.body);
-        if (jsonData['code'] == 200) {
+        if (getUserDetails.statusCode == 200) {
         setState(() {
           {
                Map<String, dynamic> data = jsonData;
@@ -87,7 +87,7 @@ class _ReportPageState extends State<ReportPage> {
                isLoading = false;
            }
          });
-      }
+       }
     } catch (e, stackTrace) {
       //print(' trace overAll getData  => ${stackTrace}');
     }

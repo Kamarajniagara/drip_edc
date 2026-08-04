@@ -83,7 +83,7 @@ class _GroupListScreenState extends State<GroupListScreen> {
     var getUserDetails = await repository.createUserValveGroup(body);
     var jsonDataResponse = jsonDecode(getUserDetails.body);
     GlobalSnackBar.show(context, jsonDataResponse['message'], jsonDataResponse['code']);
-    if (jsonDataResponse['code'] == 200) {
+    if (getUserDetails.statusCode == 200) {
       setState(() {
         fetchData();
       });

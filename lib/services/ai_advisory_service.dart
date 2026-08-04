@@ -27,66 +27,67 @@ class AiAdvisoryService {
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
+            final data = jsonData['data'];
 
-        final data = jsonData['data'];
+          if (data != null && data.isNotEmpty) {
+            final weatherData = await WeatherService().fetchWeather(city: data['location']);
 
-        if (data != null && data.isNotEmpty) {
-          final weatherData = await WeatherService().fetchWeather(city: data['location']);
 
-          aiResponseNotifier.value = null;
+            aiResponseNotifier.value = null;
 
-          if (weatherData['statusCode'] == '404') {
-            print('Error: ${weatherData['message']}');
+            if (weatherData['statusCode'] == '404') {
+              print('Error: ${weatherData['message']}');
 
-            aiResponseNotifier.value = {
-              'percentage': 0,
-              'reason': '${weatherData['message']}',
-            };
+              aiResponseNotifier.value = {
+                'percentage': 0,
+                'reason': '${weatherData['message']}',
+              };
 
-          } else {
-            final params = IrrigationParams(
-              cropType: data['cropName'],
-              soilType: data['soilType'],
-              moistureLevel: 'unknown',
-              weather: '${weatherData['rainfall']}',
-              area: data['fieldArea'],
-              growthStage: data['stage'],
-              temperature: '${weatherData['temperature']}',
-              humidity: '${weatherData['humidity']}',
-              windSpeed: '${weatherData['wind_speed']}',
-              windDirection: '${weatherData['wind_direction']}',
-              cloudCover: '${weatherData['cloud_cover']}',
-              pressure: '${weatherData['pressure']}',
-              recentRainfall: '${weatherData['rainfall']}',
-              irrigationMethod: data['irrigationType'],
-            );
+            } else {
+              final params = IrrigationParams(
+                cropType: data['cropName'],
+                soilType: data['soilType'],
+                moistureLevel: 'unknown',
+                weather: '${weatherData['rainfall']}',
+                area: data['fieldArea'],
+                growthStage: data['stage'],
+                temperature: '${weatherData['temperature']}',
+                humidity: '${weatherData['humidity']}',
+                windSpeed: '${weatherData['wind_speed']}',
+                windDirection: '${weatherData['wind_direction']}',
+                cloudCover: '${weatherData['cloud_cover']}',
+                pressure: '${weatherData['pressure']}',
+                recentRainfall: '${weatherData['rainfall']}',
+                irrigationMethod: data['irrigationType'],
+              );
 
-            final prompt = params.toPrompt();
+              final prompt = params.toPrompt();
 
-            try {
-              final aiResponse = await AIService().sendTextToAI(prompt, "English");
-              final lines = aiResponse.trim().split('\n');
+              try {
+                final aiResponse = await AIService().sendTextToAI(prompt, "English");
+                final lines = aiResponse.trim().split('\n');
 
-              final percent = extractPercentageOnly(lines[0]);
-              final reason = lines.skip(1).join('\n').trim();
+                final percent = extractPercentageOnly(lines[0]);
+                final reason = lines.skip(1).join('\n').trim();
 
-              if (percent != null) {
+                if (percent != null) {
+                  aiResponseNotifier.value = {
+                    'percentage': percent,
+                    'reason': reason,
+                  };
+                } else {
+                  aiResponseNotifier.value = {
+                    'error': '⚠️ Could not extract irrigation percentage.',
+                  };
+                }
+              } catch (e) {
                 aiResponseNotifier.value = {
-                  'percentage': percent,
-                  'reason': reason,
-                };
-              } else {
-                aiResponseNotifier.value = {
-                  'error': '⚠️ Could not extract irrigation percentage.',
+                  'error': '❌ Error fetching AI advisory.',
                 };
               }
-            } catch (e) {
-              aiResponseNotifier.value = {
-                'error': '❌ Error fetching AI advisory.',
-              };
             }
           }
-        }
+
       }
     } catch (e) {
       print('Failed to load advisory: $e');

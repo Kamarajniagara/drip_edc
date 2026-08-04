@@ -37,8 +37,10 @@ class AnalyticsViewModel extends SafeChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        mySalesData = SalesDataModel.fromJson(data);
-        totalSales = mySalesData.total!;
+        if (data.containsKey("data")) {
+          mySalesData = SalesDataModel.fromJson(data);
+          totalSales = mySalesData.total!;
+        }
       }
     } catch (e, st) {
       //debugPrint('Error in getMySalesData: $e\n$st');
