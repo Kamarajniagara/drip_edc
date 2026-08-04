@@ -59,9 +59,8 @@ class BaseHeaderViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        if (responseBody["code"] == 200) {
-          jsonDataMap = responseBody;
-        }
+           jsonDataMap = responseBody;
+
       }
     } catch (e) {
       //debugPrint("Error: $e");

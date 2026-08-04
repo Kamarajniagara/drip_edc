@@ -27,9 +27,7 @@ class AiAdvisoryService {
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-
-        if (jsonData["code"] == 200) {
-          final data = jsonData['data'];
+            final data = jsonData['data'];
 
           if (data != null && data.isNotEmpty) {
             final weatherData = await WeatherService().fetchWeather(city: data['location']);
@@ -89,7 +87,7 @@ class AiAdvisoryService {
               }
             }
           }
-        }
+
       }
     } catch (e) {
       print('Failed to load advisory: $e');

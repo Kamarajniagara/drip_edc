@@ -128,17 +128,18 @@ class _ScheduleViewScreenState extends State<ScheduleViewScreen> {
         ]
       };
       var getUserScheduleLog = await repository.getUserIrrigationLog(userData);
+      final responseJson = getUserScheduleLog.body;
+      final convertedJson = jsonDecode(responseJson);
       if (getUserScheduleLog.statusCode == 200) {
-        final responseJson = getUserScheduleLog.body;
-        final convertedJson = jsonDecode(responseJson);
+
         // print("convertedJson in the getUserScheduleLog :: $convertedJson");
-        if(convertedJson["code"] == 200) {
-          defaultData = convertedJson['data']['default'];
+           defaultData = convertedJson['data']['default'];
           // print('convertedJson: ${convertedJson['data'][0]}');
           MqttService().schedulePayload = Constants.dataConversionForScheduleView(convertedJson['data']['log'][0]['irrigation']);
-        } else {
-          MqttService().schedulePayload = [{"message" : convertedJson['message']}];
-        }
+
+      }
+      else {
+        MqttService().schedulePayload = [{"message" : convertedJson['message']}];
       }
     } catch (e, stackTrace) {
       // print('Error: $e');

@@ -43,8 +43,7 @@ class WeatherViewModel extends ChangeNotifier {
         final data = jsonDecode(response.body);
         // //print('data:$data');
 
-        if (data["code"] == 200) {
-          weatherModel = WeatherModelNew.fromJson(data["data"]);
+           weatherModel = WeatherModelNew.fromJson(data["data"]);
 
           /// ✅ parse live once (FROM MODEL)
           liveCache = weatherModel!.parseLive5101();
@@ -60,7 +59,7 @@ class WeatherViewModel extends ChangeNotifier {
             selectedSerialNumber =
                 weatherModel!.deviceList.first.serialNumber;
           }
-        }
+
       }
     } catch (e, st) {
       //debug//print("Weather error: $e\n$st");

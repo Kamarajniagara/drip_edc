@@ -283,7 +283,7 @@ class _LogHomeState extends State<LogHome> {
       };
       var response = await IrrigationRepository().getLogDateWise(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
-      if(jsonData['code'] == 200){
+      if(response.statusCode == 200){
         setState(() {
           dataSource = jsonData['data'];
           dataToShow = {};

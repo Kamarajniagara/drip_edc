@@ -352,8 +352,7 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
       final response = await Repository(HttpService()).fetchSiteAiAdvisoryData(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final data = jsonData['data'];
+           final data = jsonData['data'];
           if (data != null || data.isNotEmpty) {
             cropName = data['cropName'];
             _cvController.text = data['cropVariety'];
@@ -378,7 +377,7 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
           } else {
           }
         }
-      }
+
     } catch (error) {
     }
   }
@@ -394,11 +393,10 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
       final response = await Repository(HttpService()).updateSiteAiAdvisoryData(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
+           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(jsonData["message"])),
           );
-        }
+
       }
     } catch (error) {
     }

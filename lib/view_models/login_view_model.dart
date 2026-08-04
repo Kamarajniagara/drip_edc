@@ -82,7 +82,7 @@ class LoginViewModel extends ChangeNotifier {
 
       final response = await repository.checkLoginAuth(body);
       final data = jsonDecode(response.body);
-      if (response.statusCode == 200 && data['code'] == 200) {
+      if (response.statusCode == 200 ) {
         final userData = data['data']['user'];
 
         await SecureStorageHelper.saveUserDetails(

@@ -38,11 +38,10 @@ class CreateAccountViewModel extends ChangeNotifier {
       final response = await repository.fetchCountryList();
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final countryData = jsonData["data"] as List;
+           final countryData = jsonData["data"] as List;
           countries = countryData.map((e) => e['countryName'] as String).toList();
           countryList = countryData.map((e) => CountryListModel.fromJson(e)).toList();
-        }
+
       }
     } catch (error) {
       //debugPrint('Error fetching country list: $error');
@@ -63,11 +62,10 @@ class CreateAccountViewModel extends ChangeNotifier {
       final response = await repository.fetchStateList(countryId);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final stateData = jsonData["data"] as List;
+           final stateData = jsonData["data"] as List;
           states = stateData.map((e) => e['stateName'] as String).toList();
           stateList = stateData.map((e) => StateListModel.fromJson(e)).toList();
-        }
+       
       }
     } catch (error) {
       //debugPrint('Error fetching state list: $error');

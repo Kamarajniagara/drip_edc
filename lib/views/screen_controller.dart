@@ -32,7 +32,7 @@ class ScreenController extends StatelessWidget {
           'password': user.password,
         });
         final data = jsonDecode(response.body);
-        if (response.statusCode == 200 && data['code'] == 200) {
+        if (response.statusCode == 200) {
           return true;
         }else{
           await SecureStorageHelper.clearAll();

@@ -57,12 +57,9 @@ class Validators {
                   });
 
                   if (getUserDetails.statusCode == 200) {
-                    var jsonData = jsonDecode(getUserDetails.body);
-                    if (jsonData['code'] == 200) {
-                      if (ctx.mounted) Navigator.pop(ctx, true);
+                        if (ctx.mounted) Navigator.pop(ctx, true);
                       return;
-                    }
-                  }
+                   }
                   if (ctx.mounted) Navigator.pop(ctx, false);
                 } catch (e) {
                   if (ctx.mounted) Navigator.pop(ctx, false);

@@ -72,13 +72,9 @@ class _PasswordProtectedSiteConfigState
                   });
 
                   if (getUserDetails.statusCode == 200) {
-                    var jsonData = jsonDecode(getUserDetails.body);
-
-                    if (jsonData['code'] == 200) {
-                      if (ctx.mounted) Navigator.pop(ctx, true); // ✅ close dialog safely
-                    } else {
-                      if (ctx.mounted) Navigator.pop(ctx, false); // wrong password
-                    }
+                        if (ctx.mounted) Navigator.pop(ctx, true); // ✅ close dialog safely
+                   } else {
+                    if (ctx.mounted) Navigator.pop(ctx, false); // wrong password
                   }
                 } catch (e, stackTrace) {
                   if (ctx.mounted) Navigator.pop(ctx, false);

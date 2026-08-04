@@ -316,7 +316,7 @@ class _DeviceListState extends State<DeviceList> {
       };
       var response = await ConfigMakerRepository().checkProduct(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
-      if(response.statusCode == 200 && jsonData["code"] == 200){
+      if(response.statusCode == 200 ){
         String message = '${jsonData['message']}';
         Navigator.pop(context);
         await Future.delayed(const Duration(milliseconds: 100));

@@ -22,11 +22,10 @@ class ProductCategoryViewModel extends SafeChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data["code"] == 200) {
-          categoryList = (data["data"] as List)
+           categoryList = (data["data"] as List)
               .map((e) => ProductCategoryModel.fromJson(e))
               .toList();
-        }
+
       }
     } catch (e) {
       //debugPrint("Category error: $e");

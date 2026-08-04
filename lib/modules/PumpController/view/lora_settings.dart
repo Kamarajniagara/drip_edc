@@ -49,7 +49,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
       final result = await loraSettingsRepository.getLoraSettings(userdata);
       final data = jsonDecode(result.body);
 
-      if (result.statusCode == 200 && data['code'] == 200) {
+      if (result.statusCode == 200) {
         // print("loraFrequency :: ${data['loraFrequency']}");
         if (data['loraFrequency'] != null && data['loraFrequency'].isNotEmpty) {
           final splitData = data['loraFrequency'].toString().split(',');
@@ -93,7 +93,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
       final response = await loraSettingsRepository.updateLoraSettings(userData);
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200 && data['code'] == 200) {
+      if (response.statusCode == 200) {
         _showSnackBar('Settings updated successfully', isSuccess: true);
         Map<String, dynamic> body = {
           "userId": widget.customerId,

@@ -229,7 +229,7 @@ class _MoistureSensorPopoverState extends State<MoistureSensorPopover> {
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
+
           sensors = (jsonData['data'] as List).map((item) {
             final dateStr = item['date'];
             final Map<String, List<SensorHourlyData>> hourlyDataMap = {};
@@ -253,7 +253,7 @@ class _MoistureSensorPopoverState extends State<MoistureSensorPopover> {
             );
           }).toList();
         }
-      }
+
     } catch (error) {
       //debugPrint('Error fetching sensor hourly data: $error');
     }

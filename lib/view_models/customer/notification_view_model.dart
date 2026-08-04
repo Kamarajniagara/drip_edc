@@ -22,7 +22,7 @@ class NotificationViewModel extends ChangeNotifier {
       final response = await repository.fetchUserPushNotificationType(body);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data["code"] == 200 && data.containsKey("data")) {
+        if ( data.containsKey("data")) {
           final List<dynamic> dataList = data['data'];
           notificationList =
               dataList.map((e) => NotificationListModel.fromJson(e)).toList();

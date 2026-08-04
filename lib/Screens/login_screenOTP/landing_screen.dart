@@ -115,7 +115,7 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
       final repository = Repository(HttpService());
       final response = await repository.userVerifyWithDeviceToken(data);
       final result = jsonDecode(response.body);
-      final success = response.statusCode == 200 && result['code'] == 200;
+      final success = response.statusCode == 200 ;
 
       setState(() {
         _isSucceed = success;

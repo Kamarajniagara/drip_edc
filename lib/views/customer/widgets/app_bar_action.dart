@@ -535,7 +535,7 @@ void showPasswordDialog(BuildContext context, correctPassword, userId,
 
                 if (getUserDetails.statusCode == 200) {
                   var jsonData = jsonDecode(getUserDetails.body);
-                  if (jsonData['code'] == 200) {
+
                     if (type == 1) {
                       Navigator.of(context).pop();
                       Navigator.push(
@@ -559,9 +559,8 @@ void showPasswordDialog(BuildContext context, correctPassword, userId,
                       );
                     }
                   } else {
-                    Navigator.of(context).pop(); // Close the dialog
-                    showErrorDialog(context);
-                  }
+                  Navigator.of(context).pop(); // Close the dialog
+                  showErrorDialog(context);
                 }
               } catch (e, stackTrace) {
                 //debugPrint(' Error overAll getData => ${e.toString()}');

@@ -63,15 +63,12 @@ class DealerDeviceListViewModel extends ChangeNotifier {
       var response = await repository.fetchDeviceList(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          totalProduct = jsonData["data"]["totalProduct"] ?? 0;
+           totalProduct = jsonData["data"]["totalProduct"] ?? 0;
           List<DeviceListModel> newDevices = (jsonData["data"]["product"] as List)
               .map((item) => DeviceListModel.fromJson(item))
               .toList();
           dealerDeviceList.addAll(newDevices);
-        } else {
-          //debugPrint("API Error: ${jsonData['message'] ?? 'Unknown error'}");
-        }
+
       } else {
         //debugPrint("HTTP Error: ${response.statusCode}");
       }
@@ -143,14 +140,12 @@ class DealerDeviceListViewModel extends ChangeNotifier {
         if (response.statusCode == 200) {
           //print(response.body);
           final Map<String, dynamic> jsonData = jsonDecode(response.body);
-          if(jsonData["code"] == 200) {
-            dealerDeviceList.insertAll(0, newDevices);
+             dealerDeviceList.insertAll(0, newDevices);
            /* onDeviceListAdded({
               "status" :'success',
               "products": selectedProductList,
             });*/
-          }
-        }
+         }
       } catch (error, stackTrace) {
         //debugPrint('Error fetching Product stock: $error');
         //debugPrint(stackTrace.toString());

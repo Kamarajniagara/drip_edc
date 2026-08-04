@@ -75,8 +75,7 @@ class _MotorCyclicLogState extends State<MotorCyclicLog> {
       };
       var response = await IrrigationRepository().getNovaLogDateWise(body);
       Map<String, dynamic> jsonData = jsonDecode(response.body);
-      print('jsonData $jsonData');
-      if(jsonData['code'] == 200){
+       if(response.statusCode == 200){
         setState(() {
           data = jsonData;
         });
