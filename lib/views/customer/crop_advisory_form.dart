@@ -352,35 +352,33 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
       final response = await Repository(HttpService()).fetchSiteAiAdvisoryData(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final data = jsonData['data'];
-          if (data != null || data.isNotEmpty) {
-            cropName = data['cropName'];
-            _cvController.text = data['cropVariety'];
 
-            sowingDate = DateTime.tryParse(data['sowingDate'].split('T')[0]);
-            if (sowingDate != null) {
-              _dateController.text = "${sowingDate!.year}-${sowingDate!.month.toString().padLeft(2, '0')}-${sowingDate!.day.toString().padLeft(2, '0')}";
-            }
+        final data = jsonData['data'];
+        if (data != null || data.isNotEmpty) {
+          cropName = data['cropName'];
+          _cvController.text = data['cropVariety'];
 
-            stage = data['stage'];
-            soilType = data['soilType'];
-            _sphController.text = data['soilPh'];
-            _faController.text = data['fieldArea'];
-            irrigationType = data['irrigationType'];
-            waterSource = data['waterSource'];
-            _lfuController.text = data['lastFertilizerUsed'];
-            fertilizerFreq = data['fertilizerFrequency'];
-            location = data['location'];
-            _ldController.text = location!;
-
-            setState(() {});
-          } else {
+          sowingDate = DateTime.tryParse(data['sowingDate'].split('T')[0]);
+          if (sowingDate != null) {
+            _dateController.text = "${sowingDate!.year}-${sowingDate!.month.toString().padLeft(2, '0')}-${sowingDate!.day.toString().padLeft(2, '0')}";
           }
+
+          stage = data['stage'];
+          soilType = data['soilType'];
+          _sphController.text = data['soilPh'];
+          _faController.text = data['fieldArea'];
+          irrigationType = data['irrigationType'];
+          waterSource = data['waterSource'];
+          _lfuController.text = data['lastFertilizerUsed'];
+          fertilizerFreq = data['fertilizerFrequency'];
+          location = data['location'];
+          _ldController.text = location!;
+
+          setState(() {});
+        } else {
         }
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   Future<void> updateSiteData(BuildContext context, Map<String, String?> data) async {
@@ -394,14 +392,11 @@ class _CropAdvisoryFormPageState extends State<CropAdvisoryForm> {
       final response = await Repository(HttpService()).updateSiteAiAdvisoryData(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(jsonData["message"])),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(jsonData["message"])),
+        );
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
 }

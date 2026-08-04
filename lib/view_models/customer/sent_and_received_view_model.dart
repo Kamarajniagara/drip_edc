@@ -74,12 +74,10 @@ class SentAndReceivedViewModel extends ChangeNotifier {
         sentAndReceivedList.clear();
         final jsonData = jsonDecode(response.body);
 
-        if (jsonData["code"] == 200) {
-          sentAndReceivedList = (jsonData['data'] as List)
-              .map((programJson) =>
-              SentAndReceivedModel.fromJson(programJson))
-              .toList();
-        }
+        sentAndReceivedList = (jsonData['data'] as List)
+            .map((programJson) =>
+            SentAndReceivedModel.fromJson(programJson))
+            .toList();
       }
     } catch (error) {
       //debugPrint('Error fetching sent/received data: $error');
@@ -109,29 +107,27 @@ class SentAndReceivedViewModel extends ChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
 
-        if (jsonData["code"] == 200) {
-          final message = jsonData['data']?['message'];
+        final message = jsonData['data']?['message'];
 
-          if (message != null) {
-            displayJsonData(context, jsonData['data'], aTitle, pyTitle);
-          } else {
-            if (!context.mounted) return;
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(aTitle),
-                  content: const Text("No data available."),
-                  actions: [
-                    TextButton(
-                      child: const Text("Close"),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                );
-              },
-            );
-          }
+        if (message != null) {
+          displayJsonData(context, jsonData['data'], aTitle, pyTitle);
+        } else {
+          if (!context.mounted) return;
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(aTitle),
+                content: const Text("No data available."),
+                actions: [
+                  TextButton(
+                    child: const Text("Close"),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              );
+            },
+          );
         }
       }
     } catch (error) {

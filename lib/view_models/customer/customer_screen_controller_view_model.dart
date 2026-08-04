@@ -276,20 +276,14 @@ class CustomerScreenControllerViewModel extends ChangeNotifier {
       final response = await repository.fetchAllMySite({"userId": customerId});
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-
         //debugPrint('My Site Data:${response.body}');
-
-        if (jsonData["code"] == 200) {
           _handleFetchedSites(jsonData, 'customer', preserveSelection);
-        } else {
-          final sharedResponse =
-          await repository.fetchSharedUserSite({"userId": customerId});
-          if (sharedResponse.statusCode == 200) {
-            final jsonShared = jsonDecode(sharedResponse.body);
-            if (jsonShared["code"] == 200) {
-              _handleFetchedSites(jsonShared, 'subUser', preserveSelection);
-            }
-          }
+      } else {
+        final sharedResponse =
+        await repository.fetchSharedUserSite({"userId": customerId});
+        if (sharedResponse.statusCode == 200) {
+          final jsonShared = jsonDecode(sharedResponse.body);
+          _handleFetchedSites(jsonShared, 'subUser', preserveSelection);
         }
       }
     } catch (error) {
@@ -548,12 +542,10 @@ class CustomerScreenControllerViewModel extends ChangeNotifier {
       };
       final response = await repository.updateControllerCommunicationMode(body);
       if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
-          customerProvider.updateControllerCommunicationMode(
-              cmmMode: communicationMode);
-        }
+
+        final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
+        customerProvider.updateControllerCommunicationMode(
+            cmmMode: communicationMode);
       }
     } catch (_) {}
   }

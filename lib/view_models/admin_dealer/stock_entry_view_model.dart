@@ -69,12 +69,9 @@ class StockEntryViewModel extends SafeChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
 
-        if (jsonData["code"] == 200) {
-          final stockList = jsonData["data"] ?? [];
-
-          productStockList =
-              stockList.map<StockModel>((e) => StockModel.fromJson(e)).toList();
-        }
+        final stockList = jsonData["data"] ?? [];
+        productStockList =
+            stockList.map<StockModel>((e) => StockModel.fromJson(e)).toList();
       }
     } catch (e) {
       //debugPrint("Stock fetch error: $e");
@@ -136,17 +133,15 @@ class StockEntryViewModel extends SafeChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
 
-        if (jsonData["code"] == 200) {
-          final categories = jsonData["data"] as List?;
+        final categories = jsonData["data"] as List?;
 
-          if (categories != null) {
-            categoryList = categories
-                .map((item) => SimpleCategory(
-              id: item["categoryId"],
-              name: item["categoryName"],
-            ))
-                .toList();
-          }
+        if (categories != null) {
+          categoryList = categories
+              .map((item) => SimpleCategory(
+            id: item["categoryId"],
+            name: item["categoryName"],
+          ))
+              .toList();
         }
       }
     } catch (e) {
@@ -172,18 +167,16 @@ class StockEntryViewModel extends SafeChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
 
-        if (jsonData["code"] == 200) {
-          final models = jsonData["data"] as List?;
+        final models = jsonData["data"] as List?;
 
-          if (models != null) {
-            modelEntries = models.map((item) {
-              final model = ProductModel.fromJson(item);
-              return DropdownMenuEntry<ProductModel>(
-                value: model,
-                label: model.modelName,
-              );
-            }).toList();
-          }
+        if (models != null) {
+          modelEntries = models.map((item) {
+            final model = ProductModel.fromJson(item);
+            return DropdownMenuEntry<ProductModel>(
+              value: model,
+              label: model.modelName,
+            );
+          }).toList();
         }
       }
     } catch (e) {
@@ -252,15 +245,11 @@ class StockEntryViewModel extends SafeChangeNotifier {
       if (isDisposed) return false;
 
       if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          _clearForm();
-          addedProductList.clear();
-          await getMyStock(userId, 1);
-          return true; // ✅ SUCCESS
-        } else {
-          errorMsg = jsonData["message"] ?? "Something went wrong";
-        }
+        _clearForm();
+        addedProductList.clear();
+        await getMyStock(userId, 1);
+        return true;
+
       } else {
         errorMsg = "Server error: ${response.statusCode}";
       }

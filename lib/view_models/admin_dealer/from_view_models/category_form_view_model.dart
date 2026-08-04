@@ -32,12 +32,11 @@ class CategoryFormViewModel extends ChangeNotifier {
       var response = await repository.fetchCategory();
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final cntList = jsonData["data"] as List;
-          categoryList.clear();
-          for (int i=0; i < cntList.length; i++) {
-            categoryList.add(ProductCategoryModel.fromJson(cntList[i]));
-          }
+
+        final cntList = jsonData["data"] as List;
+        categoryList.clear();
+        for (int i=0; i < cntList.length; i++) {
+          categoryList.add(ProductCategoryModel.fromJson(cntList[i]));
         }
       }
     } catch (error) {
@@ -63,11 +62,8 @@ class CategoryFormViewModel extends ChangeNotifier {
       }
 
       if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          getCategoryList();
-          GlobalSnackBar.show(context, jsonData["message"], 200);
-        }
+        getCategoryList();
+        GlobalSnackBar.show(context, response.body, response.statusCode);
       }
     } catch (error) {
       errorMsg = 'Error fetching category list: $error';
@@ -165,12 +161,9 @@ class CategoryFormViewModel extends ChangeNotifier {
                           }
 
                           if (response.statusCode == 200) {
-                            final jsonData = jsonDecode(response.body);
-                            if (jsonData["code"] == 200) {
-                              getCategoryList();
-                              GlobalSnackBar.show(context, jsonData["message"], 200);
-                              Navigator.pop(context);
-                            }
+                            getCategoryList();
+                            GlobalSnackBar.show(context, response.body, response.statusCode);
+                            Navigator.pop(context);
                           }
                         } catch (error) {
                           errorMsg = 'Error fetching category list: $error';

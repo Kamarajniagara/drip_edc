@@ -83,15 +83,11 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
       var response = await repository.fetchDeviceList(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          totalProduct = jsonData["data"]["totalProduct"] ?? 0;
-          List<DeviceListModel> newDevices = (jsonData["data"]["product"] as List)
-              .map((item) => DeviceListModel.fromJson(item))
-              .toList();
-          customerDeviceList.addAll(newDevices);
-        } else {
-          //debugPrint("API Error: ${jsonData['message'] ?? 'Unknown error'}");
-        }
+        totalProduct = jsonData["data"]["totalProduct"] ?? 0;
+        List<DeviceListModel> newDevices = (jsonData["data"]["product"] as List)
+            .map((item) => DeviceListModel.fromJson(item))
+            .toList();
+        customerDeviceList.addAll(newDevices);
       } else {
         //debugPrint("HTTP Error: ${response.statusCode}");
       }
@@ -151,20 +147,17 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
         var response = await repository.addProductToCustomer(body);
         if (response.statusCode == 200) {
           final Map<String, dynamic> jsonData = jsonDecode(response.body);
-          if(jsonData["code"] == 200){
-            customerDeviceList.insertAll(0, newDevices);
-
-            onProductUpdatedCallback(
-              'added',
-              newDevices.map((d) => StockModel(
-                productId: d.productId,
-                categoryName: d.categoryName,
-                model: d.model,
-                imeiNo: d.deviceId,
-                dtOfMnf: d.modifyDate,
-              )).toList(),
-            );
-          }
+          customerDeviceList.insertAll(0, newDevices);
+          onProductUpdatedCallback(
+            'added',
+            newDevices.map((d) => StockModel(
+              productId: d.productId,
+              categoryName: d.categoryName,
+              model: d.model,
+              imeiNo: d.deviceId,
+              dtOfMnf: d.modifyDate,
+            )).toList(),
+          );
         }
       } catch (error, stackTrace) {
         //debugPrint('Error fetching Product stock: $error');
@@ -184,12 +177,10 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
       var response = await repository.fetchUserGroupWithMasterList(body);
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-        if(jsonData["code"] == 200){
-          customerSiteList.clear();
-          final cntList = jsonData["data"] as List;
-          for (int i=0; i < cntList.length; i++) {
-            customerSiteList.add(ProductListWithNode.fromJson(cntList[i]));
-          }
+        customerSiteList.clear();
+        final cntList = jsonData["data"] as List;
+        for (int i=0; i < cntList.length; i++) {
+          customerSiteList.add(ProductListWithNode.fromJson(cntList[i]));
         }
       }
     } catch (error, stackTrace) {
@@ -210,12 +201,10 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
       var response = await repository.fetchMasterProductStock(body);
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-        if(jsonData["code"] == 200){
-          myMasterControllerList.clear();
-          final cntList = jsonData["data"] as List;
-          for (int i=0; i < cntList.length; i++) {
-            myMasterControllerList.add(StockModel.fromJson(cntList[i]));
-          }
+        myMasterControllerList.clear();
+        final cntList = jsonData["data"] as List;
+        for (int i=0; i < cntList.length; i++) {
+          myMasterControllerList.add(StockModel.fromJson(cntList[i]));
         }
       }
     } catch (error, stackTrace) {
@@ -292,11 +281,10 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
                   var response = await repository.createUserGroupAndDeviceList(body);
                   if (response.statusCode == 200) {
                     final Map<String, dynamic> jsonData = jsonDecode(response.body);
-                    if(jsonData["code"] == 200){
-                      getCustomerSite();
-                      getMasterProduct();
-                      Navigator.pop(context);
-                    }
+
+                    getCustomerSite();
+                    getMasterProduct();
+                    Navigator.pop(context);
                   }
                 } catch (error, stackTrace) {
                   //debugPrint('Error fetching Product stock: $error');
@@ -327,13 +315,13 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
       var response = await repository.createNewMaster(body);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        if (data["code"] == 200) {
-          getCustomerSite();
-          getMasterProduct();
-          GlobalSnackBar.show(context, data["message"], data["code"]);
-        } else {
-          GlobalSnackBar.show(context, data["message"], data["code"]);
-        }
+
+        getCustomerSite();
+        getMasterProduct();
+        GlobalSnackBar.show(context, response.body, response.statusCode);
+
+      }else{
+        GlobalSnackBar.show(context, response.body, response.statusCode);
       }
     } catch (error, stackTrace) {
       //debugPrint('Error fetching Product stock: $error');
@@ -356,35 +344,33 @@ class CustomerDeviceListViewModel extends ChangeNotifier {
       var response = await repository.removeProductFromCustomer(body);
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-        if(jsonData["code"] == 200){
 
-          final removedDevice = customerDeviceList.firstWhere(
-                (device) => device.productId == productId,
-            orElse: () => DeviceListModel(
-              categoryName: '',
-              deviceId: '',
-              model: '',
-              modifyDate: '',
-              productId: productId,
-              productStatus: 0,
-              siteName: '',
-            ),
-          );
+        final removedDevice = customerDeviceList.firstWhere(
+              (device) => device.productId == productId,
+          orElse: () => DeviceListModel(
+            categoryName: '',
+            deviceId: '',
+            model: '',
+            modifyDate: '',
+            productId: productId,
+            productStatus: 0,
+            siteName: '',
+          ),
+        );
 
-          customerDeviceList.removeWhere((device) => device.productId == productId);
-          notifyListeners();
+        customerDeviceList.removeWhere((device) => device.productId == productId);
+        notifyListeners();
 
-          onProductUpdatedCallback(
-            'removed',
-            [StockModel(
-              productId: removedDevice.productId,
-              categoryName: removedDevice.categoryName,
-              model: removedDevice.model,
-              imeiNo: removedDevice.deviceId,
-              dtOfMnf: removedDevice.modifyDate,
-            )],
-          );
-        }
+        onProductUpdatedCallback(
+          'removed',
+          [StockModel(
+            productId: removedDevice.productId,
+            categoryName: removedDevice.categoryName,
+            model: removedDevice.model,
+            imeiNo: removedDevice.deviceId,
+            dtOfMnf: removedDevice.modifyDate,
+          )],
+        );
       }
     } catch (error, stackTrace) {
       //debugPrint('Error fetching Product stock: $error');

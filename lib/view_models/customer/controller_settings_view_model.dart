@@ -53,7 +53,7 @@ class ControllerSettingsViewModel extends ChangeNotifier {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
 
-        if (jsonData["code"] == 200 && jsonData["data"] is List) {
+        if (jsonData["data"] is List) {
           final List<dynamic> dataList = jsonData["data"];
 
           final Set<String> availableTitles = dataList

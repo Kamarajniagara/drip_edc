@@ -78,39 +78,36 @@ class GeneralSettingViewModel extends ChangeNotifier {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
-        if (data["code"] == 200) {
+        final firstItem = (data["data"] as List).isNotEmpty ? data["data"][0] : {};
 
-          final firstItem = (data["data"] as List).isNotEmpty ? data["data"][0] : {};
+        farmName = firstItem['groupName'] ?? "";
+        controllerCategory = firstItem['deviceName'] ?? "";
+        modelName = firstItem['modelName'] ?? "";
+        deviceId = firstItem['deviceId'] ?? "";
+        categoryName = firstItem['categoryName'] ?? "";
 
-          farmName = firstItem['groupName'] ?? "";
-          controllerCategory = firstItem['deviceName'] ?? "";
-          modelName = firstItem['modelName'] ?? "";
-          deviceId = firstItem['deviceId'] ?? "";
-          categoryName = firstItem['categoryName'] ?? "";
+        modelId = firstItem['modelId'] ?? 0;
+        groupId = firstItem['groupId'] ?? 0;
 
-          modelId = firstItem['modelId'] ?? 0;
-          groupId = firstItem['groupId'] ?? 0;
+        countryCode = firstItem['countryCode'];
+        simNumber = firstItem['simNumber'] ?? "";
 
-          countryCode = firstItem['countryCode'];
-          simNumber = firstItem['simNumber'] ?? "";
+        controllerVersion = firstItem['hwVersion'] ?? "";
+        newVersion = firstItem['availableHwVersion'] ?? "";
 
-          controllerVersion = firstItem['hwVersion'] ?? "";
-          newVersion = firstItem['availableHwVersion'] ?? "";
+        controllerLocation = firstItem['controllerLocation'] ?? "";
 
-          controllerLocation = firstItem['controllerLocation'] ?? "";
+        String timeZone = firstItem['timeZone'] ?? "Asia/Kolkata";
 
-          String timeZone = firstItem['timeZone'] ?? "Asia/Kolkata";
+        updateCurrentDateTime(timeZone);
 
-          updateCurrentDateTime(timeZone);
+        bool hasNewVersion = newVersion.isNotEmpty;
+        bool isDifferentVersion = controllerVersion != newVersion;
 
-          bool hasNewVersion = newVersion.isNotEmpty;
-          bool isDifferentVersion = controllerVersion != newVersion;
-
-          if (hasNewVersion && isDifferentVersion) {
-            timerFunction();
-          } else {
-            _timer?.cancel();
-          }
+        if (hasNewVersion && isDifferentVersion) {
+          timerFunction();
+        } else {
+          _timer?.cancel();
         }
       }
     } catch (e) {
@@ -133,10 +130,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        if (data["code"] == 200) {
-          subUsers = List<Map<String, dynamic>>.from(data["data"]);
-        }
+        subUsers = List<Map<String, dynamic>>.from(data["data"]);
       }
     } catch (e) {
       //debugPrint("Error getSubUserList: $e");
@@ -185,8 +179,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
 
       var response = await repository.updateMasterDetails(body);
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        GlobalSnackBar.show(context, data["message"], data["code"]);
+        GlobalSnackBar.show(context, response.body, response.statusCode);
       }
     } catch (e) {
       //debugPrint("Error updateMasterDetails: $e");
@@ -199,8 +192,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
     try {
       var response = await repository.updatedSubUserPermission(body);
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        GlobalSnackBar.show(context, data["message"], data["code"]);
+        GlobalSnackBar.show(context, response.body, response.statusCode);
         Navigator.pop(context);
       }
     } catch (error) {
@@ -213,10 +205,8 @@ class GeneralSettingViewModel extends ChangeNotifier {
       var response = await repository.getSubUserSharedDeviceList(body);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data["code"] == 200) {
-          var list = data['data'] as List;
-          return list;
-        }
+        var list = data['data'] as List;
+        return list;
       }
     } catch (error) {
       //debugPrint('Error fetching device list: $error');

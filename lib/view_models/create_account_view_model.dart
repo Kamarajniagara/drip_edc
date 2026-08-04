@@ -38,11 +38,10 @@ class CreateAccountViewModel extends ChangeNotifier {
       final response = await repository.fetchCountryList();
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final countryData = jsonData["data"] as List;
-          countries = countryData.map((e) => e['countryName'] as String).toList();
-          countryList = countryData.map((e) => CountryListModel.fromJson(e)).toList();
-        }
+
+        final countryData = jsonData["data"] as List;
+        countries = countryData.map((e) => e['countryName'] as String).toList();
+        countryList = countryData.map((e) => CountryListModel.fromJson(e)).toList();
       }
     } catch (error) {
       //debugPrint('Error fetching country list: $error');
@@ -63,11 +62,10 @@ class CreateAccountViewModel extends ChangeNotifier {
       final response = await repository.fetchStateList(countryId);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final stateData = jsonData["data"] as List;
-          states = stateData.map((e) => e['stateName'] as String).toList();
-          stateList = stateData.map((e) => StateListModel.fromJson(e)).toList();
-        }
+
+        final stateData = jsonData["data"] as List;
+        states = stateData.map((e) => e['stateName'] as String).toList();
+        stateList = stateData.map((e) => StateListModel.fromJson(e)).toList();
       }
     } catch (error) {
       //debugPrint('Error fetching state list: $error');
@@ -115,21 +113,21 @@ class CreateAccountViewModel extends ChangeNotifier {
 
         if (response.statusCode == 200) {
           final jsonData = jsonDecode(response.body);
-          if (jsonData["code"] == 200) {
-            onAccountCreatedSuccess({
-              'status': 'success',
-              'message': 'Account created successfully',
-              'userId': jsonData["data"]['userId'],
-              'userName': name ?? '',
-              'countryCode': dialCode.replaceAll('+', ''),
-              'mobileNumber': mobileNoController.text,
-              'emailId': email ?? '',
-              'serviceRequestCount': 0,
-              'criticalAlarmCount': 0,
-            });
-          } else{
-            errorMsg = jsonData["message"];
-          }
+
+          onAccountCreatedSuccess({
+            'status': 'success',
+            'message': 'Account created successfully',
+            'userId': jsonData["data"]['userId'],
+            'userName': name ?? '',
+            'countryCode': dialCode.replaceAll('+', ''),
+            'mobileNumber': mobileNoController.text,
+            'emailId': email ?? '',
+            'serviceRequestCount': 0,
+            'criticalAlarmCount': 0,
+          });
+
+        }else{
+          errorMsg = response.body;
         }
       } catch (error) {
         //debugPrint('Error creating account: $error');

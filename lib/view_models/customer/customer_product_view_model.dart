@@ -21,10 +21,8 @@ class CustomerProductViewModel extends ChangeNotifier {
       final response = await repository.fetchAllMyInventory(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          productInventoryListCus = (jsonData["data"]["product"] as List).map((data) =>
-              CustomerProductModel.fromJson(data)).toList();
-        }
+        productInventoryListCus = (jsonData["data"]["product"] as List).map((data) =>
+            CustomerProductModel.fromJson(data)).toList();
       }
     } catch (error) {
       //debugPrint('Error fetching country list: $error');

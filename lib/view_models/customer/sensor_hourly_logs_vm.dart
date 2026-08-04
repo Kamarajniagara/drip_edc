@@ -32,51 +32,50 @@ class SensorHourlyLogsVm extends ChangeNotifier {
     var response = await repository.fetchSensorHourlyData(body);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      if (data["code"] == 200) {
-        final jsonData = data["data"] as List;
 
-        if (jsonData.isEmpty) return;
+      final jsonData = data["data"] as List;
 
-        try {
-          for (var hourEntry in jsonData[0].entries) {
-            final hour = hourEntry.key;
-            final value = hourEntry.value;
+      if (jsonData.isEmpty) return;
 
-            if (hour != 'date' && value.isNotEmpty) {
-              final sensorStrings = value.split(';');
+      try {
+        for (var hourEntry in jsonData[0].entries) {
+          final hour = hourEntry.key;
+          final value = hourEntry.value;
 
-              for (final sensorStr in sensorStrings) {
-                final parts = sensorStr.split(',');
-                if (parts.length == 3) {
-                  double sNo = double.parse(parts[0]);
-                  final val1 = double.tryParse(parts[1]) ?? 0.0;
+          if (hour != 'date' && value.isNotEmpty) {
+            final sensorStrings = value.split(';');
 
-                  var matchedNode = configObjects.firstWhere(
-                        (obj) => obj.sNo == sNo,
-                  );
+            for (final sensorStr in sensorStrings) {
+              final parts = sensorStr.split(',');
+              if (parts.length == 3) {
+                double sNo = double.parse(parts[0]);
+                final val1 = double.tryParse(parts[1]) ?? 0.0;
 
-                  String sensorName = matchedNode.name;
-                  String objectName = matchedNode.objectName;
+                var matchedNode = configObjects.firstWhere(
+                      (obj) => obj.sNo == sNo,
+                );
 
-                  final sensorData = SensorHourlyData(
-                    sNo: sNo,
-                    hour: hour,
-                    objectName: objectName,
-                    value: val1,
-                    name: sensorName,
-                  );
+                String sensorName = matchedNode.name;
+                String objectName = matchedNode.objectName;
 
-                  sensorsBySNo.putIfAbsent(sNo.toString(), () => []);
-                  sensorsBySNo[sNo.toString()]!.add(sensorData);
-                }
+                final sensorData = SensorHourlyData(
+                  sNo: sNo,
+                  hour: hour,
+                  objectName: objectName,
+                  value: val1,
+                  name: sensorName,
+                );
+
+                sensorsBySNo.putIfAbsent(sNo.toString(), () => []);
+                sensorsBySNo[sNo.toString()]!.add(sensorData);
               }
             }
           }
-
-          notifyListeners();
-        } catch (e) {
-          print('Error: $e');
         }
+
+        notifyListeners();
+      } catch (e) {
+        print('Error: $e');
       }
     }
   }

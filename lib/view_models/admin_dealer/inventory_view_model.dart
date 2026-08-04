@@ -146,18 +146,15 @@ class InventoryViewModel extends SafeChangeNotifier {
       var response = await repository.fetchModelByCategoryId(body);
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          final List<dynamic> cntList = jsonData["data"] ?? [];
-          activeModelList..clear()..addAll(cntList.map((e) => ProductModel.fromJson(e)));
-          selectedModel = activeModelList.map((product) => DropdownMenuEntry<ProductModel>(
-            value: product,
-            label: product.modelName,
-          )).toList();
-           displayEditProductDialog(context, catId, catName, mdlName, mdlDis,
-               mdlId, imeiNo, warranty, productId, userId);
-        } else {
-          //debugPrint("API Error: ${jsonData['message']}");
-        }
+
+        final List<dynamic> cntList = jsonData["data"] ?? [];
+        activeModelList..clear()..addAll(cntList.map((e) => ProductModel.fromJson(e)));
+        selectedModel = activeModelList.map((product) => DropdownMenuEntry<ProductModel>(
+          value: product,
+          label: product.modelName,
+        )).toList();
+        displayEditProductDialog(context, catId, catName, mdlName, mdlDis,
+            mdlId, imeiNo, warranty, productId, userId);
       } else {
         //debugPrint("HTTP Error: ${response.statusCode}");
       }
@@ -298,23 +295,21 @@ class InventoryViewModel extends SafeChangeNotifier {
                       var response = await repository.updateProduct(body);
                       if (response.statusCode == 200) {
                         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-                        if (jsonData["code"] == 200) {
-                          for (var item in productInventoryList) {
-                            if (item.productId == productId) {
-                              item.deviceId = ctrlIMI.text.trim();
-                              item.warrantyMonths = int.parse(ctrlWrM.text);
-                              break;
-                            }
+
+                        for (var item in productInventoryList) {
+                          if (item.productId == productId) {
+                            item.deviceId = ctrlIMI.text.trim();
+                            item.warrantyMonths = int.parse(ctrlWrM.text);
+                            break;
                           }
-                          GlobalSnackBar.show(context, jsonData["message"], 200);
-                          Navigator.pop(context);
-                        } else {
-                          //debugPrint("API Error: ${jsonData['message']}");
-                          GlobalSnackBar.show(context, jsonData["message"], jsonData["code"]);
-                          Navigator.pop(context);
                         }
+                        GlobalSnackBar.show(context, response.body, response.statusCode);
+                        Navigator.pop(context);
+
+
                       } else {
-                        //debugPrint("HTTP Error: ${response.statusCode}");
+                        GlobalSnackBar.show(context, response.body, response.statusCode);
+                        Navigator.pop(context);
                       }
                     } catch (error, stackTrace) {
                       //debugPrint('Error fetching models: $error');

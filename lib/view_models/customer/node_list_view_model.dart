@@ -178,13 +178,10 @@ class NodeListViewModel extends ChangeNotifier {
                   try {
                     var response = await repository.updateUserNodeDetails(body);
                     if (response.statusCode == 200) {
-                      final jsonData = jsonDecode(response.body);
-                      if (jsonData["code"] == 200) {
-                        nodeList[index].deviceName = nodeNameController.text;
-                        notifyListeners();
-                        GlobalSnackBar.show(context, 'Node name updated successfully', 200);
-                        Navigator.of(context).pop();
-                      }
+                      nodeList[index].deviceName = nodeNameController.text;
+                      notifyListeners();
+                      GlobalSnackBar.show(context, response.body, response.statusCode);
+                      Navigator.of(context).pop();
                     }
                   } catch (error) {
                     //debugPrint('Error fetching category list: $error');

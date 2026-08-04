@@ -48,56 +48,54 @@ class NodeHourlyLogsVm extends ChangeNotifier {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
 
-      if (data["code"] == 200) {
-        final jsonData = data["data"] as List;
+      final jsonData = data["data"] as List;
 
-        try {
-          nodeDataMap.clear();
+      try {
+        nodeDataMap.clear();
 
-          for (var hourEntry in jsonData[0].entries) {
-            String hour = hourEntry.key;
-            String value = hourEntry.value;
+        for (var hourEntry in jsonData[0].entries) {
+          String hour = hourEntry.key;
+          String value = hourEntry.value;
 
-            if (hour != 'date' && value.isNotEmpty) {
-              List<String> nodeStrings = value.split(';');
+          if (hour != 'date' && value.isNotEmpty) {
+            List<String> nodeStrings = value.split(';');
 
-              for (var nodeStr in nodeStrings) {
-                List<String> parts = nodeStr.split(',');
+            for (var nodeStr in nodeStrings) {
+              List<String> parts = nodeStr.split(',');
 
-                if (parts.length == 3) {
-                  String nodeId = parts[0];
-                  double solarVoltage =
-                      double.tryParse(parts[1]) ?? 0.0;
-                  double batteryVoltage =
-                      double.tryParse(parts[2]) ?? 0.0;
+              if (parts.length == 3) {
+                String nodeId = parts[0];
+                double solarVoltage =
+                    double.tryParse(parts[1]) ?? 0.0;
+                double batteryVoltage =
+                    double.tryParse(parts[2]) ?? 0.0;
 
-                  var matchedNode = nodeList.firstWhere(
-                        (node) =>
-                    node.serialNumber == int.parse(nodeId),
-                  );
+                var matchedNode = nodeList.firstWhere(
+                      (node) =>
+                  node.serialNumber == int.parse(nodeId),
+                );
 
-                  String deviceName = matchedNode.deviceName;
-                  String deviceId = matchedNode.deviceId;
+                String deviceName = matchedNode.deviceName;
+                String deviceId = matchedNode.deviceId;
 
-                  nodeDataMap.putIfAbsent(deviceId, () => []);
+                nodeDataMap.putIfAbsent(deviceId, () => []);
 
-                  nodeDataMap[deviceId]!.add(
-                    ChartDataLog(
-                      deviceName,
-                      hour,
-                      batteryVoltage,
-                      solarVoltage,
-                    ),
-                  );
-                }
+                nodeDataMap[deviceId]!.add(
+                  ChartDataLog(
+                    deviceName,
+                    hour,
+                    batteryVoltage,
+                    solarVoltage,
+                  ),
+                );
               }
             }
           }
-
-          safeNotify();
-        } catch (e) {
-          //debugPrint('Error parsing node logs: $e');
         }
+
+        safeNotify();
+      } catch (e) {
+        //debugPrint('Error parsing node logs: $e');
       }
     }
   }

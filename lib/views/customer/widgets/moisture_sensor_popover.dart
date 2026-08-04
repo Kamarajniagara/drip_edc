@@ -229,30 +229,28 @@ class _MoistureSensorPopoverState extends State<MoistureSensorPopover> {
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          sensors = (jsonData['data'] as List).map((item) {
-            final dateStr = item['date'];
-            final Map<String, List<SensorHourlyData>> hourlyDataMap = {};
+        sensors = (jsonData['data'] as List).map((item) {
+          final dateStr = item['date'];
+          final Map<String, List<SensorHourlyData>> hourlyDataMap = {};
 
-            item.forEach((key, value) {
-              if (key == 'date') return;
-              if (value is String && value.isNotEmpty) {
-                final entries = value.split(';');
-                hourlyDataMap[key] = entries
-                    .map((entry) =>
-                    SensorHourlyData.fromCsv(entry, key, dateStr))
-                    .toList();
-              } else {
-                hourlyDataMap[key] = [];
-              }
-            });
+          item.forEach((key, value) {
+            if (key == 'date') return;
+            if (value is String && value.isNotEmpty) {
+              final entries = value.split(';');
+              hourlyDataMap[key] = entries
+                  .map((entry) =>
+                  SensorHourlyData.fromCsv(entry, key, dateStr))
+                  .toList();
+            } else {
+              hourlyDataMap[key] = [];
+            }
+          });
 
-            return SensorHourlyDataModel(
-              date: item['date'],
-              data: hourlyDataMap,
-            );
-          }).toList();
-        }
+          return SensorHourlyDataModel(
+            date: item['date'],
+            data: hourlyDataMap,
+          );
+        }).toList();
       }
     } catch (error) {
       //debugPrint('Error fetching sensor hourly data: $error');

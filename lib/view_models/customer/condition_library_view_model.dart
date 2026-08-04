@@ -38,20 +38,18 @@ class ConditionLibraryViewModel extends ChangeNotifier {
 
         if (response.statusCode == 200) {
           final jsonData = jsonDecode(response.body);
-          //print(response.body);
-          if (jsonData["code"] == 200) {
-            clData = ConditionLibraryModel.fromJson(jsonData['data']);
-            clData.cnLibrary.condition.sort((a, b) => (a.sNo).compareTo(b.sNo));
-            vtTEVControllers = List.generate(
-              clData.cnLibrary.condition.length,
-                  (index) => TextEditingController(),
-            );
-            amTEVControllers = List.generate(
-              clData.cnLibrary.condition.length,
-                  (index) => TextEditingController(),
-            );
-            connectedTo = List.generate(5, (index) => []);
-          }
+
+          clData = ConditionLibraryModel.fromJson(jsonData['data']);
+          clData.cnLibrary.condition.sort((a, b) => (a.sNo).compareTo(b.sNo));
+          vtTEVControllers = List.generate(
+            clData.cnLibrary.condition.length,
+                (index) => TextEditingController(),
+          );
+          amTEVControllers = List.generate(
+            clData.cnLibrary.condition.length,
+                (index) => TextEditingController(),
+          );
+          connectedTo = List.generate(5, (index) => []);
         }
       } catch (error) {
         //debugPrint('Error fetching condition library: $error');
@@ -344,10 +342,8 @@ class ConditionLibraryViewModel extends ChangeNotifier {
       };
 
       var response = await repository.saveConditionLibrary(body);
-
       if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        GlobalSnackBar.show(context, jsonData["message"], jsonData["code"]);
+        GlobalSnackBar.show(context, response.body, response.statusCode);
       }
 
     } catch (error) {

@@ -40,13 +40,12 @@ class CustomerListViewModel extends SafeChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data["code"] == 200) {
-          final list = data["data"];
-          if (list is List) {
-            myCustomerList =
-                list.map((e) => CustomerListModel.fromJson(e)).toList();
-            refreshFilter();
-          }
+
+        final list = data["data"];
+        if (list is List) {
+          myCustomerList =
+              list.map((e) => CustomerListModel.fromJson(e)).toList();
+          refreshFilter();
         }
       }
     } catch (e, st) {
