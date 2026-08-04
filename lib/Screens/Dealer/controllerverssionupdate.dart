@@ -4,8 +4,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oro_drip_irrigation/Screens/Dealer/pumpTopicChange.dart';
-import 'package:oro_drip_irrigation/utils/constants.dart';
 import 'package:oro_drip_irrigation/utils/environment.dart';
 import 'package:provider/provider.dart';
 import '../../StateManagement/mqtt_payload_provider.dart';
@@ -13,7 +11,6 @@ import '../../repository/repository.dart';
 import '../../services/http_service.dart';
 import '../../services/mqtt_service.dart';
 import '../../utils/secure_storage_helper.dart';
-import 'configureMqttTopic.dart';
 import 'controllerlogfile.dart';
 import 'frequencyLoRaPage.dart';
 
@@ -261,46 +258,6 @@ class _ResetVerssionState extends State<ResetVerssion> {
                               icon: const Icon(Icons.arrow_circle_right_outlined),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Tooltip(
-                              message: "Config Hardware",
-                              child: IconButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.teal.shade100)),
-                                onPressed: () {
-                                  setState(() {
-                                    //print('mergedList[index]:${mergedList[index]['modelId']}');
-                                    selectindex = index;
-                                    if (AppConstants.pumpList.contains(mergedList[index]['modelId'])) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => PumpTopicChangePage(
-                                            deviceID: '${mergedList[index]['deviceId'
-                                            ]!}', userId: widget.userId, controllerId: widget.controllerId, modelId:mergedList[index]['modelId'],communicationType: "MQTT",),
-                                        ),
-                                      );
-                                    }
-                                    else{
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ConfigureMqtt(
-                                            deviceID: '${mergedList[index]['deviceId'
-                                            ]!}', userId: widget.userId, controllerId: widget.controllerId, communicationType: "MQTT",),
-                                        ),
-                                      ) ;
-
-                                    }
-
-                                  });
-                                },
-                                icon: const Icon(Icons.settings_outlined),
-                              ),
-                            ),
-                          ) ,
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Tooltip(

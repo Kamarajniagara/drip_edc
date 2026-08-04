@@ -85,7 +85,7 @@ dependencies:
   pointycastle: ^3.9.1
   flutter_secure_storage: ^9.2.2
   safe_device: ^1.1.5
-  screen_protector: ^1.4.2
+  #screen_protector: ^1.4.2
 
 #  audioplayers: ^6.5.0
 #  record: ^6.0.0

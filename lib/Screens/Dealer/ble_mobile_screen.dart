@@ -1,22 +1,20 @@
 
 import 'package:flutter/material.dart';
-import 'package:oro_drip_irrigation/Screens/Dealer/configureMqttTopic.dart';
-
 import 'bLE_update.dart';
 import 'controllerlogfile.dart';
 
 class BLEMobileScreen extends StatelessWidget {
   final String deviceID;
   final String communicationType;
-  final  userId, controllerId;
+  final  int userId, controllerId;
 
   const BLEMobileScreen({
-    Key? key,
+    super.key,
     required this.deviceID,
     required this.communicationType,
     required this.userId,
     required this.controllerId,
-   }) : super(key: key);
+   });
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class BLEMobileScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FirmwareBLEPage(
+                          builder: (context) => const FirmwareBLEPage(
                            ),
                         ),
                       );
@@ -75,34 +73,10 @@ class BLEMobileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ConfigureMqtt(deviceID: deviceID, userId: userId, controllerId: controllerId,communicationType:communicationType),
-                        ),
-                      );
-                    },
-                    child: const Text("Update HW Settings"),
-                  ),
-
-
-                 ],
-              ),
             ],
           ),
         ),
       ),
     );
   }
-
-
-
 }

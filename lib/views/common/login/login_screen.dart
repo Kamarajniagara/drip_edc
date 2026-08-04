@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:screen_protector/screen_protector.dart';
+//import 'package:screen_protector/screen_protector.dart';
 import '../../../layouts/user_layout.dart';
 import '../../../repository/repository.dart';
 import '../../../security/device_security.dart';
@@ -20,12 +20,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _protectScreen();
+    //_protectScreen();
   }
 
-  Future<void> _protectScreen() async {
+  /*Future<void> _protectScreen() async {
     await ScreenProtector.protectDataLeakageOn(); // enables FLAG_SECURE on Android, blur-on-background on iOS
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    ScreenProtector.protectDataLeakageOff();
+    //ScreenProtector.protectDataLeakageOff();
     super.dispose();
   }
 }
