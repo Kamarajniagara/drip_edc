@@ -68,8 +68,7 @@ class ConstantViewModel extends ChangeNotifier {
         //print(response.body);
         if (response.statusCode == 200) {
           final jsonData = jsonDecode(response.body);
-          if (jsonData["code"] == 200) {
-            userConstant = UserConstant.fromJson(context, jsonData['data']);
+             userConstant = UserConstant.fromJson(context, jsonData['data']);
             filteredMenu = userConstant.defaultData.constantMenus
                 .where((item) => item.parameter != "Normal Alarm")
                 .toList();
@@ -143,8 +142,7 @@ class ConstantViewModel extends ChangeNotifier {
             menuOnChange(0);
 
           }
-        }
-      } catch (error) {
+       } catch (error) {
         //debugPrint('Error fetching language list: $error');
       } finally {
         setLoading(false);
@@ -526,10 +524,8 @@ class ConstantViewModel extends ChangeNotifier {
         var response = await repository.saveConstantData(body);
         if (response.statusCode == 200) {
           final jsonData = jsonDecode(response.body);
-          if (jsonData["code"] == 200) {
-            GlobalSnackBar.show(context, jsonData["message"], jsonData["code"]);
-          }
-        }
+             GlobalSnackBar.show(context, jsonData["message"], jsonData["code"]);
+         }
       } catch (error) {
         //debugPrint('Error fetching language list: $error');
       } finally {

@@ -39,8 +39,7 @@ class ConditionLibraryViewModel extends ChangeNotifier {
         if (response.statusCode == 200) {
           final jsonData = jsonDecode(response.body);
           //print(response.body);
-          if (jsonData["code"] == 200) {
-            clData = ConditionLibraryModel.fromJson(jsonData['data']);
+             clData = ConditionLibraryModel.fromJson(jsonData['data']);
             clData.cnLibrary.condition.sort((a, b) => (a.sNo).compareTo(b.sNo));
             vtTEVControllers = List.generate(
               clData.cnLibrary.condition.length,
@@ -51,7 +50,7 @@ class ConditionLibraryViewModel extends ChangeNotifier {
                   (index) => TextEditingController(),
             );
             connectedTo = List.generate(5, (index) => []);
-          }
+
         }
       } catch (error) {
         //debugPrint('Error fetching condition library: $error');

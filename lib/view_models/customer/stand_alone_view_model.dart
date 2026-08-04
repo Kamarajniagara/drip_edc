@@ -57,8 +57,7 @@ class StandAloneViewModel extends ChangeNotifier {
       final response = await repository.fetchCustomerProgramList(body);
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        if (jsonData["code"] == 200) {
-          List<dynamic> programsJson = jsonData['data'];
+           List<dynamic> programsJson = jsonData['data'];
           programList = [...programsJson.map((programJson) => ProgramModel.fromJson(programJson))];
 
           if(![...AppConstants.ecoGemModelList].contains(masterData.modelId)){
@@ -95,7 +94,7 @@ class StandAloneViewModel extends ChangeNotifier {
 
           getExitManualOperation();
         }
-      }
+
     } catch (error) {
       //debugPrint('Error fetching country list: $error');
     } finally {
