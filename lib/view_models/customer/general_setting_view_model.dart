@@ -13,6 +13,9 @@ import '../../utils/snack_bar.dart';
 class GeneralSettingViewModel extends ChangeNotifier {
   final Repository repository;
 
+  bool _isDisposed = false;
+  bool get isDisposed => _isDisposed;
+
   bool isLoading = false;
   String errorMessage = "";
 
@@ -46,8 +49,14 @@ class GeneralSettingViewModel extends ChangeNotifier {
 
   final List<String> timeZones =
   tz.timeZoneDatabase.locations.keys.toList();
-
   GeneralSettingViewModel(this.repository);
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    _timer?.cancel();
+    super.dispose();
+  }
 
   void initIds({
     required int customerId,
@@ -74,6 +83,8 @@ class GeneralSettingViewModel extends ChangeNotifier {
       };
 
       var response = await repository.fetchMasterControllerDetails(body);
+
+      if (isDisposed) return;
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -118,6 +129,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
   }
 
 
+
   Future<void> getSubUserList() async {
     if (customerId == null) return;
 
@@ -128,12 +140,22 @@ class GeneralSettingViewModel extends ChangeNotifier {
 
       var response = await repository.fetchSubUserList(body);
 
+      if (_isDisposed) return;
+
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        subUsers = List<Map<String, dynamic>>.from(data["data"]);
+        subUsers = List<Map<String, dynamic>>.from(data["data"] ?? []);
+      } else {
+        subUsers = [];
+        debugPrint(data["message"] ?? "Failed to load sub users");
+      }
+
+      if (!_isDisposed) {
+        notifyListeners();
       }
     } catch (e) {
-      //debugPrint("Error getSubUserList: $e");
+      debugPrint("Error getSubUserList: $e");
     } finally {
       setLoading(false);
     }
@@ -148,7 +170,10 @@ class GeneralSettingViewModel extends ChangeNotifier {
     currentTime = DateFormat.jm().format(now);
 
     selectedTimeZone = timeZone;
-    notifyListeners();
+
+    if (!_isDisposed) {
+      notifyListeners();
+    }
   }
 
 
@@ -178,6 +203,9 @@ class GeneralSettingViewModel extends ChangeNotifier {
       commService.sendCommand(serverMsg: '', payload: payLoadFinal);
 
       var response = await repository.updateMasterDetails(body);
+
+      if (isDisposed) return;
+
       if (response.statusCode == 200) {
         GlobalSnackBar.show(context, response.body, response.statusCode);
       }
@@ -191,7 +219,11 @@ class GeneralSettingViewModel extends ChangeNotifier {
   Future<void> updatedSubUserPermission(Map<String, dynamic> body, int subUsrId, BuildContext context) async {
     try {
       var response = await repository.updatedSubUserPermission(body);
+
+      if (isDisposed) return;
+
       if (response.statusCode == 200) {
+
         GlobalSnackBar.show(context, response.body, response.statusCode);
         Navigator.pop(context);
       }
@@ -203,6 +235,7 @@ class GeneralSettingViewModel extends ChangeNotifier {
   Future<List<dynamic>?> getSubUserSharedDeviceList(Map<String, dynamic> body) async {
     try {
       var response = await repository.getSubUserSharedDeviceList(body);
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         var list = data['data'] as List;
@@ -222,19 +255,16 @@ class GeneralSettingViewModel extends ChangeNotifier {
 
   void timerFunction() {
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (_isDisposed) return;
       opacity = opacity == 1.0 ? 0.0 : 1.0;
       notifyListeners();
     });
   }
 
   void setLoading(bool value) {
+    if (_isDisposed) return;
     isLoading = value;
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 }

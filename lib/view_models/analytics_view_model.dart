@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:oro_drip_irrigation/view_models/safe_change_notifier.dart';
 import '../models/sales_data_model.dart';
 import '../repository/repository.dart';
@@ -30,8 +29,7 @@ class AnalyticsViewModel extends SafeChangeNotifier {
     };
 
     try {
-      final response =
-      await repository.fetchAllMySalesReports(body);
+      final response = await repository.fetchAllMySalesReports(body);
 
       if (isDisposed) return;
 

@@ -13,6 +13,9 @@ enum SegmentWithFlow {manual, duration, flow}
 
 class StandAloneViewModel extends ChangeNotifier {
 
+  bool _isDisposed = false;
+  bool get isDisposed => _isDisposed;
+
   final Repository repository;
   bool isLoading = false;
   String errorMessage = "";
@@ -25,7 +28,6 @@ class StandAloneViewModel extends ChangeNotifier {
   final TextEditingController _minutesController = TextEditingController();
   final TextEditingController _secondsController = TextEditingController();
   final TextEditingController flowLiter = TextEditingController();
-
 
   List<ProgramModel> programList = [];
 
@@ -49,12 +51,22 @@ class StandAloneViewModel extends ChangeNotifier {
 
   StandAloneViewModel(this.repository, this.masterData, this.userId, this.customerId, this.controllerId, this.deviceId);
 
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
   Future<void> getProgramList() async {
     setLoading(true);
     programList.clear();
     try {
       Map<String, Object> body = {"userId": customerId, "controllerId": controllerId};
       final response = await repository.fetchCustomerProgramList(body);
+
+      if (isDisposed) return;
+
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
            List<dynamic> programsJson = jsonData['data'];
@@ -107,6 +119,8 @@ class StandAloneViewModel extends ChangeNotifier {
     try {
       Map<String, Object> body = {"userId": customerId, "controllerId": controllerId};
       final response = await repository.fetchUserManualOperation(body);
+      if (isDisposed) return;
+
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse['data'] != null){
@@ -198,14 +212,14 @@ class StandAloneViewModel extends ChangeNotifier {
 
     try {
       var response = await repository.fetchManualOperation(body);
+      if (isDisposed) return;
+
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         if (jsonResponse['data'] != null) {
           dynamic data = jsonResponse['data'];
           standAloneData = StandAloneModel.fromJson(data);
           updatePreviousSelection(standAloneData!);
-        } else {
-          //debugPrint('Invalid response format: "data" is null');
         }
       }
     } catch (error, stackTrace) {
@@ -393,9 +407,16 @@ class StandAloneViewModel extends ChangeNotifier {
                 if (_validateTime(_hoursController.text, 'hours') &&
                     _validateTime(_minutesController.text, 'minutes') &&
                     _validateTime(_secondsController.text, 'seconds')) {
-                  durationValue = '${_hoursController.text}:${_minutesController.text}:${_secondsController.text}';
-                  segmentSelectionCallbackFunction(segmentWithFlow.index, durationValue , selectedIrLine);
+
+                  // Pad each value to 2 digits with leading zeros
+                  String hours = _hoursController.text.padLeft(2, '0');
+                  String minutes = _minutesController.text.padLeft(2, '0');
+                  String seconds = _secondsController.text.padLeft(2, '0');
+
+                  durationValue = '$hours:$minutes:$seconds';
+                  segmentSelectionCallbackFunction(segmentWithFlow.index, durationValue, selectedIrLine);
                   Navigator.of(context).pop();
+
                 }
                 else{
                   showDialog(
@@ -863,6 +884,9 @@ class StandAloneViewModel extends ChangeNotifier {
 
       try {
         var response = await repository.updateStandAloneData(body);
+
+        if (isDisposed) return;
+
         if (response.statusCode == 200) {
           standaloneSelection.clear();
         }

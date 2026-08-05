@@ -17,6 +17,10 @@ import '../../utils/constants.dart';
 import '../../utils/network_utils.dart';
 
 class CustomerScreenControllerViewModel extends ChangeNotifier {
+
+  final bool _isDisposed = false;
+  bool get isDisposed => _isDisposed;
+
   final Repository repository;
   final BuildContext context;
   final MqttService mqttService = MqttService();
@@ -81,6 +85,16 @@ class CustomerScreenControllerViewModel extends ChangeNotifier {
     });
 
   }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    mqttProvider.removeListener(_onPayloadReceived);
+    mqttSubscription?.cancel();
+    mqttService.disConnect();
+    super.dispose();
+  }
+
 
   // ---------------------- MQTT HANDLING ------------------------
 
@@ -274,13 +288,18 @@ class CustomerScreenControllerViewModel extends ChangeNotifier {
     setLoading(true);
     try {
       final response = await repository.fetchAllMySite({"userId": customerId});
+
+      if (isDisposed) return;
+
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         //debugPrint('My Site Data:${response.body}');
           _handleFetchedSites(jsonData, 'customer', preserveSelection);
       } else {
-        final sharedResponse =
-        await repository.fetchSharedUserSite({"userId": customerId});
+        final sharedResponse = await repository.fetchSharedUserSite({"userId": customerId});
+
+        if (isDisposed) return;
+
         if (sharedResponse.statusCode == 200) {
           final jsonShared = jsonDecode(sharedResponse.body);
           _handleFetchedSites(jsonShared, 'subUser', preserveSelection);
@@ -541,8 +560,10 @@ class CustomerScreenControllerViewModel extends ChangeNotifier {
         "modifyUser": customerId,
       };
       final response = await repository.updateControllerCommunicationMode(body);
-      if (response.statusCode == 200) {
 
+      if (isDisposed) return;
+
+      if (response.statusCode == 200) {
         final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
         customerProvider.updateControllerCommunicationMode(
             cmmMode: communicationMode);
@@ -550,12 +571,4 @@ class CustomerScreenControllerViewModel extends ChangeNotifier {
     } catch (_) {}
   }
 
-  @override
-  void dispose() {
-    _disposed = true;
-    mqttProvider.removeListener(_onPayloadReceived);
-    mqttSubscription?.cancel();
-    mqttService.disConnect();
-    super.dispose();
-  }
 }

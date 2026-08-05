@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:new_version_plus/new_version_plus.dart';
@@ -14,7 +13,7 @@ import 'common/login/login_screen.dart';
 class ScreenController extends StatelessWidget {
   const ScreenController({super.key});
 
-  static bool _versionChecked = false; // prevent duplicate dialogs
+  static bool _versionChecked = false;
 
   Future<bool> initializeUser(BuildContext context) async {
 
