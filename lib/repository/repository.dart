@@ -4,7 +4,7 @@ import '../services/http_service.dart';
 
 abstract class ApiRepository {
   Future<dynamic> validateUser(Map<String, dynamic> body);
-  Future<dynamic> checkLoginAuth(Map<String, dynamic> body);
+  Future<http.Response> checkLoginAuth(Map<String, dynamic> body);
   Future<http.Response> fetchAllMySalesReports(Map<String, dynamic> body);
 }
 
@@ -13,7 +13,7 @@ class RepositoryImpl implements ApiRepository {
   RepositoryImpl(this.apiService);
 
   @override
-  Future<dynamic> checkLoginAuth(Map<String, dynamic> body) async {
+  Future<http.Response> checkLoginAuth(Map<String, dynamic> body) async {
     return apiService.postRequest('/auth/signIn', body);
   }
 

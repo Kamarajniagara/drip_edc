@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../view_models/login_view_model.dart';
-
+import 'package:flutter/services.dart';
 
 class PasswordInputField extends StatelessWidget {
   const PasswordInputField({super.key, required this.isWeb});
   final bool isWeb;
+
+  static const int maxPasswordLength = 25;
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +15,17 @@ class PasswordInputField extends StatelessWidget {
     return TextField(
       controller: viewModel.passwordController,
       obscureText: viewModel.isObscure,
-      // Disables selection handles + long-press "Select All" popup
       enableInteractiveSelection: false,
-      // Removes the copy/cut/paste/select-all context menu entirely
       contextMenuBuilder: (context, editableTextState) {
         return const SizedBox.shrink();
       },
+
+      // --- max length enforcement ---
+      maxLength: maxPasswordLength,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(maxPasswordLength),
+      ],
+
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
@@ -32,6 +38,7 @@ class PasswordInputField extends StatelessWidget {
           icon: Icon(viewModel.isObscure ? Icons.visibility : Icons.visibility_off, color: Colors.black87),
           onPressed: viewModel.onIsObscureChanged,
         ),
+        counterText: '', // hides the "x/20" counter Flutter shows by default with maxLength
       ),
       style: const TextStyle(color: Colors.black),
     );

@@ -82,6 +82,7 @@ class LoginViewModel extends ChangeNotifier {
 
       final response = await repository.checkLoginAuth(body);
       final data = jsonDecode(response.body);
+
       if (response.statusCode == 200 ) {
         final userData = data['data']['user'];
 
@@ -104,10 +105,7 @@ class LoginViewModel extends ChangeNotifier {
         notifyListeners();
       }
     } catch (error) {
-      // print("error:${error.toString()}");git push -u origin main --force
       isLoading = false;
-      //debugPrint('$error');
-      errorMessage = "Unexpected error occurred.";
       notifyListeners();
     }
   }

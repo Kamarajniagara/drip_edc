@@ -4,6 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../../../../view_models/login_view_model.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
+
 class PhoneInputField extends StatelessWidget {
   const PhoneInputField({super.key, required this.isWeb});
   final bool isWeb;
@@ -19,7 +24,7 @@ class PhoneInputField extends StatelessWidget {
           icon: const Icon(Icons.clear, color: Colors.red),
           onPressed: () => viewModel.mobileNoController.clear(),
         ),
-        icon: Icon(Icons.phone_outlined, color: isWeb? Colors.black : Colors.white),
+        icon: Icon(Icons.phone_outlined, color: isWeb ? Colors.black : Colors.white),
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
@@ -28,6 +33,28 @@ class PhoneInputField extends StatelessWidget {
       languageCode: "en",
       initialCountryCode: 'IN',
       controller: viewModel.mobileNoController,
+
+      // --- restrict to digits only, max 10 for India ---
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly, // blocks '+', letters, spaces
+        LengthLimitingTextInputFormatter(10),    // adjust per country if needed
+      ],
+
+      // optional: reject non-digit paste/autofill and show inline error
+      validator: (phone) {
+        if (phone == null || phone.number.isEmpty) {
+          return 'Mobile number is required';
+        }
+        if (!RegExp(r'^[0-9]+$').hasMatch(phone.number)) {
+          return 'Only digits are allowed';
+        }
+        if (phone.number.length != 10) {
+          return 'Enter a valid 10-digit mobile number';
+        }
+        return null;
+      },
+
       onChanged: (phone) {},
       onCountryChanged: (country) => viewModel.countryCode = country.dialCode,
     );
