@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +5,6 @@ import '../layouts/layout_selector.dart';
 import '../providers/user_provider.dart';
 import '../repository/repository.dart';
 import '../utils/auth_pref_checker.dart';
-import '../utils/enums.dart';
 import '../utils/secure_storage_helper.dart';
 import 'common/login/login_screen.dart';
 
@@ -18,6 +16,7 @@ class ScreenController extends StatelessWidget {
   Future<bool> initializeUser(BuildContext context) async {
 
     final user = await AuthPrefChecker.getLoggedInUser();
+
     if (user == null) return false;
 
     context.read<UserProvider>().setLoggedInUser(user);
@@ -30,7 +29,6 @@ class ScreenController extends StatelessWidget {
           'userId': user.id,
           'password': user.password,
         });
-        final data = jsonDecode(response.body);
         if (response.statusCode == 200) {
           return true;
         }else{
@@ -45,23 +43,6 @@ class ScreenController extends StatelessWidget {
     }
 
     return true;
-  }
-
-  UserRole getRoleFromString(String? role) {
-    switch (role?.toLowerCase()) {
-      case '0':
-        return UserRole.superAdmin;
-      case '1':
-        return UserRole.admin;
-      case '2':
-        return UserRole.dealer;
-      case '3':
-        return UserRole.customer;
-      case 'sub user':
-        return UserRole.subUser;
-      default:
-        return UserRole.customer;
-    }
   }
 
   /// VERSION CHECK HERE (Safe)

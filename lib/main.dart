@@ -76,8 +76,7 @@ Future<void> _firebaseMessagingBackgroundHandler(
 
 Future<void> requestAppPermissions() async {
   // Notifications
-  final notifStatus =
-  await Permission.notification.request();
+  final notifStatus = await Permission.notification.request();
 
   // Android-specific permissions
   if (isAndroid) {
@@ -142,8 +141,7 @@ Future<void> initializeFirebaseAndNotifications() async {
   // Firebase Messaging
   // ----------------------------------------------------------
 
-  final FirebaseMessaging messaging =
-      FirebaseMessaging.instance;
+  final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   await messaging.requestPermission(
     alert: true,

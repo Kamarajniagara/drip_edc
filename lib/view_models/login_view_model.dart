@@ -82,6 +82,7 @@ class LoginViewModel extends ChangeNotifier {
 
       final response = await repository.checkLoginAuth(body);
       final data = jsonDecode(response.body);
+      print(response.body);
 
       if (response.statusCode == 200 ) {
         final userData = data['data']['user'];

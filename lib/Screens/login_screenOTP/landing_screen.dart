@@ -27,10 +27,6 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
     checkAuthentication();
   }
 
-  @override
-  void dispose(){
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,22 +75,7 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
       ),
     );
   }
-  UserRole getRoleFromString(String? role) {
-    switch (role?.toLowerCase()) {
-      case '0':
-        return UserRole.superAdmin;
-      case '1':
-        return UserRole.admin;
-      case '2':
-        return UserRole.dealer;
-      case '3':
-        return UserRole.customer;
-      case 'sub user':
-        return UserRole.subUser;
-      default:
-        return UserRole.customer;
-    }
-  }
+
 
   Future<void> checkAuthentication() async {
     try {
@@ -103,7 +84,7 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
 
       // If no userId saved → go to login immediately
       if (userId == null || userId == 0) {
-        _navigateTo( LoginScreenOTP());
+        _navigateTo( const LoginScreenOTP());
         return;
       }
 
@@ -114,7 +95,6 @@ class _LandingScreenState extends State<LandingScreen> with TickerProviderStateM
 
       final repository = Repository(HttpService());
       final response = await repository.userVerifyWithDeviceToken(data);
-      final result = jsonDecode(response.body);
       final success = response.statusCode == 200 ;
 
       setState(() {

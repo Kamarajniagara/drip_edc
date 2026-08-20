@@ -280,8 +280,16 @@ class IrrigationLineWide extends StatelessWidget {
         widgets.add(_buildVerticalLine(height: 130));
       }
 
-      return SizedBox(
-        width: ((site.boosterPump.length + site.channel.length + site.agitator.length ) * 70) + 5,
+      final boosterPumpWidth = site.boosterPump.length * 70.0;
+      final channelWidth = site.channel.length * 70.0;
+      final agitatorWidth = site.agitator.length * 57.5;
+
+      final totalWidth = boosterPumpWidth + channelWidth + agitatorWidth;
+
+      return Container(
+        color: Colors.white,
+        width: totalWidth,
+        //width: ((site.boosterPump.length + site.channel.length + site.agitator.length ) * 70) + 5,
         child: Stack(
           children: [
             Row(
@@ -306,7 +314,6 @@ class IrrigationLineWide extends StatelessWidget {
                 );
               }).toList(),
             ),
-            // Row(children: widgets),
             Positioned(
               left: 3,
               bottom: 0,
@@ -340,12 +347,12 @@ class IrrigationLineWide extends StatelessWidget {
       child: const Row(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 42),
+            padding: EdgeInsets.only(top: 42.0, bottom: 5),
             child: VerticalDivider(width: 0, color: Colors.black12),
           ),
           SizedBox(width: 4.5),
           Padding(
-            padding: EdgeInsets.only(top: 45),
+            padding: EdgeInsets.only(top: 46.0, bottom: 2),
             child: VerticalDivider(width: 0, color: Colors.black12),
           ),
         ],
