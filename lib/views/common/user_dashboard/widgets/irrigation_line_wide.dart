@@ -288,7 +288,7 @@ class IrrigationLineWide extends StatelessWidget {
 
       return Container(
         color: Colors.white,
-        width: totalWidth,
+        width: agitatorWidth>0? totalWidth : totalWidth+5.5,
         //width: ((site.boosterPump.length + site.channel.length + site.agitator.length ) * 70) + 5,
         child: Stack(
           children: [

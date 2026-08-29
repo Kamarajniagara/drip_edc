@@ -325,7 +325,8 @@ class InventoryViewModel extends SafeChangeNotifier {
         });
   }
 
-  Future<void> displayReplaceProductDialog(BuildContext context, int catId, String catName, String mdlName, int mdlId, String imeiNo, int warranty, int productId, int customerId, int modelId) async
+  Future<void> displayReplaceProductDialog(BuildContext context, int catId, String catName,
+      String mdlName, int mdlId, String imeiNo, int warranty, int productId, int customerId, int modelId) async
   {
     String selectedOption = 'Option 1';
 
@@ -429,7 +430,7 @@ class InventoryViewModel extends SafeChangeNotifier {
                             ),
                           )
                               : const SizedBox(),
-                          SizedBox(height: 16,),
+                          const SizedBox(height: 16,),
                           const Text('TO'),
                           const Divider(),
                           Text('Category : $catName'),

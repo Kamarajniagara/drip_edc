@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
 
 import 'package:oro_drip_irrigation/modules/PumpController/state_management/pump_controller_provider.dart';
 import 'package:oro_drip_irrigation/modules/bluetooth_low_energy/state_management/ble_service.dart';
@@ -56,8 +56,7 @@ GlobalKey<NavigatorState>();
 // PLATFORM HELPER
 // ============================================================
 
-bool get isAndroid =>
-    !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+bool get isAndroid => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
 
 // ============================================================
@@ -113,8 +112,8 @@ Future<void> enableSecureScreen() async {
     return;
   }
 
-  await FlutterWindowManager.addFlags(
-    FlutterWindowManager.FLAG_SECURE,
+  await FlutterWindowManagerPlus.addFlags(
+    FlutterWindowManagerPlus.FLAG_SECURE,
   );
 }
 
@@ -230,6 +229,9 @@ Future<void> initializeFirebaseAndNotifications() async {
 // ============================================================
 
 FutureOr<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
   // ----------------------------------------------------------
   // Flutter Error Handling
   // ----------------------------------------------------------
@@ -432,8 +434,7 @@ FutureOr<void> main() async {
             // ------------------------------------------------
 
             Provider<ApiRepository>(
-              create: (context) =>
-                  RepositoryImpl(
+              create: (context) => RepositoryImpl(
                     context.read<HttpService>(),
                   ),
             ),

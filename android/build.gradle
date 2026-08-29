@@ -28,6 +28,16 @@ subprojects {
 }
 subprojects {
     project.evaluationDependsOn(':app')
+
+    plugins.withId('com.android.library') {
+        if (project.name == "flutter_windowmanager") {
+            project.android {
+                if (namespace == null) {
+                    namespace 'io.adaptant.labs.flutter_windowmanager'
+                }
+            }
+        }
+    }
 }
 
 tasks.register("clean", Delete) {

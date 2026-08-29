@@ -261,10 +261,11 @@ class _ProductInventoryContentState extends State<_ProductInventoryContent> {
         ),
       ));
     } else {
-      return DataCell(Center(
+      return const DataCell(Center(
         child: IconButton(
           tooltip: 'Replace product',
-          onPressed: () {
+          onPressed: null,
+          /*onPressed: () {
             vm.displayReplaceProductDialog(
               context,
               product.categoryId,
@@ -277,8 +278,8 @@ class _ProductInventoryContentState extends State<_ProductInventoryContent> {
               product.buyerId,
               product.modelId,
             );
-          },
-          icon: const Icon(Icons.repeat),
+          },*/
+          icon: Icon(Icons.repeat),
         ),
       ));
     }
