@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:oro_drip_irrigation/Constants/properties.dart';
 import 'package:oro_drip_irrigation/modules/IrrigationProgram/model/sequence_model.dart';
 import 'package:oro_drip_irrigation/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:responsive_grid_list/responsive_grid_list.dart';
-
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import '../state_management/irrigation_program_provider.dart';
 
 class AlarmScreen extends StatefulWidget {

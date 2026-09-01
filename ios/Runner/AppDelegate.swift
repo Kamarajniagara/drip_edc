@@ -69,10 +69,30 @@ import FirebaseMessaging
   }
 
   // Finding 4: Handle Screen Recording
-  @objc private func screenCaptureChanged() {
-    if UIScreen.main.isCaptured {
-        // App is being recorded or mirrored.
-        // We can show a black overlay or alert.
+    @objc private func screenCaptureChanged() {
+        if SecurityUtils.isScreenBeingCaptured() {
+            showPrivacyOverlay()
+        } else {
+            hidePrivacyOverlay()
+        }
     }
-  }
+    
+    private func showPrivacyOverlay() {
+        guard blurView == nil else { return }
+
+        let blurEffect = UIBlurEffect(style: .systemChromeMaterial)
+        let view = UIVisualEffectView(effect: blurEffect)
+
+        view.frame = self.window?.bounds ?? UIScreen.main.bounds
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.tag = 221122
+
+        self.window?.addSubview(view)
+        self.blurView = view
+    }
+
+    private func hidePrivacyOverlay() {
+        self.blurView?.removeFromSuperview()
+        self.blurView = nil
+    }
 }
