@@ -60,6 +60,19 @@ class UserSettingViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// True if the user has edited name, email, mobile number, or country
+  /// code away from the values the form was originally loaded with.
+  bool get hasProfileFieldChanges {
+    final cleanedCode = countryCode.replaceAll('+', '');
+    return controllerUsrName.text.trim() != userName.trim() ||
+        controllerEmail.text.trim() != emailId.trim() ||
+        controllerMblNo.text.trim() != mobileNo.trim() ||
+        cleanedCode != countryCode.replaceAll('+', ''); // kept for symmetry / future edits to countryCode source
+  }
+
+  bool get isChangingPassword =>
+      controllerNewPwd.text.isNotEmpty || controllerConfirmPwd.text.isNotEmpty;
+
   Future<Map<String, dynamic>?> updateUserProfile(
       BuildContext context, int customerId, int userId) async {
     errorMsg = '';
@@ -67,12 +80,21 @@ class UserSettingViewModel extends ChangeNotifier {
     String newPw = controllerNewPwd.text;
     String cnPw = controllerConfirmPwd.text;
 
-    if (newPw.isNotEmpty || cnPw.isNotEmpty) {
+    final profileChanged = hasProfileFieldChanges;
+    final passwordChangeRequested = isChangingPassword;
+
+    // Re-authentication is required for ANY sensitive change:
+    // editing name/mobile/email, or setting a new password.
+    if (profileChanged || passwordChangeRequested) {
       if (oldPw.isEmpty) {
-        errorMsg = 'Please enter your current password';
+        errorMsg = 'Please enter your current password to save changes';
         notifyListeners();
         return null;
-      } else if (cnPw.isEmpty) {
+      }
+    }
+
+    if (passwordChangeRequested) {
+      if (cnPw.isEmpty) {
         errorMsg = 'Please confirm your password';
         notifyListeners();
         return null;
@@ -89,6 +111,12 @@ class UserSettingViewModel extends ChangeNotifier {
         notifyListeners();
         return null;
       }
+    }
+
+    if (!profileChanged && !passwordChangeRequested) {
+      errorMsg = 'No changes to save';
+      notifyListeners();
+      return null;
     }
 
     if (formKey.currentState!.validate()) {
@@ -113,11 +141,13 @@ class UserSettingViewModel extends ChangeNotifier {
                     "mobileNumber": controllerMblNo.text,
                     "email": controllerEmail.text,
                     "modifyUser": userId,
+                    // Sent for verification any time profile is edited,
+                    // not just for password changes.
+                    "oldPassword": oldPw,
                   };
 
-                  if (controllerNewPwd.text.isNotEmpty) {
-                    body["oldPassword"] = controllerOldPwd.text;
-                    body["password"] = controllerNewPwd.text;
+                  if (passwordChangeRequested) {
+                    body["password"] = newPw;
                   }
 
                   setLoading(true);
@@ -128,7 +158,7 @@ class UserSettingViewModel extends ChangeNotifier {
                       final jsonData = jsonDecode(response.body);
                       Navigator.of(ctx).pop(jsonData);
                     } else if (response.statusCode == 401) {
-                      // Common convention: 401 for "current password incorrect"
+                      // Convention: 401 = current password incorrect
                       final jsonData = jsonDecode(response.body);
                       errorMsg = jsonData["message"] ?? 'Current password is incorrect';
                       notifyListeners();
