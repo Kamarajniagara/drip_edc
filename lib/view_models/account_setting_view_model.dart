@@ -67,7 +67,7 @@ class UserSettingViewModel extends ChangeNotifier {
     return controllerUsrName.text.trim() != userName.trim() ||
         controllerEmail.text.trim() != emailId.trim() ||
         controllerMblNo.text.trim() != mobileNo.trim() ||
-        cleanedCode != countryCode.replaceAll('+', ''); // kept for symmetry / future edits to countryCode source
+        cleanedCode != countryCode.replaceAll('+', '');
   }
 
   bool get isChangingPassword =>
