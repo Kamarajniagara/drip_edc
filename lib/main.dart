@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
 
 import 'package:oro_drip_irrigation/modules/PumpController/state_management/pump_controller_provider.dart';
@@ -23,6 +24,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:screen_security/screen_security.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 import 'Constants/notifi_service.dart';
@@ -31,6 +33,7 @@ import 'app/app.dart';
 import 'StateManagement/customer_provider.dart';
 import 'firebase_options.dart';
 
+import 'flavors.dart';
 import 'modules/IrrigationProgram/state_management/irrigation_program_provider.dart';
 import 'modules/Preferences/state_management/preference_provider.dart';
 import 'modules/SystemDefinitions/state_management/system_definition_provider.dart';
@@ -232,11 +235,9 @@ FutureOr<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ----------------------------------------------------------
-  // Initialize Network Utils
-  // ----------------------------------------------------------
-
-  await NetworkUtils.initialize();
+// Enable protection for the entire app from the start
+  final screenSecurity = ScreenSecurity();
+  await screenSecurity.enable();
 
   // ----------------------------------------------------------
   // Flutter Error Handling
@@ -256,7 +257,7 @@ FutureOr<void> main() async {
   // ----------------------------------------------------------
 
   tz.initializeTimeZones();
-
+  F.appFlavor = Flavor.smartComm;
   // ----------------------------------------------------------
   // Enable Secure Screen
   // ----------------------------------------------------------
@@ -276,10 +277,17 @@ FutureOr<void> main() async {
   }
 
   // ----------------------------------------------------------
+  // Initialize Network Utils
+  // ----------------------------------------------------------
+
+  await NetworkUtils.initialize();
+
+  // ----------------------------------------------------------
   // Firebase + Notifications
   // ----------------------------------------------------------
 
-  await initializeFirebaseAndNotifications();
+
+await initializeFirebaseAndNotifications();
 
   // ----------------------------------------------------------
   // Run Application

@@ -11,38 +11,38 @@ import FirebaseMessaging
 
   private var blurView: UIVisualEffectView?
 
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
+ 
+    
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
 
-    // Finding 2 & 3: Run Jailbreak and Integrity checks on startup
-    if SecurityUtils.isDeviceCompromised() {
-        // Impact: Critical. Terminate app if jailbroken or tampered.
-        exit(0)
+        GeneratedPluginRegistrant.register(with: self)
+
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
+
+        FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { registry in
+            GeneratedPluginRegistrant.register(with: registry)
+        }
+
+ 
+        NotificationCenter.default.addObserver(
+               self,
+               selector: #selector(screenshotTaken),
+               name: UIApplication.userDidTakeScreenshotNotification,
+               object: nil
+           )
+        return super.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
     }
-
-    if FirebaseApp.app() == nil {
-      FirebaseApp.configure()
-    }
-
-    FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
-      GeneratedPluginRegistrant.register(with: registry)
-    }
-
-    GeneratedPluginRegistrant.register(with: self)
-    GMSServices.provideAPIKey("AIzaSyCfMo2V0inDY3xpp91BjfIrD4s-v6PPSzw")
-
-    if #available(iOS 10.0, *) {
-      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
-    }
-    application.registerForRemoteNotifications()
-
-    // Finding 4: Screen capture protection native listener
-    NotificationCenter.default.addObserver(self, selector: #selector(screenCaptureChanged), name: UIScreen.capturedDidChangeNotification, object: nil)
-
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
+    @objc private func screenshotTaken() {
+        
+     }
 
   override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     Messaging.messaging().apnsToken = deviceToken
