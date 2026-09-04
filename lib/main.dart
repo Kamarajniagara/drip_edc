@@ -231,13 +231,160 @@ Future<void> initializeFirebaseAndNotifications() async {
 // MAIN
 // ============================================================
 
+Future<void> main() async {
+  runZonedGuarded(
+        () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      // Screen security - skip Web
+      if (!kIsWeb) {
+        final screenSecurity = ScreenSecurity();
+        await screenSecurity.enable();
+      }
+
+      FlutterError.onError = (
+          FlutterErrorDetails details,
+          ) {
+        debugPrint(
+          'FlutterError: ${details.exception}',
+        );
+      };
+
+      tz.initializeTimeZones();
+
+      F.appFlavor = Flavor.smartComm;
+
+      await enableSecureScreen();
+
+      if (isAndroid) {
+        await requestAppPermissions();
+      }
+
+      await NetworkUtils.initialize();
+
+      await initializeFirebaseAndNotifications();
+
+      runApp(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_) => UserProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => CustomerProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => ConfigMakerProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) =>
+                  IrrigationProgramMainProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => MqttPayloadProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => OverAllUse(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => PreferenceProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) =>
+                  SystemDefinitionProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => ConstantProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) =>
+                  PumpControllerProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => BleProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => SearchProvider(),
+            ),
+
+            ChangeNotifierProvider(
+              create: (_) => ButtonLoadingProvider(),
+            ),
+
+            ProxyProvider2<
+                MqttPayloadProvider,
+                CustomerProvider,
+                CommunicationService>(
+              update: (
+                  BuildContext context,
+                  MqttPayloadProvider mqttProvider,
+                  CustomerProvider customer,
+                  CommunicationService? previous,
+                  ) {
+                return CommunicationService(
+                  mqttService: MqttService(),
+                  blueService:
+                  BluetoothClassicService(),
+                  bleService:
+                  BluetoothBleService(),
+                  customerProvider: customer,
+                );
+              },
+            ),
+
+            Provider<HttpService>(
+              create: (_) => HttpService(),
+            ),
+
+            Provider<ApiRepository>(
+              create: (context) =>
+                  RepositoryImpl(
+                    context.read<HttpService>(),
+                  ),
+            ),
+          ],
+          child: const MyApp(),
+        ),
+      );
+    },
+        (
+        Object error,
+        StackTrace stack,
+        ) {
+      debugPrint(
+        'Uncaught error: $error',
+      );
+
+      debugPrint(
+        'StackTrace: $stack',
+      );
+    },
+  );
+}
+
+/*
 FutureOr<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
 // Enable protection for the entire app from the start
-  final screenSecurity = ScreenSecurity();
-  await screenSecurity.enable();
+
+  if (!kIsWeb) {
+    final screenSecurity = ScreenSecurity();
+    await screenSecurity.enable();
+  }
+
 
   // ----------------------------------------------------------
   // Flutter Error Handling
@@ -264,14 +411,12 @@ FutureOr<void> main() async {
   //
   // This is safe for Web because enableSecureScreen()
   // checks isAndroid before accessing flutter_windowmanager.
-  //
 
   await enableSecureScreen();
 
   // ----------------------------------------------------------
   // Request Permissions
   // ----------------------------------------------------------
-
   if (isAndroid) {
     await requestAppPermissions();
   }
@@ -279,15 +424,12 @@ FutureOr<void> main() async {
   // ----------------------------------------------------------
   // Initialize Network Utils
   // ----------------------------------------------------------
-
   await NetworkUtils.initialize();
 
   // ----------------------------------------------------------
   // Firebase + Notifications
   // ----------------------------------------------------------
-
-
-await initializeFirebaseAndNotifications();
+  await initializeFirebaseAndNotifications();
 
   // ----------------------------------------------------------
   // Run Application
@@ -465,4 +607,4 @@ await initializeFirebaseAndNotifications();
       );
     },
   );
-}
+}*/
