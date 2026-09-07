@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
-
 import 'package:oro_drip_irrigation/modules/PumpController/state_management/pump_controller_provider.dart';
 import 'package:oro_drip_irrigation/modules/bluetooth_low_energy/state_management/ble_service.dart';
 import 'package:oro_drip_irrigation/providers/button_loading_provider.dart';
@@ -16,23 +14,18 @@ import 'package:oro_drip_irrigation/services/communication_service.dart';
 import 'package:oro_drip_irrigation/services/http_service.dart';
 import 'package:oro_drip_irrigation/services/mqtt_service.dart';
 import 'package:oro_drip_irrigation/utils/network_utils.dart';
-
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:screen_security/screen_security.dart';
 import 'package:timezone/data/latest.dart' as tz;
-
 import 'Constants/notifi_service.dart';
 import 'StateManagement/search_provider.dart';
 import 'app/app.dart';
 import 'StateManagement/customer_provider.dart';
 import 'firebase_options.dart';
-
 import 'flavors.dart';
 import 'modules/IrrigationProgram/state_management/irrigation_program_provider.dart';
 import 'modules/Preferences/state_management/preference_provider.dart';

@@ -7,6 +7,10 @@ class SecureStorageService {
   final _storage = const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
     iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
+    webOptions: WebOptions(
+      dbName: 'oro_drip_irrigation',
+      publicKey: 'oro_drip_irrigation_pk',
+    ),
   );
 
   Future<void> write(String key, String value) => _storage.write(key: key, value: value);

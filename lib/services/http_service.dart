@@ -21,7 +21,7 @@ class HttpService implements ApiService {
   // ------------------------------------------------------------
   // SSL PINNED CLIENT
   // ------------------------------------------------------------
-  Future<IOClient> _getClient() async {
+  Future<IOClient> _getClient1() async {
     if (_client != null) {
       return _client!;
     }
@@ -45,6 +45,27 @@ class HttpService implements ApiService {
     _client = IOClient(httpClient);
 
     return _client!;
+  }
+
+  Future<IOClient> _getClient() async {
+    if (_client != null) return _client!;
+
+    try {
+      final httpClient = HttpClient();
+
+      // Temp — certificate bypass
+      httpClient.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+
+      httpClient.connectionTimeout = const Duration(seconds: 30);
+      _client = IOClient(httpClient);
+
+      print('✅ Simple client initialized');
+      return _client!;
+    } catch (e) {
+      print('❌ Client error: $e');
+      rethrow;
+    }
   }
 
   // ------------------------------------------------------------
