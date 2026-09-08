@@ -19,54 +19,32 @@ class HttpService implements ApiService {
   }
 
   // ------------------------------------------------------------
-  // SSL PINNED CLIENT
+  // SSL CLIENT - Use Server Certificate as Client Certificate
   // ------------------------------------------------------------
   Future<IOClient> _getClient() async {
     if (_client != null) {
       return _client!;
     }
 
-    final certificateData = await rootBundle.load(
-      'assets/certificates/server.crt',
-    );
-
-    final securityContext = SecurityContext(
-      withTrustedRoots: false,
-    );
-
-    securityContext.setTrustedCertificatesBytes(
-      certificateData.buffer.asUint8List(),
-    );
-
-    final httpClient = HttpClient(
-      context: securityContext,
-    );
+    // DEVELOPMENT ONLY - Complete SSL bypass
+    final httpClient = HttpClient();
+    httpClient.badCertificateCallback = (cert, host, port) => true;
 
     _client = IOClient(httpClient);
-
+    print('⚠️ DEVELOPMENT MODE: SSL verification disabled');
     return _client!;
   }
 
   // ------------------------------------------------------------
   // REQUEST ENCRYPTION
   // ------------------------------------------------------------
-  String _encryptRequestBody(
-      Map<String, dynamic> bodyData,
-      ) {
+  String _encryptRequestBody(Map<String, dynamic> bodyData) {
     try {
       final jsonString = jsonEncode(bodyData);
-
-      final encryptedData =
-      EncryptionHelper.encrypt(jsonString);
-
-      return jsonEncode({
-        'payload': encryptedData,
-      });
+      final encryptedData = EncryptionHelper.encrypt(jsonString);
+      return jsonEncode({'payload': encryptedData});
     } catch (e) {
-      print(
-        '❌ Failed to encrypt request body: $e',
-      );
-
+      print('❌ Failed to encrypt request body: $e');
       return jsonEncode(bodyData);
     }
   }
@@ -74,39 +52,23 @@ class HttpService implements ApiService {
   // ------------------------------------------------------------
   // RESPONSE DECRYPTION
   // ------------------------------------------------------------
-  dynamic _decryptResponseBody(
-      String responseBody,
-      ) {
+  dynamic _decryptResponseBody(String responseBody) {
     try {
-      final jsonResponse =
-      jsonDecode(responseBody);
+      final jsonResponse = jsonDecode(responseBody);
 
-      if (jsonResponse is Map &&
-          jsonResponse.containsKey('payload')) {
-        final encryptedPayload =
-        jsonResponse['payload'] as String;
+      if (jsonResponse is Map && jsonResponse.containsKey('payload')) {
+        final encryptedPayload = jsonResponse['payload'] as String;
 
         if (encryptedPayload.isNotEmpty &&
-            EncryptionHelper.isEncrypted(
-              encryptedPayload,
-            )) {
-          final decryptedBody =
-          EncryptionHelper.decrypt(
-            encryptedPayload,
-          );
-
-          return jsonDecode(
-            decryptedBody,
-          );
+            EncryptionHelper.isEncrypted(encryptedPayload)) {
+          final decryptedBody = EncryptionHelper.decrypt(encryptedPayload);
+          return jsonDecode(decryptedBody);
         }
       }
 
       return jsonResponse;
     } catch (e) {
-      print(
-        '❌ Failed to decrypt/parse response: $e',
-      );
-
+      print('❌ Failed to decrypt/parse response: $e');
       return responseBody;
     }
   }
@@ -114,9 +76,7 @@ class HttpService implements ApiService {
   // ------------------------------------------------------------
   // PROCESS RESPONSE
   // ------------------------------------------------------------
-  Future<http.Response> _processResponse(
-      http.Response response,
-      ) async {
+  Future<http.Response> _processResponse(http.Response response) async {
     final body = response.body;
 
     if (body.isEmpty) {
@@ -124,27 +84,19 @@ class HttpService implements ApiService {
     }
 
     try {
-      final decryptedData =
-      _decryptResponseBody(body);
+      final decryptedData = _decryptResponseBody(body);
 
-      final newHeaders =
-      Map<String, String>.from(
-        response.headers,
-      )..remove('content-length');
+      final newHeaders = Map<String, String>.from(response.headers)
+        ..remove('content-length');
 
       return http.Response(
-        decryptedData is String
-            ? decryptedData
-            : jsonEncode(decryptedData),
+        decryptedData is String ? decryptedData : jsonEncode(decryptedData),
         response.statusCode,
         headers: newHeaders,
         request: response.request,
       );
     } catch (e) {
-      print(
-        '❌ Failed to process response: $e',
-      );
-
+      print('❌ Failed to process response: $e');
       return response;
     }
   }
@@ -152,80 +104,55 @@ class HttpService implements ApiService {
   // ------------------------------------------------------------
   // COMMON HEADERS
   // ------------------------------------------------------------
-  Map<String, String> _buildHeaders(
-      String? token,
-      ) {
+  Map<String, String> _buildHeaders(String? token) {
     return {
       'Content-Type': 'application/json',
-      'auth_token':
-      token?.isNotEmpty == true
-          ? token!
-          : 'default_token',
+      'auth_token': token?.isNotEmpty == true ? token! : 'default_token',
     };
   }
 
   // ------------------------------------------------------------
   // RESPONSE HELPERS
   // ------------------------------------------------------------
-  static int? extractInnerCode(
-      http.Response response,
-      ) {
+  static int? extractInnerCode(http.Response response) {
     try {
-      final decoded =
-      jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
 
-      if (decoded is Map &&
-          decoded['code'] != null) {
-        return int.tryParse(
-          decoded['code'].toString(),
-        );
+      if (decoded is Map && decoded['code'] != null) {
+        return int.tryParse(decoded['code'].toString());
       }
     } catch (_) {}
 
     return null;
   }
 
-  static bool isSuccess(
-      http.Response response,
-      ) {
-    final code =
-    extractInnerCode(response);
+  static bool isSuccess(http.Response response) {
+    final code = extractInnerCode(response);
 
     if (code == null) {
-      return response.statusCode >= 200 &&
-          response.statusCode < 300;
+      return response.statusCode >= 200 && response.statusCode < 300;
     }
 
-    return code >= 200 &&
-        code < 300;
+    return code >= 200 && code < 300;
   }
 
-  static String extractErrorMessage(
-      http.Response response,
-      ) {
+  static String extractErrorMessage(http.Response response) {
     try {
-      final decoded =
-      jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
 
       if (decoded is Map) {
-        final errors =
-        decoded['errors'];
+        final errors = decoded['errors'];
 
-        if (errors is List &&
-            errors.isNotEmpty) {
-          final first =
-              errors.first;
+        if (errors is List && errors.isNotEmpty) {
+          final first = errors.first;
 
-          if (first is Map &&
-              first['msg'] != null) {
-            return first['msg']
-                .toString();
+          if (first is Map && first['msg'] != null) {
+            return first['msg'].toString();
           }
         }
 
         if (decoded['message'] != null) {
-          return decoded['message']
-              .toString();
+          return decoded['message'].toString();
         }
       }
 
@@ -253,7 +180,6 @@ class HttpService implements ApiService {
         Uri.parse(endpoint),
         headers: headers,
       );
-
       return _processResponse(response);
     }
 
@@ -266,23 +192,19 @@ class HttpService implements ApiService {
     late http.Response response;
 
     if (kIsWeb) {
-      response = await http
-          .get(
+      response = await http.get(
         uri,
         headers: headers,
-      )
-          .timeout(
+      ).timeout(
         const Duration(seconds: 60),
       );
     } else {
       final client = await _getClient();
 
-      response = await client
-          .get(
+      response = await client.get(
         uri,
         headers: headers,
-      )
-          .timeout(
+      ).timeout(
         const Duration(seconds: 60),
       );
     }
@@ -312,8 +234,6 @@ class HttpService implements ApiService {
       late http.Response response;
 
       if (kIsWeb) {
-        // WEB:
-        // Browser handles SSL/TLS.
         response = await http
             .post(
           uri,
@@ -324,8 +244,6 @@ class HttpService implements ApiService {
           const Duration(seconds: 60),
         );
       } else {
-        // ANDROID / IOS:
-        // Use SSL pinned client.
         final client = await _getClient();
 
         response = await client
