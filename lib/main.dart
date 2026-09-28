@@ -227,12 +227,17 @@ Future<void> initializeFirebaseAndNotifications() async {
 Future<void> main() async {
   runZonedGuarded(
         () async {
+
       WidgetsFlutterBinding.ensureInitialized();
+
 
       // Screen security - skip Web
       if (!kIsWeb) {
         final screenSecurity = ScreenSecurity();
         await screenSecurity.enable();
+      }else{
+        // Disable browser right-click context menu on Flutter Web
+        SystemChannels.contextMenu.invokeMethod('disableContextMenu');
       }
 
       FlutterError.onError = (
